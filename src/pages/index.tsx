@@ -1,16 +1,19 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
+import FlexBox from "@/layouts/FlexBox";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// text-white  //items-center 
 export default function Home() {
   return (
-    <div className="flex justify-center">
-      <div className="content-center font-bold text-8xl text-center tracking-wider text-red-600">
-        PONG<br></br>
-        GAME
-      </div>
-    </div>
+    <FlexBox className="w-screen h-screen justify-center">
+      <FlexBox>
+        <div className="font-bold text-8xl text-center tracking-wider text-white">
+          PONG<br></br>
+          GAME
+        </div>
+      </FlexBox>
+    </FlexBox>
+
   );
 }
