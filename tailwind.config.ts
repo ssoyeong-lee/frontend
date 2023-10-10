@@ -9,6 +9,14 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      dropShadow: {
+        card: "0px 0px 40px #89A84846",
+        board: "0px 0px 25px #BED8FF",
+        ball: "0px 0px 10px #FFE500",
+        "blue-inout": "0px 0px 20px #3691FC, inset 0px 0px 20px #3691FC",
+        "red-inout": "0px 0px 20px #FD5E5E inset 0px 0px 20px #FD5E5E",
+        "green-inout": "0px 0px 20px #0ACE41, inset 0px 0px 20px #0ACE41",
+      },
     },
     colors: {
       white: "#FFFFFF",
