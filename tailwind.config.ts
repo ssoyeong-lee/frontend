@@ -13,9 +13,9 @@ const config: Config = {
         card: "0px 0px 40px #89A84846",
         board: "0px 0px 25px #BED8FF",
         ball: "0px 0px 10px #FFE500",
-        "blue-inout": "0px 0px 20px #3691FC, inset 0px 0px 20px #3691FC",
-        "red-inout": "0px 0px 20px #FD5E5E inset 0px 0px 20px #FD5E5E",
-        "green-inout": "0px 0px 20px #0ACE41, inset 0px 0px 20px #0ACE41",
+        blue: "0px 0px 10px #3691FC",
+        red: "0px 0px 10px #FD5E5E",
+        green: "0px 0px 10px #0ACE41",
       },
     },
     colors: {
