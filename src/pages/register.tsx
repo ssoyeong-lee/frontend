@@ -12,10 +12,10 @@ export default function Register() {
             Register
           </div>
         </FlexBox>
-        <TextBox placeholder="Nickname" size="w-[25rem] h-[3rem]" className="font-bold text-2xl tracking-wider bg-[#EAEAEA]"/>
+        <TextBox placeholder="Nickname" size="w-[25rem] h-[3rem]" className="font-bold text-2xl tracking-wider bg-gray-100"/>
         <Button
           href="https://www.naver.com"
-          className="w-[25rem] h-[3rem] bg-black"
+          className="w-[25rem] h-[3rem] bg-gray-500"
           textClassName="font-bold text-2xl tracking-wider"
         >
           Complete

@@ -12,7 +12,7 @@ export default function Button({href, className, textClassName, children }: Prop
   return (
     <Link href={href} passHref>
       <FlexBox direction="col" className={`justify-center ${className} 
-        ${className?.includes("bg-") ? "" : "bg-[#3691FC]" }`}>
+        ${className?.includes("bg-") ? "" : "bg-button-green" }`}>
         <div className={`w-fit h-fit text-white ${textClassName}`}>
           {children}
         </div>
