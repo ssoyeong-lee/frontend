@@ -9,6 +9,15 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      dropShadow: {
+        card: "0px 0px 40px #89A84846",
+        board: "0px 0px 25px #BED8FF",
+        ball: "0px 0px 10px #FFE500",
+        blue: "0px 0px 10px #3691FC",
+        red: "0px 0px 10px #FD5E5E",
+        green: "0px 0px 10px #0ACE41",
+        bar: "0px 0px 4px #FFFFFFAA",
+      },
     },
     colors: {
       white: "#FFFFFF",
@@ -22,14 +31,14 @@ const config: Config = {
       black: "#000000",
       card: "#100813CC",
 
-      "lightred-cyber": "B15F5F",
+      "lightred-cyber": "#B15F5F",
       "deepred-cyber": "#FD5E5E",
       "red-cyber": "#FF2F2F",
       "yellow-cyber": "#ACCF1E",
       "green-cyber": "#1FDE00",
       "lightblue-cyber": "#3DC6DF",
       "deepblue-cyber": "#007A90",
-      "sky-cyber": "08A2BE",
+      "sky-cyber": "#08A2BE",
       "blue-cyber": "#3691FC",
       "purple-cyber": "#B142F5",
       "darkgreen-cyber": "#13633C",
