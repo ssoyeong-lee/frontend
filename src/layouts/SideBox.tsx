@@ -1,18 +1,17 @@
-
 import FlexBox from "@/layouts/FlexBox";
 import LogoBox from "@/layouts/LogoBox";
 
-interface Props{
+interface Props {
   children: React.ReactNode;
 }
 
-export default function SideBox({children}:Props) {
+export default function SideBox({ children }: Props) {
   return (
-    <FlexBox direction="row" className=" h-full w-full">
-      <FlexBox direction="col" className="h-full  w-3/5 justify-center bg-white">
-          {children}
+    <FlexBox direction="row" className="w-full h-full">
+      <FlexBox direction="col" className="w-[1024px] h-full justify-center bg-white">
+        {children}
       </FlexBox>
-      <LogoBox></LogoBox>
+      <LogoBox />
     </FlexBox>
   );
 }
