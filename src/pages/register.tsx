@@ -2,8 +2,15 @@ import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
 import TextBox from "@/layouts/TextBox";
+import { useState } from "react";
 
 export default function Register() {
+  const [nickName, setNickName] = useState('');
+  const myInput= (e: React.ChangeEvent<HTMLInputElement>)=>{
+    setNickName(e.target.value);
+    console.log(nickName);
+  }
+
   return (
     <SideBox>
       <FlexBox direction="col" className="items-start gap-9">
@@ -12,7 +19,7 @@ export default function Register() {
             Register
           </div>
         </FlexBox>
-        <TextBox placeholder="Nickname" size="w-[25rem] h-[3rem]" className="font-bold text-2xl tracking-wider bg-gray-100"/>
+        <TextBox inputNickname={myInput} placeholder="Nickname" className="w-[25rem] h-[3rem] font-bold text-2xl tracking-wider bg-gray-100"/>
         <Button
           href="https://www.naver.com"
           className="border rounded w-[25rem] h-[3rem] bg-gray-500"

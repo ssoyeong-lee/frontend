@@ -1,16 +1,18 @@
+import React, { useState } from "react";
+
 interface Props {
-    size: string;
+    inputNickname: React.ChangeEventHandler<HTMLInputElement>;
     className?: string;
     placeholder?: string;
 }
 
-export default function TextBox({size, className, placeholder}: Props) {
+export default function TextBox({inputNickname, className, placeholder}: Props) {
+  
   return (
-    <form className={`${size}`}>
       <input
         type="text"
+        onInput={inputNickname}
         placeholder={`${placeholder}`}
-        className={`w-full h-full border border-solid rounded px-6 ${className}`}/>
-    </form>
+        className={`border border-solid rounded px-6 ${className}`}/>
   );
 }
