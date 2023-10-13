@@ -2,15 +2,21 @@ import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
 import TextBox from "@/layouts/TextBox";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Register() {
   const [nickName, setNickName] = useState('');
   const myInput= (e: React.ChangeEvent<HTMLInputElement>)=>{
     setNickName(e.target.value);
-    console.log(nickName);
+    // console.log(nickName);
   }
 
+  const router = useRouter();
+  const onClickBtn= (e: React.MouseEvent<HTMLButtonElement>)=>{
+    router.push("/login");
+  }
+  
   return (
     <SideBox>
       <FlexBox direction="col" className="items-start gap-8">
@@ -27,7 +33,7 @@ export default function Register() {
         </FlexBox>
 
         <Button
-          href="https://www.naver.com"
+          onClickBtn={onClickBtn}
           className="border rounded w-[25rem] h-[3rem] bg-gray-500"
           textClassName="font-bold text-2xl tracking-wider"
         >
