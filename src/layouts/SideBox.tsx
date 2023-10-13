@@ -6,7 +6,7 @@ interface Props{
   children: React.ReactNode;
 }
 
-export default function Side({children}:Props) {
+export default function SideBox({children}:Props) {
   return (
     <FlexBox direction="row" className=" h-full w-full">
       <FlexBox direction="col" className="h-full  w-3/5 justify-center bg-white">

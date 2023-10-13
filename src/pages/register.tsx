@@ -1,11 +1,11 @@
 import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
-import Side from "@/layouts/Side";
+import SideBox from "@/layouts/SideBox";
 import TextBox from "@/layouts/TextBox";
 
 export default function Register() {
   return (
-    <Side>
+    <SideBox>
       <FlexBox direction="col" className="items-start gap-9">
         <FlexBox direction="col" className="items-start gap-3 ">
           <div className="font-bold text-5xl tracking-wider leading-[3.5rem]">
@@ -21,6 +21,6 @@ export default function Register() {
           Complete
         </Button>
       </FlexBox>
-    </Side>
+    </SideBox>
   );
 }

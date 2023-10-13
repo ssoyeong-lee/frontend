@@ -1,12 +1,11 @@
 
 import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
-import Side from "@/layouts/Side";
-
+import SideBox from "@/layouts/SideBox";
 
 export default function Login() {
   return (
-    <Side>
+    <SideBox>
       <FlexBox direction="col" className="items-start gap-9">
           <FlexBox direction="col" className="items-start gap-3 ">
             <div className="font-bold text-5xl tracking-wider leading-[3.5rem]">Login</div>
@@ -16,6 +15,6 @@ export default function Login() {
               42 Intra로 로그인
             </Button>
         </FlexBox>
-    </Side>
+    </SideBox>
   );
 }
