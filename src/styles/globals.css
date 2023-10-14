@@ -17,3 +17,10 @@ body {
   background-size: cover;
   background-position: center;
 }
+
+.modal {
+  @apply fixed inset-0 z-[100] flex items-center justify-center bg-cover-black-100;
+}
+.modal-container {
+  @apply w-11/12 mx-auto rounded-xl shadow-lg z-50 overflow-y-auto;
+}
