@@ -13,6 +13,6 @@ export default function TextBox({inputNickname, className, placeholder}: Props) 
         type="text"
         onInput={inputNickname}
         placeholder={`${placeholder}`}
-        className={`border border-solid rounded px-6 ${className}`}/>
+        className={`text-black border border-solid rounded px-6 ${className}`}/>
   );
 }

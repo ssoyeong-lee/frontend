@@ -21,7 +21,7 @@ export default function Register() {
     <SideBox>
       <FlexBox direction="col" className="items-start gap-8">
         <FlexBox direction="col" className="items-start gap-3 ">
-          <div className="font-bold text-5xl tracking-wider leading-[3.5rem]">
+          <div className="text-black font-bold text-5xl tracking-wider leading-[3.5rem]">
             Register
           </div>
         </FlexBox>
