@@ -11,9 +11,11 @@ export default function User() {
     <>
       <TopNav />
       <Container>
-        <FlexBox className="w-full gap-6">
+        <FlexBox className="h-full w-full gap-6">
           <FlexBox className="basis-1/3 h-full gap-6" direction="col">
-            <SearchCard />
+            <div className="w-full h-fit">
+              <SearchCard />
+            </div>
             <RankingCard />
           </FlexBox>
           <div className="basis-1/3 h-full">
