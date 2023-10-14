@@ -12,13 +12,17 @@ export default function Play() {
     <>
       <TopNav />
       <Container>
-        <FlexBox className="w-full gap-6">
+        <FlexBox className="h-full w-full gap-6">
           <div className="basis-1/3 h-full">
             <HowToPlayCard />
           </div>
           <FlexBox className="basis-2/3 h-full gap-6" direction="col">
-            <OptionCard />
-            <QueueCard queue={1} game={2} />
+            <div className="h-fit w-full">
+              <OptionCard />
+            </div>
+            <div className="h-fit w-full">
+              <QueueCard queue={1} game={2} />
+            </div>
             <GameButton isFinding={false} />
             <GameLoader isFinding={true} />
           </FlexBox>
