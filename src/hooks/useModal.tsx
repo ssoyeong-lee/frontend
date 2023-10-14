@@ -1,9 +1,21 @@
-import React, { useCallback, useState } from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 
 interface ModalTemplateProps {
   content: React.ReactNode;
   onClose: () => void;
 }
+
+interface ModalContextType {
+  modal: React.ReactNode | null;
+  openModal: (RC: React.ReactNode) => void;
+  closeModal: () => void;
+}
+
+const ModalContext = createContext<ModalContextType>({
+  modal: null,
+  openModal: () => {},
+  closeModal: () => {},
+});
 
 function ModalTemplate({ content, onClose }: ModalTemplateProps) {
   return (
@@ -15,27 +27,35 @@ function ModalTemplate({ content, onClose }: ModalTemplateProps) {
   );
 }
 
-const useModal = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [children, setChildren] = useState<React.ReactNode>(null);
-
-  const modalOpen = useCallback((children: React.ReactNode) => {
-    setIsModalOpen(() => true);
-    setChildren(() => children);
-  }, []);
-
-  const modalClose = useCallback(() => {
-    setIsModalOpen(() => false);
-  }, []);
-
-  return {
-    Modal: isModalOpen
-      ? () => <ModalTemplate content={children} onClose={modalClose} />
-      : () => null,
-    modalOpen,
-    modalClose,
-    isModalOpen,
+function ModalImplement(): ModalContextType {
+  const [modal, setModal] = useState<React.ReactNode>(<></>);
+  const closeModal = () => {
+    setModal(<></>);
   };
-};
+  const openModal = (RC: React.ReactNode) => {
+    console.log("openModal");
+    setModal(<ModalTemplate content={RC} onClose={closeModal} />);
+  };
+  return { modal, openModal, closeModal };
+}
 
-export default useModal;
+function ModalProvider({ children }: { children: JSX.Element }) {
+  const modal = ModalImplement();
+
+  return (
+    <ModalContext.Provider value={modal}>
+      {children}
+      {modal.modal}
+    </ModalContext.Provider>
+  );
+}
+
+function useModal() {
+  const context = useContext(ModalContext);
+  if (!context) {
+    throw new Error("useModalContext must be used within a ModalProvider");
+  }
+  return context;
+}
+
+export { ModalProvider, useModal };
