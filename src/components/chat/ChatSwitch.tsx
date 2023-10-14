@@ -6,7 +6,7 @@ export default function ChatSwitch({ type }: { type: "user" | "channel" }) {
   const userStyle = type === "user" ? selectedStyle : unselectedStyle;
   const channelStyle = type === "channel" ? selectedStyle : unselectedStyle;
   return (
-    <FlexBox className="mb-3 border-b-2 border-purple-cyber text-center">
+    <FlexBox className="w-full border-b-2 border-purple-cyber text-center">
       <div
         className={`w-full py-1 font-bold text-xl cursur-pointer ${userStyle}`}
       >
