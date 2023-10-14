@@ -16,7 +16,7 @@ export default function Login() {
           <div className="text-black font-bold text-5xl tracking-wider leading-[3.5rem]">Login</div>
           <div className="text-black font-bold text-xl tracking-wider">Use 42 Account</div>
         </FlexBox>
-        <Button onClickBtn={onClickBtn} className="border rounded w-[25rem] h-[3rem]" textClassName="font-bold text-2xl tracking-wider">
+        <Button onClickBtn={onClickBtn} className="border rounded border-black w-[25rem] h-[3rem]" textClassName="font-bold text-2xl tracking-wider">
           42 Intra로 로그인
         </Button>
       </FlexBox>

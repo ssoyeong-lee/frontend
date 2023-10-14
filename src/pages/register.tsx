@@ -28,13 +28,13 @@ export default function Register() {
         <FlexBox direction="col" className="items-end gap-1">
           <TextBox inputNickname={myInput} placeholder="Nickname" className="w-[25rem] h-[3rem] font-bold text-2xl tracking-wider bg-gray-100"/>
           <div className="h-[20px] w-fit">
-            {nickName.length > 10? <div className="text-sm tracking-wider text-red-cyber">Must be less than 10 characters</div>: ""}
+            {Buffer.byteLength(nickName) > 8? <div className="text-sm tracking-wider text-red-cyber">Must be less than 8 characters</div>: ""}
           </div>
         </FlexBox>
 
         <Button
           onClickBtn={onClickBtn}
-          className="border rounded w-[25rem] h-[3rem] bg-gray-500"
+          className="border rounded border-black w-[25rem] h-[3rem] bg-gray-500"
           textClassName="font-bold text-2xl tracking-wider"
         >
           Complete
