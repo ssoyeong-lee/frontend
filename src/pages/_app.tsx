@@ -1,3 +1,4 @@
+import MatchFoundModal from "@/components/modal/MatchFoundModal";
 import useModal from "@/hooks/useModal";
 import Layout from "@/layouts/Layout";
 import "@/styles/globals.css";
@@ -7,7 +8,7 @@ import { useEffect } from "react";
 export default function App({ Component, pageProps }: AppProps) {
   const { Modal, modalOpen } = useModal();
   useEffect(() => {
-    //modalOpen(<>hell</>);
+    //modalOpen(<MatchFoundModal />);
   }, []);
   return (
     <Layout>
