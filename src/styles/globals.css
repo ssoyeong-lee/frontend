@@ -24,3 +24,7 @@ body {
 .modal-container {
   @apply w-11/12 mx-auto rounded-xl shadow-lg z-50 overflow-y-auto;
 }
+
+input {
+  @apply focus:outline-none;
+}
