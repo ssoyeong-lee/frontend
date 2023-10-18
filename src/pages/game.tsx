@@ -2,27 +2,53 @@ import GameBoard from "@/layouts/Gameboard";
 import PlayerBar from "@/layouts/PlayerBar";
 import { useEffect, useState } from "react";
 
-export default function Game() {
-  const [myPos, setMyPos] = useState(100);
+let direction: "none" | "left" | "right" = "none";
 
-  const mvMyBar = (e: KeyboardEvent) => {
-    const step = 30;
-    if (e.key === "ArrowLeft") {
-      if (myPos < step) setMyPos(0);
-      else setMyPos(myPos - step);
-    } else if (e.key === "ArrowRight") {
-      if (myPos > 640 - step) setMyPos(640);
-      else setMyPos(myPos + step);
+export default function Game() {
+  const [myPos, setMyPos] = useState(0);
+
+  const asyncMv = async () => {
+    while (direction !== "none") {
+      if (direction === "left") {
+        setMyPos((prev) => {
+          console.log(prev);
+          if (prev <= 0) return 0;
+          else return prev - 1;
+        });
+      } else {
+        setMyPos((prev) => {
+          console.log(prev);
+          if (prev >= 100) return 100;
+          else return prev + 1;
+        });
+      }
+      await sleep(30);
     }
-    console.log("event occured: ", myPos);
+  };
+
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  const startMoving = (e: KeyboardEvent) => {
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      direction = e.key === "ArrowLeft" ? "left" : "right";
+      asyncMv();
+    }
+  };
+  const stopMoving = (e: KeyboardEvent) => {
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      direction = "none";
+    }
   };
 
   useEffect(() => {
-    window.addEventListener("keydown", mvMyBar);
+    window.addEventListener("keydown", startMoving);
+    window.addEventListener("keyup", stopMoving);
     return () => {
-      window.removeEventListener("keydown", mvMyBar);
+      window.removeEventListener("keydown", startMoving);
+      window.removeEventListener("keyup", stopMoving);
     };
-  }, [myPos]);
+  }, []);
 
   return (
     <GameBoard>
