@@ -1,5 +1,6 @@
 import Avatar from "@/components/Avatar";
 import FlexBox from "@/layouts/FlexBox";
+import ModalCard from "@/layouts/ModalCard";
 
 interface UserDisplayProps {
   src: string;
@@ -27,7 +28,7 @@ function UserDisplay({ src, nickname, lp, winRate, type }: UserDisplayProps) {
 
 export default function MatchFoundModal() {
   return (
-    <div className="bg-gray-700 px-6 py-12 border-[1.5px] border-white">
+    <ModalCard>
       <div className="text-4xl font-bold mb-12 text-center">Match Found</div>
       <FlexBox className="gap-12">
         <UserDisplay
@@ -46,6 +47,6 @@ export default function MatchFoundModal() {
           type="user"
         />
       </FlexBox>
-    </div>
+    </ModalCard>
   );
 }

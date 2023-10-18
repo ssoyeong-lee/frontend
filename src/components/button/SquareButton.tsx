@@ -9,9 +9,10 @@ export default function SquareButton({
   className,
   onClick,
 }: SquareButtonProps) {
+  const width = className?.includes("w-") ? "" : "w-full";
   return (
     <button
-      className={`w-full px-2 py-3 bg-button-green hover:button-green-hover ${className}`}
+      className={`px-2 py-3 bg-button-green hover:button-green-hover ${className} ${width}`}
       onClick={onClick}
     >
       {children}

@@ -1,6 +1,7 @@
 import NotificationDot from "@/components/NotificationDot";
 import SquareButton from "@/components/button/SquareButton";
 import ChatSwitch from "@/components/chat/ChatSwitch";
+import ChannelCreateModal from "@/components/modal/ChannelCreateModal";
 import { useModal } from "@/hooks/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
@@ -8,7 +9,7 @@ import FlexBox from "@/layouts/FlexBox";
 export default function ListCard() {
   const { openModal } = useModal();
   const onClick = () => {
-    openModal(<div>hello</div>);
+    openModal(<ChannelCreateModal />);
   };
   return (
     <Card>
