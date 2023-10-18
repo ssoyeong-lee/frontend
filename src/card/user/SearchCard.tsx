@@ -7,7 +7,7 @@ export default function SearchCard() {
       <IconInput
         src="/icon/search.png"
         placeholder="type to search"
-        className="border border-deepred-cyber"
+        color="red"
       />
     </Card>
   );

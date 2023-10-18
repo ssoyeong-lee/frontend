@@ -1,3 +1,4 @@
+import DefaultInput from "@/components/control/DefaultInput";
 import FlexBox from "@/layouts/FlexBox";
 import Icon from "@/layouts/Icon";
 
@@ -5,9 +6,15 @@ interface Props {
   src: string;
   className?: string;
   placeholder?: string;
+  color?: "white" | "red";
 }
 
-export default function IconInput({ src, className, placeholder }: Props) {
+export default function IconInput({
+  src,
+  className,
+  placeholder,
+  color = "white",
+}: Props) {
   return (
     <div className="w-full relative">
       <div className="w-full h-[56px]"></div>
@@ -16,9 +23,10 @@ export default function IconInput({ src, className, placeholder }: Props) {
           <Icon src={src} className="w-[30px] h-[30px]" alt="icon" />
         </FlexBox>
       </div>
-      <input
-        className={`w-full h-full absolute z-99 top-0 text-lg px-4 bg-[#00000000] ${className}`}
+      <DefaultInput
+        className={"absolute z-99 top-0 " + className}
         placeholder={placeholder}
+        color={color}
       />
     </div>
   );
