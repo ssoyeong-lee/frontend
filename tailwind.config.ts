@@ -45,9 +45,9 @@ const config: Config = {
       "button-green": "#05A11B",
       "button-green-hover": "#118120",
 
-      "cover-black-100": "#00000080",
-      "cover-black-200": "#000000CC",
-      "cover-white": "#D8D8D880",
+      "cover-black-100": "#00000050",
+      "cover-black-200": "#00000080",
+      "cover-white": "#D8D8D850",
     },
   },
   plugins: [],
