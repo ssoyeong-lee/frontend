@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  background-color: black;
+}
+
 body {
   color: white;
   background-image: linear-gradient(
@@ -12,4 +16,15 @@ body {
     url("../../public/peakpx.jpg"); /* 이미지 파일 경로에 맞게 수정 */
   background-size: cover;
   background-position: center;
+}
+
+.modal {
+  @apply fixed inset-0 z-[100] flex items-center justify-center bg-cover-black-100;
+}
+.modal-container {
+  @apply w-11/12 mx-auto rounded-xl shadow-lg z-50 overflow-y-auto;
+}
+
+input {
+  @apply focus:outline-none;
 }

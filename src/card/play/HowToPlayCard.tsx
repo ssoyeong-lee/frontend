@@ -4,8 +4,8 @@ import FlexBox from "@/layouts/FlexBox";
 export default function HowToPlayCard() {
   return (
     <Card>
-      <FlexBox className="text-2xl gap-12" direction="col">
-        <div className="text-4xl font-bold">How To Play</div>
+      <FlexBox className="text-lg gap-12" direction="col">
+        <div className="text-2xl font-bold">How To Play</div>
         <FlexBox className="w-full gap-8" direction="col">
           <div>공이 넘어가지 않도록 막아내세요!</div>
           <div>10에 먼저 도달하면 승리합니다 😉</div>

@@ -9,7 +9,7 @@ export default function Chat() {
     <>
       <TopNav />
       <Container>
-        <FlexBox className="w-full gap-6">
+        <FlexBox className="h-full w-full gap-6">
           <div className="basis-1/3 h-full">
             <ListCard />
           </div>
