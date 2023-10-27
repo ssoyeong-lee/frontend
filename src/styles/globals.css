@@ -28,3 +28,10 @@ body {
 input {
   @apply focus:outline-none;
 }
+
+.toast {
+  @apply fixed top-0 right-0 z-[100] w-[400px] h-[80px] p-[12px] bg-purple-cyber;
+}
+.toast-container {
+  @apply flex flex-col justify-center w-full h-full p-[8px] text-base tracking-wider font-bold text-white;
+}
