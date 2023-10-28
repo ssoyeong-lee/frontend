@@ -14,13 +14,13 @@ const ToastContext = createContext<ToastContextType>({
 
 function ToastImplement() {
   const [toast, setToast] = useState<React.ReactNode>(<></>);
+  const [isStartTimer, setIsStartTimer] = useState(false);
 
   const closeToast = () => {
     setToast(<></>);
     setIsStartTimer(false);
   };
 
-  const [isStartTimer, setIsStartTimer] = useState(false);
   const openToast = (content: JSX.Element) => {
     setToast(
       <div className="toast" onClick={closeToast}>

@@ -52,16 +52,14 @@ const config: Config = {
     keyframes: {
       'toastOpen': {
         '0%': { transform: 'translate(400px)' },
-        '100%': { transform: 'translate(0px)' },
+        '10%': { transform: 'translate(0px)' },
+		'90%': { transform: 'translate(0px)' },
+	  	'100%': { transform: 'translate(400px)' },
       },
-	  'toastClose': {
-		  '0%': { transform: 'translate(0px)' },
-        '100%': { transform: 'translate(400px)' },
-      },
+
     },
     animation: {
-      'toastOpen': 'toastOpen 1s ease-in-out',
-      'toastClose': 'toastClose 1s ease-in-out',
+      'toastOpen': 'toastOpen 3s ease-in-out forwards',
     },
   },
   plugins: [],
