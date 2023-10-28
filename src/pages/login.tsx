@@ -1,3 +1,4 @@
+import { login } from "@/api/login";
 import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
@@ -5,8 +6,9 @@ import { useRouter } from "next/router";
 
 export default function Login() {
   const router = useRouter();
-  const onClickBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
-    router.push("/register");
+  const onClickBtn = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const res = await login();
+    router.push(res.data?.data);
   };
 
   return (
