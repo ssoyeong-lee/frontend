@@ -11,6 +11,7 @@ export default function ListCard() {
   const onClick = () => {
     openModal(<ChannelCreateModal />);
   };
+
   return (
     <Card>
       <FlexBox direction="col" className="w-full h-full gap-3">

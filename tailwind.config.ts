@@ -18,6 +18,15 @@ const config: Config = {
         green: "0px 0px 10px #0ACE41",
         bar: "0px 0px 4px #FFFFFFAA",
       },
+      keyframes: {
+        "sidenav-open": {
+          "0%": { width: "calc(100%+530px)" },
+          "100%": { width: "100%" },
+        },
+      },
+      animation: {
+        "sidenav-open": "sidenav-open 0.7s ease-in-out forwards",
+      },
     },
     colors: {
       white: "#FFFFFF",
