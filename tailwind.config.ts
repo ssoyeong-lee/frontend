@@ -49,6 +49,16 @@ const config: Config = {
       "cover-black-200": "#00000080",
       "cover-white": "#D8D8D850",
     },
+    keyframes: {
+			'toast_open': {
+        '0%': {transform: 'rotate(0deg)'},
+        '50%': {transform: 'rotate(180deg)'},
+        '100%': {transform: 'rotate(360deg)'},
+        // '0%': {transform: 'translateX(0px)'},
+        // '50%': {transform: 'translateX(200px)'},
+        // '100%': {transform: 'translateX(400px)'},
+      }
+	},
   },
   plugins: [],
 };
