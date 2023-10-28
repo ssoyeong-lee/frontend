@@ -2,13 +2,13 @@ import { useContext, createContext, useEffect, useState } from "react";
 
 interface AuthContextType {
   username: string;
-  accesstoken: string;
+  accessToken: string;
   refreshToken: string;
 }
 
 const AuthInit = {
   username: "",
-  accesstoken: "",
+  accessToken: "",
   refreshToken: "",
 };
 
@@ -16,10 +16,10 @@ const AuthContext = createContext<AuthContextType>(AuthInit);
 
 function AuthFromLocalStorage(): AuthContextType {
   const username = localStorage.getItem("username") || "";
-  const accesstoken = localStorage.getItem("accesstoken") || "";
+  const accessToken = localStorage.getItem("accessToken") || "";
   const refreshToken = localStorage.getItem("refreshToken") || "";
 
-  return { username, accesstoken, refreshToken };
+  return { username, accessToken, refreshToken };
 }
 
 function AuthProvider({ children }: { children: JSX.Element }) {
