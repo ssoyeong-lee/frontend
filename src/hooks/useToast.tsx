@@ -40,7 +40,7 @@ function ToastImplement() {
       if (time == 0) {
         closeToast();
         clearTimeout(timer);
-		setTime(toastTime);
+        setTime(toastTime);
       }
       return () => {
         clearTimeout(timer);
