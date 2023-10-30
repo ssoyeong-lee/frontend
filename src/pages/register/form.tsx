@@ -1,22 +1,28 @@
+import { register } from "@/api/login";
 import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
 import TextBox from "@/layouts/TextBox";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Register() {
-  const [nickName, setNickName] = useState('');
-  const myInput= (e: React.ChangeEvent<HTMLInputElement>)=>{
-    setNickName(e.target.value);
-    // console.log(nickName);
-  }
-
   const router = useRouter();
-  const onClickBtn= (e: React.MouseEvent<HTMLButtonElement>)=>{
-    router.push("/login");
-  }
-  
+  const [nickName, setNickName] = useState("");
+
+  const myInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNickName(e.target.value);
+  };
+
+  const onClickBtn = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    try {
+      await register(nickName);
+      router.push("/main");
+    } catch (error) {}
+  };
+
   return (
     <SideBox>
       <FlexBox direction="col" className="items-start gap-8">
@@ -26,9 +32,19 @@ export default function Register() {
           </div>
         </FlexBox>
         <FlexBox direction="col" className="items-end gap-1">
-          <TextBox inputNickname={myInput} placeholder="Nickname" className="w-[25rem] h-[3rem] font-bold text-2xl tracking-wider bg-gray-100"/>
+          <TextBox
+            inputNickname={myInput}
+            placeholder="Nickname"
+            className="w-[25rem] h-[3rem] font-bold text-2xl tracking-wider bg-gray-100"
+          />
           <div className="h-[20px] w-fit">
-            {nickName.length > 10? <div className="text-sm tracking-wider text-red-cyber">Must be less than 10 characters</div>: ""}
+            {nickName.length > 10 ? (
+              <div className="text-sm tracking-wider text-red-cyber">
+                Must be less than 10 characters
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </FlexBox>
 
