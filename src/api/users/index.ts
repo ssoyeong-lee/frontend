@@ -26,4 +26,5 @@ async function getUser(id: number): Promise<AxiosResponse<UserDetail>> {
   return axios.get(`/api/users/${id}`);
 }
 
+export type { UserAbstract, UserDetail };
 export { getUserList, getUserMe, getUser };
