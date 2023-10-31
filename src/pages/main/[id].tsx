@@ -11,9 +11,9 @@ export default function Home() {
       <TopNav />
       <Container>
         <FlexBox className="w-full gap-6" direction="col">
-          <FlexBox className="w-full h-[350px] gap-6">
+          <FlexBox className="w-full h-[380px] gap-6">
             <div className="basis-1/3 h-full">
-              <ProfileCard />
+              <ProfileCard type="other" user={null} />
             </div>
             <div className="basis-2/3 h-full">
               <StatusCard />
