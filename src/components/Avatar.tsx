@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Avatar({ src }: { src: string }) {
   return (
-    <div className="w-[100px] h-[100px]">
+    <div className="min-w-[100px] w-[100px] h-[100px]">
       <Image
         src={src}
         alt="avatar"

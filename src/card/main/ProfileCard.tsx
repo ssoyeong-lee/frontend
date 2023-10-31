@@ -1,8 +1,29 @@
+import { UserDetail } from "@/api/users/index";
+import Avatar from "@/components/Avatar";
 import ChipButton from "@/components/button/ChipButton";
+import DefaultInput from "@/components/control/DefaultInput";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
+import { Dispatch, SetStateAction } from "react";
 
-export default function ProfileCard() {
+interface Props {
+  user: UserDetail | null;
+  setUser?: Dispatch<SetStateAction<UserDetail | null>>;
+  type: "me" | "other";
+}
+
+export default function ProfileCard({ type, user, setUser }: Props) {
+  const onChange = (key: keyof UserDetail, value: any) => {
+    if (!setUser || !user) return;
+    setUser((prev: UserDetail | null) => {
+      if (!prev) return null;
+      return { ...prev, [key]: value };
+    });
+  };
+  const onBlur = () => {
+    //api update user
+  };
+
   return (
     <Card>
       <FlexBox className="w-full gap-6" direction="col">
@@ -10,18 +31,38 @@ export default function ProfileCard() {
           <div className="text-2xl font-bold">Status</div>
           <div className="text-2xl font-bold text-green-cyber">online</div>
         </FlexBox>
-        <FlexBox className="w-full justify-between">
+        <FlexBox className="w-full justify-between gap-6">
           <div>
-            <div className="text-5xl font-bold">hello</div>
-            <div>sryou@gmail.com</div>
+            {type === "other" ? (
+              <div className="text-5xl font-bold">{user?.nickname}</div>
+            ) : (
+              <DefaultInput
+                className="text-2xl py-2 bg-gray-700"
+                value={user?.nickname}
+                onChange={(e) => onChange("nickname", e.target.value)}
+                onBlur={onBlur}
+              />
+            )}
+            <div className="mt-2 text-gray-300 font-bold">{user?.email}</div>
           </div>
-          <div>이미지</div>
+          <Avatar src="/sample.png" />
         </FlexBox>
-        <div className="w-full text-gray-300">Bio hello world I am sryou</div>
-        <FlexBox className="w-full justify-between">
-          <div className="font-bold">2 factor auth</div>
-          <ChipButton color="white">OFF</ChipButton>
-        </FlexBox>
+        {type === "other" ? (
+          <div className="w-full text-gray-300">{user?.bio}</div>
+        ) : (
+          <>
+            <DefaultInput
+              className="text-md py-1 bg-gray-700"
+              value={user?.bio ?? ""}
+              onChange={(e) => onChange("bio", e.target.value)}
+              onBlur={onBlur}
+            />
+            <FlexBox className="w-full justify-between">
+              <div className="font-bold">2 factor auth</div>
+              <ChipButton color="white">OFF</ChipButton>
+            </FlexBox>
+          </>
+        )}
       </FlexBox>
     </Card>
   );

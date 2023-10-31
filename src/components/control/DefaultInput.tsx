@@ -1,5 +1,9 @@
 interface Props {
   className?: string;
+  name?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   placeholder?: string;
   size?: "sm" | "lg";
   color?: "white" | "red";
@@ -7,6 +11,10 @@ interface Props {
 
 export default function DefaultInput({
   className,
+  name,
+  value,
+  onChange,
+  onBlur,
   placeholder,
   size = "lg",
   color = "white",
@@ -18,7 +26,11 @@ export default function DefaultInput({
     <div className="w-full">
       <input
         className={`w-full h-full bg-[#00000000] ${padding} border ${borderColor} ${className}`}
+        name={name}
         placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
       />
     </div>
   );
