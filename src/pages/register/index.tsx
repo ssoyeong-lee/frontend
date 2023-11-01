@@ -1,18 +1,33 @@
-import { login } from "@/api/login";
+import { userRedirect } from "@/api/login";
 import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
-export default function Login() {
+export default function Register() {
   const router = useRouter();
-  const onClickBtn = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const res = await login();
-    router.push(res.data?.data);
-  };
+
+  useEffect(() => {
+    const asyncFunc = async () => {
+      if (!router.isReady) return;
+      const { code, state } = router.query;
+      if (code && state) {
+        const res = await userRedirect(code as string, state as string);
+        if (res.data?.redirect === "home") {
+          router.push("/main");
+        } else if (res.data?.redirect === "register") {
+          router.push("/register/form");
+        }
+      } else {
+        router.push("/login");
+      }
+    };
+    asyncFunc();
+  }, [router.isReady]);
 
   return (
-    <SideBox animate>
+    <SideBox>
       <FlexBox direction="col" className="items-start box-border gap-9">
         <FlexBox direction="col" className="items-start gap-3 ">
           <div className="text-black font-bold text-5xl tracking-wider leading-[3.5rem]">
@@ -23,11 +38,11 @@ export default function Login() {
           </div>
         </FlexBox>
         <Button
-          onClickBtn={onClickBtn}
+          onClickBtn={() => {}}
           className="border rounded w-[25rem] h-[3rem]"
           textClassName="font-bold text-2xl tracking-wider"
         >
-          42 Intra로 로그인
+          로그인 중 입니다...
         </Button>
       </FlexBox>
     </SideBox>
