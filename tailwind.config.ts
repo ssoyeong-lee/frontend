@@ -54,9 +54,21 @@ const config: Config = {
       "button-green": "#05A11B",
       "button-green-hover": "#118120",
 
-      "cover-black-100": "#00000080",
-      "cover-black-200": "#000000CC",
-      "cover-white": "#D8D8D880",
+      "cover-black-100": "#00000050",
+      "cover-black-200": "#00000080",
+      "cover-white": "#D8D8D850",
+    },
+    keyframes: {
+      'toastOpen': {
+        '0%': { transform: 'translate(400px)' },
+        '10%': { transform: 'translate(0px)' },
+		'90%': { transform: 'translate(0px)' },
+	  	'100%': { transform: 'translate(400px)' },
+      },
+
+    },
+    animation: {
+      'toastOpen': 'toastOpen 3s ease-in-out forwards',
     },
   },
   plugins: [],
