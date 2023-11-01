@@ -1,3 +1,4 @@
+import { useToast } from "@/hooks/useToast";
 import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
@@ -5,8 +6,11 @@ import { useRouter } from "next/router";
 
 export default function Login() {
   const router = useRouter();
+  const {openToast} = useToast();
+
   const onClickBtn= (e: React.MouseEvent<HTMLButtonElement>)=>{
     router.push("/register");
+    openToast(<div>login에 성공했습니다!!!</div>);
   }
 
   return (

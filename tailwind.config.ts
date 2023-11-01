@@ -49,6 +49,18 @@ const config: Config = {
       "cover-black-200": "#00000080",
       "cover-white": "#D8D8D850",
     },
+    keyframes: {
+      'toastOpen': {
+        '0%': { transform: 'translate(400px)' },
+        '10%': { transform: 'translate(0px)' },
+		'90%': { transform: 'translate(0px)' },
+	  	'100%': { transform: 'translate(400px)' },
+      },
+
+    },
+    animation: {
+      'toastOpen': 'toastOpen 3s ease-in-out forwards',
+    },
   },
   plugins: [],
 };
