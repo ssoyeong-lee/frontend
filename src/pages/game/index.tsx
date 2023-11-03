@@ -18,7 +18,7 @@ export default function Game() {
       } else {
         setMyPos((prev) => {
           console.log(prev);
-          if (prev >= 100) return 100;
+          if (prev >= 75) return 75;
           else return prev + 1;
         });
       }
