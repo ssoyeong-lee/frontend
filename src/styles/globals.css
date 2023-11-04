@@ -25,6 +25,13 @@ body {
   @apply w-11/12 mx-auto rounded-xl shadow-lg z-50 overflow-y-auto;
 }
 
+.user_control {
+  @apply absolute w-screen h-screen top-0 inset-0 z-[50];
+}
+.user_control-container {
+  @apply absolute inline-block p-4 bg-gray-600;
+}
+
 input {
   @apply focus:outline-none;
 }

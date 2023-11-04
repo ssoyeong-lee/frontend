@@ -12,7 +12,7 @@ export default function ChatCard() {
           <div>Direct message</div>
           <div>user121</div>
         </FlexBox>
-        <Divider />
+        <Divider color="yellow" />
         <ChatDisplay />
         <IconInput
           src="/icon/send.png"
