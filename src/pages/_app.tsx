@@ -1,5 +1,6 @@
 import { AuthProvider } from "@/hooks/useAuth";
 import { ModalProvider } from "@/hooks/useModal";
+import { NotificationProvider } from "@/hooks/useNotification";
 import { ToastProvider } from "@/hooks/useToast";
 import Layout from "@/layouts/Layout";
 import "@/styles/globals.css";
@@ -10,9 +11,11 @@ export default function App({ Component, pageProps }: AppProps) {
     <AuthProvider>
       <ModalProvider>
         <ToastProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <NotificationProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </NotificationProvider>
         </ToastProvider>
       </ModalProvider>
     </AuthProvider>
