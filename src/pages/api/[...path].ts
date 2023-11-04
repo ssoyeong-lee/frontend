@@ -40,7 +40,7 @@ export default async function handler(
       .setHeader("Set-Cookie", axiosRes.headers["set-cookie"] as string[])
       .json(axiosRes.data);
   } catch (error) {
-    //console.log(error);
+    console.log(error);
     const axiosError = error as AxiosError;
     res
       .status(axiosError.response?.status || 500)
