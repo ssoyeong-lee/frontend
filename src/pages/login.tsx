@@ -7,7 +7,9 @@ import { useRouter } from "next/router";
 export default function Login() {
   const router = useRouter();
   const onClickBtn = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const res = await login();
+    const res = await login(
+      window.location.protocol + "//" + window.location.host + "/register"
+    );
     router.push(res.data?.data);
   };
 
