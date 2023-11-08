@@ -1,7 +1,7 @@
 interface Props {
   children: React.ReactNode;
   className?: string;
-  color: "white" | "grean" | "red";
+  color: "white" | "green" | "red";
   onClick?: () => void;
 }
 
@@ -16,7 +16,7 @@ export default function ChipButton({
     case "white":
       colorClass = "border-white hover:bg-white hover:text-black";
       break;
-    case "grean":
+    case "green":
       colorClass = "border-green-cyber hover:bg-green-cyber hover:text-black";
       break;
     case "red":

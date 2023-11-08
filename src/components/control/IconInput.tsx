@@ -1,20 +1,31 @@
 import DefaultInput from "@/components/control/DefaultInput";
 import FlexBox from "@/layouts/FlexBox";
 import Icon from "@/layouts/Icon";
+import { RefObject, forwardRef } from "react";
 
 interface Props {
   src: string;
   className?: string;
   placeholder?: string;
   color?: "white" | "red";
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  ref?: RefObject<HTMLInputElement>;
 }
 
-export default function IconInput({
-  src,
-  className,
-  placeholder,
-  color = "white",
-}: Props) {
+export default forwardRef<HTMLInputElement, Props>(function IconInput(
+  {
+    src,
+    className,
+    placeholder,
+    color = "white",
+    onChange,
+    onFocus,
+    onBlur,
+  }: Props,
+  ref
+) {
   return (
     <div className="w-full relative">
       <div className="w-full h-[56px]"></div>
@@ -27,7 +38,11 @@ export default function IconInput({
         className={"absolute z-99 top-0 " + className}
         placeholder={placeholder}
         color={color}
+        onChange={onChange}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        ref={ref}
       />
     </div>
   );
-}
+});

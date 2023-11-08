@@ -28,7 +28,7 @@ export default function ChatCard() {
             <Icon src="/icon/setting.svg" onClick={settingClick} className="w-6 h-6 fill-red-400" alt="name"/>
           </FlexBox>
         </FlexBox>
-        <Divider />
+        <Divider color="yellow" />
         <ChatDisplay />
         <IconInput
           src="/icon/send.png"

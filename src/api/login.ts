@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 
-export function login(): Promise<AxiosResponse<{ data: string }>> {
-  return axios.get("/api/auth/sign-in");
+export function login(uri: string): Promise<AxiosResponse<{ data: string }>> {
+  return axios.get(`/api/auth/sign-in?callback_uri=${uri}`);
 }
 
 export function userRedirect(
