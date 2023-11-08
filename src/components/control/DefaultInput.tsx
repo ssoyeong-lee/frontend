@@ -7,6 +7,7 @@ interface Props {
   placeholder?: string;
   size?: "sm" | "lg";
   color?: "white" | "red";
+  type?: "text" | "password";
 }
 
 export default function DefaultInput({
@@ -18,6 +19,7 @@ export default function DefaultInput({
   placeholder,
   size = "lg",
   color = "white",
+  type = "text",
 }: Props) {
   const padding = size === "lg" ? "p-4" : "px-4 py-2";
   const borderColor =
@@ -31,6 +33,7 @@ export default function DefaultInput({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
+        type={type}
       />
     </div>
   );

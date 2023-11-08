@@ -25,11 +25,13 @@ export default function ChatroomSettinngModal() {
           placeholder="new"
           onChange={pwChange}
           className="bg-gray-700"
+          type="password"
         />
         <DefaultInput
           placeholder="again"
           onChange={againChange}
           className="bg-gray-700"
+          type="password"
         />
         <div className="h-6 w-full">
           {again && pw !== again ? (
