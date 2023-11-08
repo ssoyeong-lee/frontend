@@ -24,8 +24,8 @@ export default function ChatCard() {
           <div>Direct message</div>
           <FlexBox className="gap-3">
             <div>user121</div>
-            <Icon src="/icon/blockList.svg" onClick={blockClick} className="w-6 h-6 fill-red-400  stroke-2 stroke-white" alt="name"/>
-            <Icon src="/icon/setting.svg" onClick={settingClick} className="w-6 h-6 fill-red-400" alt="name"/>
+            <Icon src="/icon/blockList.svg" onClick={blockClick} className="w-6 h-6" alt="name"/>
+            <Icon src="/icon/setting.svg" onClick={settingClick} className="w-6 h-6" alt="name"/>
           </FlexBox>
         </FlexBox>
         <Divider color="yellow" />
