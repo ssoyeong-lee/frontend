@@ -11,6 +11,7 @@ interface Props {
   placeholder?: string;
   size?: "sm" | "lg";
   color?: "white" | "red";
+  type?: "text" | "password";
 }
 
 export default forwardRef<HTMLInputElement, Props>(function DefaultInput(
@@ -24,6 +25,7 @@ export default forwardRef<HTMLInputElement, Props>(function DefaultInput(
     placeholder,
     size = "lg",
     color = "white",
+    type = "text",
   }: Props,
   ref
 ) {
@@ -39,6 +41,7 @@ export default forwardRef<HTMLInputElement, Props>(function DefaultInput(
         value={value}
         onChange={onChange}
         onBlur={onBlur}
+        type={type}
         onFocus={onFocus}
         ref={ref}
       />
