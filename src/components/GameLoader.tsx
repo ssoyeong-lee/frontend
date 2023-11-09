@@ -1,7 +1,7 @@
 import SpinningLoad from "@/components/SpinningLoad";
 import FlexBox from "@/layouts/FlexBox";
 
-export default function GameLoader({ isFinding }: { isFinding: boolean }) {
+export default function GameLoader() {
   return (
     <FlexBox className="gap-8">
       <SpinningLoad />
