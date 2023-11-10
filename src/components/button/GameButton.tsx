@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 interface GameButtonProps {
   onClick?: () => void;
   isFinding: boolean;

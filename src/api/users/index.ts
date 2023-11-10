@@ -22,9 +22,13 @@ async function getUserMe(): Promise<AxiosResponse<UserDetail>> {
   return axios.get("/api/users/me");
 }
 
+async function putUserMe(params: UserDetail): Promise<AxiosResponse> {
+  return axios.put("/api/users/me", params);
+}
+
 async function getUser(id: number): Promise<AxiosResponse<UserDetail>> {
   return axios.get(`/api/users/${id}`);
 }
 
 export type { UserAbstract, UserDetail };
-export { getUserList, getUserMe, getUser };
+export { getUserList, getUserMe, putUserMe, getUser };

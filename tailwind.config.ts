@@ -23,9 +23,19 @@ const config: Config = {
           "0%": { width: "calc(100%+530px)" },
           "100%": { width: "100%" },
         },
+        toastOpen: {
+          "0%": { transform: "translate(400px)" },
+          "10%": { transform: "translate(0px)" },
+          "90%": { transform: "translate(0px)" },
+          "100%": { transform: "translate(400px)" },
+        },
+      },
+      aspectRatio: {
+        gameBoardRatio: "9 / 16",
       },
       animation: {
         "sidenav-open": "sidenav-open 0.7s ease-in-out forwards",
+        toastOpen: "toastOpen 3s ease-in-out forwards",
       },
     },
     colors: {
@@ -58,20 +68,6 @@ const config: Config = {
       "cover-black-200": "#00000080",
       "cover-white": "#D8D8D850",
     },
-    keyframes: {
-      toastOpen: {
-        "0%": { transform: "translate(400px)" },
-        "10%": { transform: "translate(0px)" },
-        "90%": { transform: "translate(0px)" },
-        "100%": { transform: "translate(400px)" },
-      },
-    },
-    animation: {
-      toastOpen: "toastOpen 3s ease-in-out forwards",
-    },
-    aspectRatio: {
-      'gameBoardRatio': '9 / 16',
-    }
   },
   plugins: [],
 };

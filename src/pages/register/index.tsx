@@ -13,7 +13,11 @@ export default function Register() {
       if (!router.isReady) return;
       const { code, state } = router.query;
       if (code && state) {
-        const res = await userRedirect(code as string, state as string);
+        const res = await userRedirect(
+          code as string,
+          state as string,
+          window.location.protocol + "//" + window.location.host + "/register"
+        );
         if (res.data?.redirect === "home") {
           router.push("/main");
         } else if (res.data?.redirect === "register") {

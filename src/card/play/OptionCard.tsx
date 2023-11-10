@@ -1,9 +1,16 @@
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
+import { Option } from "@/pages/play/index";
+import { Dispatch, SetStateAction } from "react";
 
-export default function OptionCard() {
-  const selectedStyle = "text-white";
-  const unselectedStyle = "text-gray-400 hover:text-white";
+interface Props {
+  option: Option;
+  setOption: Dispatch<SetStateAction<Option>>;
+}
+
+export default function OptionCard({ option, setOption }: Props) {
+  const selectedStyle = "cursor-pointer text-white";
+  const unselectedStyle = "cursor-pointer text-gray-400 hover:text-white";
   return (
     <Card>
       <FlexBox
@@ -14,15 +21,43 @@ export default function OptionCard() {
         <FlexBox className="w-full justify-between">
           <div>SPEED</div>
           <FlexBox>
-            <div className={`w-[150px] ${selectedStyle}`}>Normal</div>
-            <div className={`w-[150px] ${unselectedStyle}`}>Fast</div>
+            <div
+              className={`w-[150px] ${
+                option.speed === "normal" ? selectedStyle : unselectedStyle
+              }`}
+              onClick={() => setOption({ ...option, speed: "normal" })}
+            >
+              Normal
+            </div>
+            <div
+              className={`w-[150px] ${
+                option.speed === "fast" ? selectedStyle : unselectedStyle
+              }
+            `}
+              onClick={() => setOption({ ...option, speed: "fast" })}
+            >
+              Fast
+            </div>
           </FlexBox>
         </FlexBox>
         <FlexBox className="w-full justify-between">
           <div>MODE</div>
           <FlexBox>
-            <div className={`w-[150px] ${selectedStyle}`}>Standard</div>
-            <div className={`w-[150px] ${unselectedStyle}`}>Extreme</div>
+            <div
+              className={`w-[150px] ${
+                option.mode === "standard" ? selectedStyle : unselectedStyle
+              }`}
+              onClick={() => setOption({ ...option, mode: "standard" })}
+            >
+              Standard
+            </div>
+            <div
+              className={`w-[150px] 
+            ${option.mode === "extreme" ? selectedStyle : unselectedStyle}`}
+              onClick={() => setOption({ ...option, mode: "extreme" })}
+            >
+              Extreme
+            </div>
           </FlexBox>
         </FlexBox>
         <FlexBox className="w-full justify-between">

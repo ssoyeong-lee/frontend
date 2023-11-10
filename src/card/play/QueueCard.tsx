@@ -9,12 +9,10 @@ export default function QueueCard({
   game: number;
 }) {
   return (
-    <Card>
-      <FlexBox className="w-full justify-center">
-        <div className="text-2xl font-bold tracking-wider">
-          {`${queue} in queue / ${game} in games`}
-        </div>
-      </FlexBox>
-    </Card>
+    <FlexBox className="w-full justify-center">
+      <div className="text-xl font-bold tracking-wider">
+        {`${queue} in queue / ${game} in games`}
+      </div>
+    </FlexBox>
   );
 }
