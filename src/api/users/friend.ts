@@ -5,11 +5,11 @@ interface Friend {
   nickname: string;
 }
 async function getFriendList(): Promise<AxiosResponse<Friend[]>> {
-  return axios.get("/users/friends");
+  return axios.get("/api/users/friends");
 }
 
 async function postRequestFriend(id: number): Promise<AxiosResponse> {
-  return axios.post(`/users/friends/request/${id}`);
+  return axios.post(`/api/users/friends/request/${id}`);
 }
 
 export { getFriendList, postRequestFriend };
