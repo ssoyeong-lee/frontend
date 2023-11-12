@@ -1,4 +1,4 @@
-import { UserDetail, getUser } from "@/api/users/index";
+import { UserDetail, getUserMe } from "@/api/users/index";
 import HistoryCard from "@/card/main/HistoryCard";
 import ProfileCard from "@/card/main/ProfileCard";
 import StatusCard from "@/card/main/StatusCard";
@@ -11,8 +11,7 @@ export default function Home() {
   const [user, setUser] = useState<UserDetail | null>(null);
   useEffect(() => {
     const asyncFunc = async () => {
-      const res = await getUser(1);
-      console.log(res);
+      const res = await getUserMe();
       setUser(res.data);
     };
     asyncFunc();
