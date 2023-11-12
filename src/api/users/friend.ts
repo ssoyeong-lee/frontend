@@ -9,7 +9,7 @@ async function getFriendList(): Promise<AxiosResponse<Friend[]>> {
 }
 
 async function postRequestFriend(id: number): Promise<AxiosResponse> {
-  return axios.post(`/api/user-relation/friends/${id}/request`);
+  return axios.post(`/api/user-relation/friends/${id}/request`, {});
 }
 
 export { getFriendList, postRequestFriend };

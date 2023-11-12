@@ -5,6 +5,7 @@ import Icon from "@/layouts/Icon";
 
 interface Props {
   friendList: Friend[];
+  setFriendList: (friendList: Friend[]) => void;
 }
 
 export default function FriendCard({ friendList }: Props) {

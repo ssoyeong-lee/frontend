@@ -1,13 +1,18 @@
-import { Block } from "@/api/users/block";
+import { Block, deleteBlock } from "@/api/users/block";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import Icon from "@/layouts/Icon";
 
 interface Props {
   blockList: Block[];
+  setBlockList: (blockList: Block[]) => void;
 }
 
-export default function BlockCard({ blockList }: Props) {
+export default function BlockCard({ blockList, setBlockList }: Props) {
+  const onClickDelete = async (id: number) => {
+    await deleteBlock(id);
+    setBlockList(blockList.filter((block) => block.id !== id));
+  };
   return (
     <Card>
       <FlexBox className="h-full gap-8 text-xl" direction="col">
@@ -19,7 +24,8 @@ export default function BlockCard({ blockList }: Props) {
               <Icon
                 src="/icon/delete.png"
                 alt="delete"
-                className="w-[24px] h-[24px]"
+                className="w-[24px] h-[24px] cursor-pointer"
+                onClick={() => onClickDelete(block.id)}
               />
             </FlexBox>
           );

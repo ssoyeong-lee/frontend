@@ -9,7 +9,7 @@ async function getBlockList(): Promise<AxiosResponse<Block[]>> {
 }
 
 async function postBlock(user_id: number) {
-  return axios.post(`/api/user-relation/block/${user_id}`);
+  return axios.post(`/api/user-relation/block/${user_id}`, {});
 }
 
 async function deleteBlock(user_id: number) {
