@@ -1,12 +1,17 @@
 import { login } from "@/api/login";
+import SpinningLoad from "@/components/SpinningLoad";
 import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function Login() {
+  const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
   const onClickBtn = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setIsClicked(true);
     const res = await login(
       window.location.protocol + "//" + window.location.host + "/register"
     );
@@ -29,7 +34,7 @@ export default function Login() {
           className="border rounded w-[25rem] h-[3rem]"
           textClassName="font-bold text-2xl tracking-wider"
         >
-          42 Intra로 로그인
+          {isClicked ? <SpinningLoad /> : "42 Intra로 로그인"}
         </Button>
       </FlexBox>
     </SideBox>
