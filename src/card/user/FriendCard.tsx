@@ -1,8 +1,13 @@
+import { Friend } from "@/api/users/friend";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import Icon from "@/layouts/Icon";
 
-export default function FriendsCard() {
+interface Props {
+  friendList: Friend[];
+}
+
+export default function FriendCard({ friendList }: Props) {
   return (
     <Card>
       <FlexBox className="h-full gap-8 text-xl" direction="col">

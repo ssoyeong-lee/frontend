@@ -1,8 +1,13 @@
+import { Block } from "@/api/users/block";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import Icon from "@/layouts/Icon";
 
-export default function BansCard() {
+interface Props {
+  blockList: Block[];
+}
+
+export default function BlockCard({ blockList }: Props) {
   return (
     <Card>
       <FlexBox className="h-full gap-8 text-xl" direction="col">
