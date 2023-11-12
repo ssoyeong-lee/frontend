@@ -12,3 +12,6 @@ async function getFriendList(): Promise<AxiosResponse<Friend[]>> {
 async function postRequestFriend(id: number): Promise<AxiosResponse> {
   return api.post(`/users/friends/request/${id}`);
 }
+
+export { getFriendList, postRequestFriend };
+export type { Friend };
