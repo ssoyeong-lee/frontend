@@ -38,8 +38,8 @@ export default forwardRef<HTMLInputElement, Props>(function DefaultInput(
         className={`w-full h-full bg-[#00000000] ${padding} border ${borderColor} ${className}`}
         name={name}
         placeholder={placeholder}
-        value={value}
-        onChange={onChange}
+        value={value ?? ""}
+        onChange={onChange ?? (() => {})}
         onBlur={onBlur}
         type={type}
         onFocus={onFocus}

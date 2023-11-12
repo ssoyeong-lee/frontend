@@ -1,4 +1,4 @@
-import { UserDetail } from "@/api/users/index";
+import { UserDetail, putUserMe } from "@/api/users/index";
 import Avatar from "@/components/Avatar";
 import ChipButton from "@/components/button/ChipButton";
 import DefaultInput from "@/components/control/DefaultInput";
@@ -20,8 +20,9 @@ export default function ProfileCard({ type, user, setUser }: Props) {
       return { ...prev, [key]: value };
     });
   };
-  const onBlur = () => {
-    //api update user
+  const onBlur = async () => {
+    if (!user) return;
+    await putUserMe(user);
   };
 
   return (

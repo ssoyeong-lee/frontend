@@ -1,5 +1,6 @@
 import { useUserControl } from "@/hooks/useUserControl";
 import FlexBox from "@/layouts/FlexBox";
+import ScrollBox from "@/layouts/ScrollBox";
 
 function MyChat() {
   return (
@@ -37,20 +38,22 @@ function OtherChat() {
 
 export default function ChatDisplay() {
   return (
-    <FlexBox direction="col" className="w-full h-full">
-      <MyChat />
-      <OtherChat />
-      <OtherChat />
-      <OtherChat />
-      <OtherChat />
-      <OtherChat />
-      <OtherChat />
-      <OtherChat />
-      <OtherChat />
-      <OtherChat />
-      <OtherChat />
-      <OtherChat />
-      <OtherChat />
-    </FlexBox>
+    <ScrollBox>
+      <FlexBox direction="col" className="w-full h-full">
+        <MyChat />
+        <OtherChat />
+        <OtherChat />
+        <OtherChat />
+        <OtherChat />
+        <OtherChat />
+        <OtherChat />
+        <OtherChat />
+        <OtherChat />
+        <OtherChat />
+        <OtherChat />
+        <OtherChat />
+        <OtherChat />
+      </FlexBox>
+    </ScrollBox>
   );
 }

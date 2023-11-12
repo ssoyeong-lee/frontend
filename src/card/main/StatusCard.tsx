@@ -43,9 +43,9 @@ export default function StatusCard() {
       <FlexBox className="w-full gap-8" direction="col">
         <FlexBox className="w-full justify-between">
           <CoinDisplay title="Rank" content="A+" color="purple" />
-          <CoinDisplay title="Rank" content="A+" color="blue" />
-          <CoinDisplay title="Rank" content="A+" color="red" />
-          <CoinDisplay title="Rank" content="A+" color="green" />
+          <CoinDisplay title="Win" content="12" color="blue" />
+          <CoinDisplay title="Lose" content="8" color="red" />
+          <CoinDisplay title="Win Rate" content="56%" color="green" />
         </FlexBox>
         <FlexBox className="w-full gap-2" direction="col">
           <div className="w-full text-start">Ladder</div>

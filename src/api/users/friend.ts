@@ -1,14 +1,16 @@
-import { api } from "@/api/network";
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 
 interface Friend {
   id: number;
   nickname: string;
 }
 async function getFriendList(): Promise<AxiosResponse<Friend[]>> {
-  return api.get("/users/friends");
+  return axios.get("/api/user-relation/friends");
 }
 
 async function postRequestFriend(id: number): Promise<AxiosResponse> {
-  return api.post(`/users/friends/request/${id}`);
+  return axios.post(`/api/user-relation/friends/${id}/request`);
 }
+
+export { getFriendList, postRequestFriend };
+export type { Friend };

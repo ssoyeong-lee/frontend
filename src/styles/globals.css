@@ -42,3 +42,15 @@ input {
 .toast-container {
   @apply flex flex-col justify-center w-full h-full p-2 text-base tracking-wider font-bold text-white;
 }
+
+#scroll-box::-webkit-scrollbar-track {
+  @apply rounded-full;
+}
+
+#scroll-box::-webkit-scrollbar {
+  @apply rounded-full w-[10px] bg-gray-200;
+}
+
+#scroll-box::-webkit-scrollbar-thumb {
+  @apply rounded-full bg-gray-600;
+}
