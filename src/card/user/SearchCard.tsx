@@ -12,10 +12,10 @@ interface Props {
   isSearch?: boolean;
 }
 
-function SearchItem() {
+function SearchItem({ user }: { user: UserAbstract }) {
   return (
     <FlexBox className="w-full px-4 py-2 justify-between">
-      <div>seud</div>
+      <div>{user.nickname}</div>
       <FlexBox className="gap-6">
         <ChipButton color="green" className="w-[80px]">
           invite
@@ -46,7 +46,7 @@ export default function SearchCard({ userList, isSearch, onClick }: Props) {
           {isSearch &&
             userList &&
             userList.map((user) => {
-              return <SearchItem key={user.id} />;
+              return <SearchItem key={user.id} user={user} />;
             })}
         </FlexBox>
       </ScrollBox>
