@@ -1,3 +1,5 @@
+import { postBlock } from "@/api/users/block";
+import { postRequestFriend } from "@/api/users/friend";
 import { UserAbstract } from "@/api/users/index";
 import ChipButton from "@/components/button/ChipButton";
 import IconInput from "@/components/control/IconInput";
@@ -17,10 +19,18 @@ function SearchItem({ user }: { user: UserAbstract }) {
     <FlexBox className="w-full px-4 py-2 justify-between">
       <div>{user.nickname}</div>
       <FlexBox className="gap-6">
-        <ChipButton color="green" className="w-[80px]">
+        <ChipButton
+          color="green"
+          className="w-[80px]"
+          onClick={async () => await postRequestFriend(user.id)}
+        >
           invite
         </ChipButton>
-        <ChipButton color="red" className="w-[80px]">
+        <ChipButton
+          color="red"
+          className="w-[80px]"
+          onClick={async () => await postBlock(user.id)}
+        >
           ban
         </ChipButton>
       </FlexBox>
