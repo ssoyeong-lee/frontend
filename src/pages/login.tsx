@@ -1,4 +1,5 @@
 import { login } from "@/api/login";
+import { testLogin } from "@/api/testLogin";
 import SpinningLoad from "@/components/SpinningLoad";
 import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
@@ -11,11 +12,15 @@ export default function Login() {
   const router = useRouter();
   const onClickBtn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    await testLogin();
+    /*
     setIsClicked(true);
     const res = await login(
       window.location.protocol + "//" + window.location.host + "/register"
     );
     router.push(res.data?.data);
+    */
+    router.push("/main");
   };
 
   return (
