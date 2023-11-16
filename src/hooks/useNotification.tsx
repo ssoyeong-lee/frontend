@@ -25,9 +25,6 @@ function NotificationTemplate({content, onClose}: NotificationTemplateProps){
   return (
     <div onClick={onClose} className="fixed z-[101] inset-0">
       <div onClick={(e)=>e.stopPropagation()} className="fixed top-28 right-0 bg-gray-500 w-[500px] h-fit max-h-[200px]">
-        {/* <FlexBox direction="row" className="w-full h-fit max-h-[200px] overflow-auto gap-[12px] p-[12px]">
-          {content}
-        </FlexBox> */}
         <ScrollBox className="w-full h-fit max-h-[200px] overflow-auto gap-3 p-3">
           {content}
         </ScrollBox>
