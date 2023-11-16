@@ -8,6 +8,7 @@ interface Props {
   className?: string;
   placeholder?: string;
   color?: "white" | "red";
+  value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
@@ -20,6 +21,7 @@ export default forwardRef<HTMLInputElement, Props>(function IconInput(
     className,
     placeholder,
     color = "white",
+    value,
     onChange,
     onFocus,
     onBlur,
@@ -38,6 +40,7 @@ export default forwardRef<HTMLInputElement, Props>(function IconInput(
         className={"absolute z-99 top-0 " + className}
         placeholder={placeholder}
         color={color}
+        value={value}
         onChange={onChange}
         onFocus={onFocus}
         onBlur={onBlur}

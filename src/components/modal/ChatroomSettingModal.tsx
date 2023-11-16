@@ -23,12 +23,14 @@ export default function ChatroomSettinngModal() {
       <FlexBox direction="col" className="w-full h-full gap-3">
         <DefaultInput
           placeholder="new"
+          value={pw}
           onChange={pwChange}
           className="bg-gray-700"
           type="password"
         />
         <DefaultInput
           placeholder="again"
+          value={again}
           onChange={againChange}
           className="bg-gray-700"
           type="password"

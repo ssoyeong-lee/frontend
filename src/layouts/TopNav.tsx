@@ -15,15 +15,15 @@ export default function TopNav() {
   const onClick = () => {
     openNotification(
       <div className="w-full max-h-[200px]">
-        <FlexBox direction="row" className="w-full h-fit justify-between p-[8px]">
+        <FlexBox direction="row" className="w-full h-fit justify-between p-2">
           <div >user1님이 게임에 초대하였습니다.</div>
-          <div className="px-[8px] py-[4px] border-solid border border-green-cyber">수락</div>
+          <div className="px-2 border-solid border border-green-cyber">수락</div>
         </FlexBox>
-        <div className="p-[8px]">user2님이 게임에 초대하였습니다.</div>
-        <div className="p-[8px]">user2님이 게임에 초대하였습니다.</div>
-        <div className="p-[8px]">user2님이 게임에 초대하였습니다.</div>
-        <div className="p-[8px]">user2님이 게임에 초대하였습니다.</div>
-        <div className="p-[8px]">user2님이 게임에 초대하였습니다.</div>
+        <div className="p-2">user2님이 게임에 초대하였습니다.</div>
+        <div className="p-2">user2님이 게임에 초대하였습니다.</div>
+        <div className="p-2">user2님이 게임에 초대하였습니다.</div>
+        <div className="p-2">user2님이 게임에 초대하였습니다.</div>
+        <div className="p-2">user2님이 게임에 초대하였습니다.</div>
       </div>
     );
   };

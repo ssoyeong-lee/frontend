@@ -6,7 +6,7 @@ import IconInput from "@/components/control/IconInput";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Props {
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
@@ -43,6 +43,10 @@ export default function SearchCard({ userList, isSearch, onClick }: Props) {
   useEffect(() => {
     if (isSearch) ref.current?.focus();
   }, [isSearch]);
+  const [keyword, setKeyword] = useState("");
+  const keyworkdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(e.target.value);
+  }
   return (
     <Card onClick={onClick}>
       <ScrollBox>
@@ -51,6 +55,8 @@ export default function SearchCard({ userList, isSearch, onClick }: Props) {
             src="/icon/search.png"
             placeholder="type to search"
             color="red"
+            value={keyword}
+            onChange={keyworkdChange}
             ref={ref}
           />
           {isSearch &&
