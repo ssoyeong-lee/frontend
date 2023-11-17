@@ -1,4 +1,4 @@
-import { createChannel } from "@/api/channels/owner";
+import { createChannel } from "@/api/channels";
 import SquareButton from "@/components/button/SquareButton";
 import DefaultInput from "@/components/control/DefaultInput";
 import SelectBox from "@/components/control/SelectBox";
@@ -30,12 +30,7 @@ export default function ChannelCreateModal() {
       console.log("click err");
       return;
     }
-
-    createChannel({ title, type, password })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
+    createChannel({ title, type, password }).then((res)=>console.log(res)).catch((err)=>console.log(err));
   };
   return (
     <ModalCard className="w-[500px] h-[450px]">
