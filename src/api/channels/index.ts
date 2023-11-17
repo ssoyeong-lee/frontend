@@ -11,5 +11,9 @@ async function getChannelList(){
     return axios.get('/api/channels');
 }
 
+async function getChannel(channel_id: number){
+    return axios.get(`/api/channels/${channel_id}`);
+}
+
 export type { Channel };
-export { getChannelList };
+export { getChannelList, getChannel };
