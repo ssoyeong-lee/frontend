@@ -1,3 +1,4 @@
+import { Channel, getChannelList } from "@/api/channels";
 import NotificationDot from "@/components/NotificationDot";
 import SquareButton from "@/components/button/SquareButton";
 import ChatSwitch from "@/components/chat/ChatSwitch";
@@ -13,12 +14,14 @@ export default function ListCard() {
     openModal(<ChannelCreateModal />);
   };
 
+  const [channelList, setChannelList] = useState<Channel[]>([]);
   const [type, setType] = useState<string>("user");
   const clickUser = () => {
     setType("user");
   };
   const clickChannel = () => {
     setType("channel");
+    getChannelList().then((res) => setChannelList(res.data));
   };
 
   return (
@@ -42,17 +45,18 @@ export default function ListCard() {
           </FlexBox>
         ) : (
           <FlexBox direction="col" className="h-full w-full gap-3">
-            <FlexBox className="w-full justify-between p-2 hover:bg-gray-600 cursur-pointer">
-              <div className="font-bold">channel1</div>
-              <NotificationDot amount={1} />
-            </FlexBox>
-            <FlexBox className="w-full justify-between p-2 bg-gray-600 cursur-pointer">
-              <div className="font-bold">channel2</div>
-              <NotificationDot amount={0} />
-            </FlexBox>
+            {channelList.map((channel) => {
+              if (channel.type === "private")
+                return <></>;
+              return (
+                <FlexBox className="w-full justify-between p-2 hover:bg-gray-600 cursur-pointer">
+                  <div className="font-bold">channel.title</div>
+                  <NotificationDot amount={1} />
+                </FlexBox>
+              );
+            })}
           </FlexBox>
         )}
-
         <SquareButton onClick={onClick}>Create Channel</SquareButton>
       </FlexBox>
     </Card>
