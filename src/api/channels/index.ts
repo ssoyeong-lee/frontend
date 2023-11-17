@@ -30,5 +30,13 @@ async function updateChannel(channel_id: number, {title, type, password}: Props)
     return axios.put(`/api/channels/${channel_id}`, {title, type, password});
 }
 
+async function joinChannel(channel_id: number){
+    return axios.post(`/api/channels/${channel_id}`, {});
+}
+
+async function leaveChannel(channel_id: number){
+    return axios.delete(`/api/channels/${channel_id}`, {});
+}
+
 export type { Channel };
-export { getChannelList, getChannel, createChannel, updateChannel };
+export { getChannelList, getChannel, createChannel, updateChannel, joinChannel, leaveChannel};

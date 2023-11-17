@@ -1,4 +1,4 @@
-import { Channel, getChannelList } from "@/api/channels";
+import { Channel, getChannelList, joinChannel, leaveChannel } from "@/api/channels";
 import NotificationDot from "@/components/NotificationDot";
 import SquareButton from "@/components/button/SquareButton";
 import ChatSwitch from "@/components/chat/ChatSwitch";
@@ -18,6 +18,7 @@ export default function ListCard() {
   const [type, setType] = useState<string>("user");
   const clickUser = () => {
     setType("user");
+    leaveChannel(3).then((res)=>console.log(res)).catch((err)=>console.log(err));
   };
   const clickChannel = () => {
     setType("channel");
