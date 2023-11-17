@@ -1,3 +1,4 @@
+import { createChannel } from "@/api/channels/owner";
 import SquareButton from "@/components/button/SquareButton";
 import DefaultInput from "@/components/control/DefaultInput";
 import SelectBox from "@/components/control/SelectBox";
@@ -6,19 +7,36 @@ import ModalCard from "@/layouts/ModalCard";
 import { useState } from "react";
 
 export default function ChannelCreateModal() {
-  const [name, setName] = useState("");
-  const [type, setType] = useState("private");
-  const [pw, setPw] = useState("");
+  const [title, setTitle] = useState("");
+  const [type, setType] = useState<string>("private");
+  const [password, setPassword] = useState("");
 
-  const nameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  }
+  const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
   const typeChange = (type: string) => {
     setType(type);
   };
-  const pwChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPw(e.target.value);
-  }
+  const passwordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+  const onClick = () => {
+    if (
+      title === "" ||
+      !(type === "public" || type === "protected" || type === "private") ||
+      (type === "protected" && password === "")
+    )
+    {
+      console.log("click err");
+      return;
+    }
+
+    createChannel({ title, type, password })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <ModalCard className="w-[500px] h-[450px]">
       <FlexBox className="w-full h-full justify-between" direction="col">
@@ -28,9 +46,9 @@ export default function ChannelCreateModal() {
           </div>
           <FlexBox className="w-full gap-3" direction="col">
             <DefaultInput
-              value={name}
-              onChange={nameChange}
-              placeholder="name"
+              value={title}
+              onChange={titleChange}
+              placeholder="title"
             />
             <SelectBox
               list={["private", "protected", "public"]}
@@ -40,15 +58,17 @@ export default function ChannelCreateModal() {
             {type === "protected" && (
               <DefaultInput
                 placeholder="password"
-                value={pw}
-                onChange={pwChange}
+                value={password}
+                onChange={passwordChange}
                 type="password"
               />
             )}
           </FlexBox>
         </div>
         <FlexBox className="w-full justify-end">
-          <SquareButton className="w-[150px]">Ok</SquareButton>
+          <SquareButton className="w-[150px]" onClick={onClick}>
+            Ok
+          </SquareButton>
         </FlexBox>
       </FlexBox>
     </ModalCard>

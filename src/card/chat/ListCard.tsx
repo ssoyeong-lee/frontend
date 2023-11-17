@@ -22,6 +22,7 @@ export default function ListCard() {
   const clickChannel = () => {
     setType("channel");
     getChannelList().then((res) => setChannelList(res.data));
+    console.log("channelList", channelList);
   };
 
   return (
@@ -45,15 +46,14 @@ export default function ListCard() {
           </FlexBox>
         ) : (
           <FlexBox direction="col" className="h-full w-full gap-3">
-            {channelList.map((channel) => {
-              if (channel.type === "private")
-                return <></>;
-              return (
-                <FlexBox className="w-full justify-between p-2 hover:bg-gray-600 cursur-pointer">
-                  <div className="font-bold">channel.title</div>
-                  <NotificationDot amount={1} />
-                </FlexBox>
-              );
+            {channelList.map((channel, idx) => {
+              if (channel.type !== "private")
+                return (
+                  <FlexBox className="w-full justify-between p-2 hover:bg-gray-600 cursur-pointer" key={idx}>
+                    <div className="font-bold" key={idx + "div"}>{channel.title}</div>
+                    <NotificationDot amount={0} key={idx+"noti"}/>
+                  </FlexBox>
+                );
             })}
           </FlexBox>
         )}
