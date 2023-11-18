@@ -5,6 +5,10 @@ function connectSocket() {
   socket.on("connect", () => {
     console.log(socket.id);
   });
+
+  socket.on("disconnect", () => {
+    console.log("disconnect");
+  });
 }
 
 export default connectSocket;
