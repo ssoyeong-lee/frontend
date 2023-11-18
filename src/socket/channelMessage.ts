@@ -1,4 +1,4 @@
-import socket from "@/socket/index";
+import { Socket } from "socket.io-client";
 
 interface ChannelMessage {
   channelId: string;
@@ -6,11 +6,11 @@ interface ChannelMessage {
   message: string;
 }
 
-function receiveCM(callback: (res: ChannelMessage) => void) {
+function receiveCM(socket: Socket, callback: (res: ChannelMessage) => void) {
   socket.on("DM", (res: ChannelMessage) => callback(res));
 }
 
-function sendCM(channelId: number, content: string) {
+function sendCM(socket: Socket, channelId: number, content: string) {
   socket.emit("DM", {
     channelId: channelId,
     content: content,

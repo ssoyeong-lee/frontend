@@ -1,4 +1,4 @@
-import socket from "@/socket/index";
+import { Socket } from "socket.io-client";
 
 type NotificationType = "game-invite" | "channel_invite" | "friend-request";
 interface Notification<T extends NotificationType> {
@@ -28,6 +28,7 @@ interface NotiFriendRequest extends Notification<"friend-request"> {
 }
 
 function receiveNotification(
+  socket: Socket,
   callbackGameInvite: (res: NotiGameInvite) => void,
   callbackChannelInvite: (res: NotiChannelInvite) => void,
   callbackFriendRequest: (res: NotiFriendRequest) => void
