@@ -11,15 +11,19 @@ import { ReactNode, useState } from "react";
 
 const dmList = [
   {
+    id: 1,
     title: "user1",
   },
   {
+    id: 2,
     title: "user2",
   },
   {
+    id: 3,
     title: "user3",
   },
   {
+    id: 4,
     title: "user4",
   },
 ];
@@ -43,6 +47,7 @@ export default function ListCard() {
     setSelectedIdx(0);
   };
 
+  const [selectedIdx, setSelectedIdx] = useState(0);
   const clickChannel = async () => {
     setType("channel");
     const tmp = await getChannelList();
@@ -51,16 +56,17 @@ export default function ListCard() {
     setSelectedIdx(0);
   };
 
-  const [selectedIdx, setSelectedIdx] = useState(0);
-
   const dmNode = dmList.map((user, idx) => {
-      return (
-        <ChatItem
-          title={user.title}
-          isSelected={idx === selectedIdx ? true : false}
-          idx={idx}
-        />
-      );
+    return (
+      <ChatItem
+        title={user.title}
+        isSelected={user.id === selectedIdx ? true : false}
+        idx={idx}
+		onClick={()=>{
+			setSelectedIdx(user.id);
+		}}
+      />
+    );
   });
 
   const channelNode = channelList.map((channel, idx) => {
@@ -68,8 +74,11 @@ export default function ListCard() {
       return (
         <ChatItem
           title={channel.title}
-          isSelected={idx === selectedIdx ? true : false}
+          isSelected={channel.id === selectedIdx ? true : false}
           idx={idx}
+          onClick={() => {
+            setSelectedIdx(channel.id);
+          }}
         />
       );
   });
@@ -83,9 +92,13 @@ export default function ListCard() {
           clickChannel={clickChannel}
         />
         <FlexBox direction="col" className="h-full w-full gap-3">
-          {type === "user"? dmNode: channelNode}
+          {type === "user" ? dmNode : channelNode}
         </FlexBox>
-        <SquareButton onClick={onClick}>Create Channel</SquareButton>
+        {type === "user" ? (
+          ""
+        ) : (
+          <SquareButton onClick={onClick}>Create Channel</SquareButton>
+        )}
       </FlexBox>
     </Card>
   );

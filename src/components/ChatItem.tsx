@@ -22,8 +22,9 @@ export default function ChatItem({
         isSelected === true ? "bg-gray-600" : ""
       } hover:bg-gray-600 cursur-pointer`}
       key={idx}
+	  onClick={onClick}
     >
-      <div className="font-bold" key={idx + "title"}>
+      <div className="font-bold" key={idx + "title"} onClick={onClick}>
         {title}
       </div>
       <NotificationDot amount={notiCount} key={idx + "noti"} />
