@@ -1,4 +1,3 @@
-import initSocket from "@/socket/connectSocket";
 import { createContext, useContext, useState } from "react";
 
 interface Message {
