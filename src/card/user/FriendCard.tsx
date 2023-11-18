@@ -42,7 +42,6 @@ export default function FriendCard({ friendList, setFriendList }: Props) {
         <ScrollBox>
           <FlexBox className="gap-8" direction="col">
             {friendList.map((friend, idx) => {
-              console.log(friend);
               let item = <></>;
               switch (friend.status) {
                 case "friend":
