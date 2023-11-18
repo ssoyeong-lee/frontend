@@ -1,8 +1,9 @@
 import axios, { AxiosResponse } from "axios";
 
 interface Friend {
-  id: number;
   nickname: string;
+  otherUserId: number;
+  status: "friend" | "pendingApproval" | "friendRequest";
 }
 async function getFriendList(): Promise<AxiosResponse<Friend[]>> {
   return axios.get("/api/user-relation/friends");

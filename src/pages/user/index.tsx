@@ -9,6 +9,7 @@ import Container from "@/layouts/Container";
 import FlexBox from "@/layouts/FlexBox";
 import TopNav from "@/layouts/TopNav";
 import { useEffect, useState } from "react";
+import sleep from "@/utils/sleep";
 
 export default function User() {
   const [userList, setUserList] = useState<UserAbstract[]>([]);
@@ -18,13 +19,19 @@ export default function User() {
 
   useEffect(() => {
     const asyncFunc = async () => {
-      Promise.all([getUserList(), getFriendList(), getBlockList()]).then(
-        (res) => {
-          setUserList(res[0].data);
-          setFriendList(res[1].data);
-          setBlockList(res[2].data);
-        }
-      );
+      const res = await getUserList();
+      setUserList(res.data);
+    };
+    asyncFunc();
+  }, []);
+
+  useEffect(() => {
+    const asyncFunc = async () => {
+      await sleep(100);
+      Promise.all([getFriendList(), getBlockList()]).then((res) => {
+        setFriendList(res[0].data);
+        setBlockList(res[1].data);
+      });
     };
     if (isSearch === false) asyncFunc();
   }, [isSearch]);

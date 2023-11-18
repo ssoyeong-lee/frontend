@@ -1,4 +1,7 @@
 import { Friend } from "@/api/users/friend";
+import FriendItem from "@/components/user/FriendItem";
+import FriendRequestItem from "@/components/user/FriendRequestItem";
+import PendingApprovalItem from "@/components/user/PendingApprovalItem";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import Icon from "@/layouts/Icon";
@@ -14,23 +17,20 @@ export default function FriendCard({ friendList }: Props) {
       <FlexBox className="h-full gap-8 text-xl" direction="col">
         <div>Friends</div>
         {friendList.map((friend, idx) => {
-          return (
-            <FlexBox className="w-full justify-between" key={idx}>
-              <div>{friend.nickname}</div>
-              <FlexBox className="gap-4">
-                <Icon
-                  src="/icon/check.png"
-                  alt="check"
-                  className="w-[24px] h-[24px]"
-                />
-                <Icon
-                  src="/icon/delete.png"
-                  alt="delete"
-                  className="w-[24px] h-[24px]"
-                />
-              </FlexBox>
-            </FlexBox>
-          );
+          console.log(friend);
+          let item = <></>;
+          switch (friend.status) {
+            case "friend":
+              item = <FriendItem friend={friend} key={idx} />;
+              break;
+            case "pendingApproval":
+              item = <PendingApprovalItem friend={friend} key={idx} />;
+              break;
+            case "friendRequest":
+              item = <FriendRequestItem friend={friend} key={idx} />;
+              break;
+          }
+          return item;
         })}
       </FlexBox>
     </Card>
