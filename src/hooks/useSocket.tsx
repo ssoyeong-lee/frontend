@@ -1,4 +1,4 @@
-import initSocket from "@/socket/initSocket";
+import initSocket from "@/socket/connectSocket";
 import { createContext, useContext, useState } from "react";
 
 interface Message {
@@ -62,7 +62,6 @@ function SocketImplement(): SocketContextType {
 
 function SocketProvider({ children }: { children: JSX.Element }) {
   const socket = SocketImplement();
-  initSocket();
   return (
     <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
   );

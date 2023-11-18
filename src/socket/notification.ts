@@ -1,22 +1,46 @@
 import socket from "@/socket/index";
 
-function notiGameInvite(callback: (res: { opponentId: string }) => void) {
-  socket.on("noti-game-invite", (res: { opponentId: string }) => callback(res));
+type NotificationType = "game-invite" | "channel_invite" | "friend-request";
+interface Notification<T extends NotificationType> {
+  type: T;
 }
 
-function notiChannelInvite(
-  callback: (res: { channelId: string; inviterId: string }) => void
+interface NotiGameInvite extends Notification<"game-invite"> {
+  invitingUser: {
+    id: number; // userId
+    nickname: string;
+  };
+}
+
+interface NotiChannelInvite extends Notification<"channel_invite"> {
+  channelId: number; // channelId
+  invitingUser: {
+    id: number; // userId
+    nickname: string;
+  };
+}
+
+interface NotiFriendRequest extends Notification<"friend-request"> {
+  requestingUser: {
+    id: number; // userId
+    nickname: string;
+  };
+}
+
+function receiveNotification(
+  callbackGameInvite: (res: NotiGameInvite) => void,
+  callbackChannelInvite: (res: NotiChannelInvite) => void,
+  callbackFriendRequest: (res: NotiFriendRequest) => void
 ) {
-  socket.on(
-    "noti-channel-invite",
-    (res: { channelId: string; inviterId: string }) => callback(res)
-  );
+  socket.on("noti", (data: { type: NotificationType }) => {
+    if (data.type === "game-invite") {
+      callbackGameInvite(data as NotiGameInvite);
+    } else if (data.type === "channel_invite") {
+      callbackChannelInvite(data as NotiChannelInvite);
+    } else if (data.type === "friend-request") {
+      callbackFriendRequest(data as NotiFriendRequest);
+    }
+  });
 }
 
-function notiFriendRequest(callback: (res: { otherUserId: string }) => void) {
-  socket.on("noti-friend-request", (res: { otherUserId: string }) =>
-    callback(res)
-  );
-}
-
-export { notiGameInvite, notiChannelInvite, notiFriendRequest };
+export { receiveNotification };

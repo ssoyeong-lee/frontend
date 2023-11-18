@@ -1,20 +1,42 @@
 import socket from "@/socket/index";
 
-function receiveDM(
-  callback: (res: { senderId: string; message: string }) => void
-) {
-  socket.on("DM", (res: { senderId: string; message: string }) =>
-    callback(res)
-  );
+interface DM {
+  data: {
+    id: number;
+    sender: {
+      id: number; // userId
+      nickname: string;
+    };
+    content: string;
+    createdAt: Date;
+  };
 }
 
-function recieveDMList(recieverId: number, callback: (res: any) => void) {
+interface DMUnread {
+  sender: {
+    id: number; // userId
+    nickname: string;
+  };
+  count: number;
+}
+
+function receiveDM(callback: (res: DM) => void) {
+  socket.on("DM", (res: DM) => callback(res));
+}
+
+function recieveDMList(otherUserId: number, callback: (res: DM[]) => void) {
   socket.emit(
     "DM-messages",
     {
-      otherUserId: recieverId,
+      otherUserId: otherUserId,
     },
-    (res: any) => callback(res)
+    (res: { messages: DM[] }) => callback(res.messages)
+  );
+}
+
+function receiveDMUnreadCount(callback: (res: DMUnread[]) => void) {
+  socket.emit("DM-unread-count", (res: { unreadMessagesCount: DMUnread[] }) =>
+    callback(res.unreadMessagesCount)
   );
 }
 
@@ -31,4 +53,4 @@ function sendDMRead(senderId: number) {
   });
 }
 
-export { receiveDM, recieveDMList, sendDM, sendDMRead };
+export { receiveDM, recieveDMList, receiveDMUnreadCount, sendDM, sendDMRead };

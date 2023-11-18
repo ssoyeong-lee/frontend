@@ -4,6 +4,7 @@ import SpinningLoad from "@/components/SpinningLoad";
 import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
+import connectSocket from "@/socket/connectSocket";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -12,14 +13,16 @@ export default function Login() {
   const router = useRouter();
   const onClickBtn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    await testLogin();
-    /*
     setIsClicked(true);
     const res = await login(
       window.location.protocol + "//" + window.location.host + "/register"
     );
     router.push(res.data?.data);
-    */
+  };
+
+  const onClickTest = async (num: number) => {
+    await testLogin(num);
+    connectSocket();
     router.push("/main");
   };
 
@@ -40,6 +43,21 @@ export default function Login() {
           textClassName="font-bold text-2xl tracking-wider"
         >
           {isClicked ? <SpinningLoad /> : "42 Intra로 로그인"}
+        </Button>
+
+        <Button
+          onClickBtn={() => onClickTest(1)}
+          className="border rounded w-[25rem] h-[3rem]"
+          textClassName="font-bold text-2xl tracking-wider"
+        >
+          {isClicked ? <SpinningLoad /> : "test1 로그인"}
+        </Button>
+        <Button
+          onClickBtn={() => onClickTest(2)}
+          className="border rounded w-[25rem] h-[3rem]"
+          textClassName="font-bold text-2xl tracking-wider"
+        >
+          {isClicked ? <SpinningLoad /> : "test2 로그인"}
         </Button>
       </FlexBox>
     </SideBox>

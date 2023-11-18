@@ -1,9 +1,10 @@
 import socket from "@/socket/index";
 
-function initSocket() {
+function connectSocket() {
+  console.log("connectSocket");
   socket.on("connect", () => {
     console.log(socket.id);
   });
 }
 
-export default initSocket;
+export default connectSocket;
