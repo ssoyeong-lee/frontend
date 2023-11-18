@@ -44,6 +44,7 @@ export default async function handler(
       const session = setCookie[0]
         .split(";")[0]
         .split("session-cookie=")[1]
+        .split(".")[0]
         .substring(4);
       console.log("session", session);
       axiosRes.data = { session: session, msg: axiosRes.data };
