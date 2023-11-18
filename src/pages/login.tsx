@@ -4,6 +4,7 @@ import SpinningLoad from "@/components/SpinningLoad";
 import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
+import connectSocket from "@/socket/connectSocket";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -21,6 +22,7 @@ export default function Login() {
 
   const onClickTest = async (num: number) => {
     await testLogin(num);
+    connectSocket();
     router.push("/main");
   };
 
