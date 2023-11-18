@@ -6,10 +6,19 @@ import ModalCard from "@/layouts/ModalCard";
 import { useState } from "react";
 
 export default function ChannelCreateModal() {
-  const [value, setValue] = useState("private");
-  const onChange = (value: string) => {
-    setValue(value);
+  const [name, setName] = useState("");
+  const [type, setType] = useState("private");
+  const [pw, setPw] = useState("");
+
+  const nameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  }
+  const typeChange = (type: string) => {
+    setType(type);
   };
+  const pwChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPw(e.target.value);
+  }
   return (
     <ModalCard className="w-[500px] h-[450px]">
       <FlexBox className="w-full h-full justify-between" direction="col">
@@ -18,13 +27,24 @@ export default function ChannelCreateModal() {
             Create a new Channel
           </div>
           <FlexBox className="w-full gap-3" direction="col">
-            <DefaultInput placeholder="name" />
+            <DefaultInput
+              value={name}
+              onChange={nameChange}
+              placeholder="name"
+            />
             <SelectBox
               list={["private", "protected", "public"]}
-              value={value}
-              onChange={onChange}
+              value={type}
+              onChange={typeChange}
             />
-            {value === "protected" && <DefaultInput placeholder="password" />}
+            {type === "protected" && (
+              <DefaultInput
+                placeholder="password"
+                value={pw}
+                onChange={pwChange}
+                type="password"
+              />
+            )}
           </FlexBox>
         </div>
         <FlexBox className="w-full justify-end">

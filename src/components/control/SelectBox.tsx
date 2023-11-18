@@ -12,6 +12,7 @@ export default function SelectBox({ list, value, onChange }: Props) {
   const [isSelect, setIsSelect] = useState(false);
   const clickSelect = () => {
     setIsSelect(true);
+    onChange("none");
   };
   const clickList = (item: string) => {
     setIsSelect(false);
