@@ -1,4 +1,5 @@
 import { Channel, getChannelList } from "@/api/channels";
+import ChatItem from "@/components/ChatItem";
 import NotificationDot from "@/components/NotificationDot";
 import SquareButton from "@/components/button/SquareButton";
 import ChatSwitch from "@/components/chat/ChatSwitch";
@@ -6,24 +7,72 @@ import ChannelCreateModal from "@/components/modal/ChannelCreateModal";
 import { useModal } from "@/hooks/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
+
+const dmList = [
+  {
+    title: "user1",
+  },
+  {
+    title: "user2",
+  },
+  {
+    title: "user3",
+  },
+  {
+    title: "user4",
+  },
+];
 
 export default function ListCard() {
-  const { openModal } = useModal();
+  const { openModal, closeModal } = useModal();
   const onClick = () => {
-    openModal(<ChannelCreateModal />);
+    openModal(<ChannelCreateModal closeModal={onClickClose} />);
+  };
+
+  const onClickClose = async () => {
+    closeModal();
+    const tmp = await getChannelList();
+    setChannelList(tmp.data);
   };
 
   const [channelList, setChannelList] = useState<Channel[]>([]);
   const [type, setType] = useState<string>("user");
   const clickUser = () => {
     setType("user");
+    setSelectedIdx(0);
   };
-  const clickChannel = () => {
+
+  const clickChannel = async () => {
     setType("channel");
-    getChannelList().then((res) => setChannelList(res.data));
+    const tmp = await getChannelList();
+    setChannelList(tmp.data);
     console.log("channelList", channelList);
+    setSelectedIdx(0);
   };
+
+  const [selectedIdx, setSelectedIdx] = useState(0);
+
+  const dmNode = dmList.map((user, idx) => {
+      return (
+        <ChatItem
+          title={user.title}
+          isSelected={idx === selectedIdx ? true : false}
+          idx={idx}
+        />
+      );
+  });
+
+  const channelNode = channelList.map((channel, idx) => {
+    if (channel.type !== "private")
+      return (
+        <ChatItem
+          title={channel.title}
+          isSelected={idx === selectedIdx ? true : false}
+          idx={idx}
+        />
+      );
+  });
 
   return (
     <Card>
@@ -33,30 +82,9 @@ export default function ListCard() {
           clickUser={clickUser}
           clickChannel={clickChannel}
         />
-        {type === "user" ? (
-          <FlexBox direction="col" className="h-full w-full gap-3">
-            <FlexBox className="w-full justify-between p-2 hover:bg-gray-600 cursur-pointer">
-              <div className="font-bold">user1</div>
-              <NotificationDot amount={1} />
-            </FlexBox>
-            <FlexBox className="w-full justify-between p-2 bg-gray-600 cursur-pointer">
-              <div className="font-bold">user2</div>
-              <NotificationDot amount={0} />
-            </FlexBox>
-          </FlexBox>
-        ) : (
-          <FlexBox direction="col" className="h-full w-full gap-3">
-            {channelList.map((channel, idx) => {
-              if (channel.type !== "private")
-                return (
-                  <FlexBox className="w-full justify-between p-2 hover:bg-gray-600 cursur-pointer" key={idx}>
-                    <div className="font-bold" key={idx + "div"}>{channel.title}</div>
-                    <NotificationDot amount={0} key={idx+"noti"}/>
-                  </FlexBox>
-                );
-            })}
-          </FlexBox>
-        )}
+        <FlexBox direction="col" className="h-full w-full gap-3">
+          {type === "user"? dmNode: channelNode}
+        </FlexBox>
         <SquareButton onClick={onClick}>Create Channel</SquareButton>
       </FlexBox>
     </Card>
