@@ -39,7 +39,15 @@ export default async function handler(
       requestToServer.data = req.body;
     }
     const axiosRes = await api.request(requestToServer);
-    console.log(axiosRes.headers);
+    const setCookie = axiosRes.headers["set-cookie"] as string[];
+    if (setCookie) {
+      const session = setCookie[0]
+        .split(";")[0]
+        .split("session-cookie=")[1]
+        .substring(4);
+      console.log("session", session);
+      axiosRes.data = { session: session, msg: axiosRes.data };
+    }
     res
       .status(200)
       .setHeader("Set-Cookie", axiosRes.headers["set-cookie"] as string[])
