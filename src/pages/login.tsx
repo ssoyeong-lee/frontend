@@ -12,14 +12,15 @@ export default function Login() {
   const router = useRouter();
   const onClickBtn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    await testLogin();
-    /*
     setIsClicked(true);
     const res = await login(
       window.location.protocol + "//" + window.location.host + "/register"
     );
     router.push(res.data?.data);
-    */
+  };
+
+  const onClickTest = async (num: number) => {
+    await testLogin(num);
     router.push("/main");
   };
 
@@ -40,6 +41,21 @@ export default function Login() {
           textClassName="font-bold text-2xl tracking-wider"
         >
           {isClicked ? <SpinningLoad /> : "42 Intra로 로그인"}
+        </Button>
+
+        <Button
+          onClickBtn={() => onClickTest(1)}
+          className="border rounded w-[25rem] h-[3rem]"
+          textClassName="font-bold text-2xl tracking-wider"
+        >
+          {isClicked ? <SpinningLoad /> : "test1 로그인"}
+        </Button>
+        <Button
+          onClickBtn={() => onClickTest(1)}
+          className="border rounded w-[25rem] h-[3rem]"
+          textClassName="font-bold text-2xl tracking-wider"
+        >
+          {isClicked ? <SpinningLoad /> : "test2 로그인"}
         </Button>
       </FlexBox>
     </SideBox>
