@@ -12,9 +12,16 @@ interface Props {
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   userList?: UserAbstract[];
   isSearch?: boolean;
+  setIsSearch?: (isSearch: boolean) => void;
 }
 
-function SearchItem({ user }: { user: UserAbstract }) {
+function SearchItem({
+  user,
+  setIsSearch,
+}: {
+  user: UserAbstract;
+  setIsSearch: (isSearch: boolean) => void;
+}) {
   return (
     <FlexBox className="w-full px-4 py-2 justify-between">
       <div>{user.nickname}</div>
@@ -22,23 +29,34 @@ function SearchItem({ user }: { user: UserAbstract }) {
         <ChipButton
           color="green"
           className="w-[80px]"
-          onClick={async () => await postRequestFriend(user.id)}
+          onClick={async () => {
+            setIsSearch(false);
+            await postRequestFriend(user.id);
+          }}
         >
           invite
         </ChipButton>
         <ChipButton
           color="red"
           className="w-[80px]"
-          onClick={async () => await postBlock(user.id)}
+          onClick={async () => {
+            setIsSearch(false);
+            await postBlock(user.id);
+          }}
         >
-          ban
+          block
         </ChipButton>
       </FlexBox>
     </FlexBox>
   );
 }
 
-export default function SearchCard({ userList, isSearch, onClick }: Props) {
+export default function SearchCard({
+  userList,
+  isSearch,
+  setIsSearch,
+  onClick,
+}: Props) {
   const ref = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (isSearch) ref.current?.focus();
@@ -60,9 +78,16 @@ export default function SearchCard({ userList, isSearch, onClick }: Props) {
             ref={ref}
           />
           {isSearch &&
+            setIsSearch &&
             userList &&
             userList.map((user) => {
-              return <SearchItem key={user.id} user={user} />;
+              return (
+                <SearchItem
+                  key={user.id}
+                  user={user}
+                  setIsSearch={setIsSearch}
+                />
+              );
             })}
         </FlexBox>
       </ScrollBox>
