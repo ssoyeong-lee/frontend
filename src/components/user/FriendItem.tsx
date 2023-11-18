@@ -2,7 +2,12 @@ import { Friend } from "@/api/users/friend";
 import FlexBox from "@/layouts/FlexBox";
 import Icon from "@/layouts/Icon";
 
-export default function FriendItem({ friend }: { friend: Friend }) {
+interface Props {
+  friend: Friend;
+  onClickDelete: (id: number) => void;
+}
+
+export default function FriendItem({ friend, onClickDelete }: Props) {
   return (
     <FlexBox className="w-full justify-between">
       <div>{friend.nickname}</div>
@@ -10,7 +15,8 @@ export default function FriendItem({ friend }: { friend: Friend }) {
         <Icon
           src="/icon/delete.png"
           alt="check"
-          className="w-[24px] h-[24px]"
+          className="w-[24px] h-[24px] cursor-pointer"
+          onClick={() => onClickDelete(friend.otherUserId)}
         />
       </FlexBox>
     </FlexBox>
