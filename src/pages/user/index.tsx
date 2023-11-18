@@ -9,6 +9,7 @@ import Container from "@/layouts/Container";
 import FlexBox from "@/layouts/FlexBox";
 import TopNav from "@/layouts/TopNav";
 import { useEffect, useState } from "react";
+import sleep from "@/utils/sleep";
 
 export default function User() {
   const [userList, setUserList] = useState<UserAbstract[]>([]);
@@ -18,23 +19,33 @@ export default function User() {
 
   useEffect(() => {
     const asyncFunc = async () => {
-      Promise.all([getUserList(), getFriendList(), getBlockList()]).then(
-        (res) => {
-          setUserList(res[0].data);
-          setFriendList(res[1].data);
-          setBlockList(res[2].data);
-        }
-      );
+      const res = await getUserList();
+      setUserList(res.data);
     };
     asyncFunc();
   }, []);
+
+  useEffect(() => {
+    const asyncFunc = async () => {
+      await sleep(100);
+      Promise.all([getFriendList(), getBlockList()]).then((res) => {
+        setFriendList(res[0].data);
+        setBlockList(res[1].data);
+      });
+    };
+    if (isSearch === false) asyncFunc();
+  }, [isSearch]);
   return (
     <div className="w-full h-full" onClick={() => setIsSearch(false)}>
       <TopNav />
       <Container>
         <div className="w-full h-full" onClick={(e) => e.stopPropagation()}>
           {isSearch ? (
-            <SearchCard userList={userList} isSearch={isSearch} />
+            <SearchCard
+              userList={userList}
+              isSearch={isSearch}
+              setIsSearch={setIsSearch}
+            />
           ) : (
             <FlexBox className="h-full w-full gap-6">
               <FlexBox className="basis-1/3 h-full gap-6" direction="col">
@@ -44,10 +55,13 @@ export default function User() {
                 <RankingCard userList={userList} />
               </FlexBox>
               <div className="basis-1/3 h-full">
-                <FriendCard friendList={friendList} />
+                <FriendCard
+                  friendList={friendList}
+                  setFriendList={setFriendList}
+                />
               </div>
               <div className="basis-1/3 h-full">
-                <BlockCard blockList={blockList} />
+                <BlockCard blockList={blockList} setBlockList={setBlockList} />
               </div>
             </FlexBox>
           )}
