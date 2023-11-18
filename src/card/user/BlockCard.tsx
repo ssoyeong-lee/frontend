@@ -12,7 +12,7 @@ interface Props {
 export default function BlockCard({ blockList, setBlockList }: Props) {
   const onClickDelete = async (id: number) => {
     await deleteBlock(id);
-    setBlockList(blockList.filter((block) => block.id !== id));
+    setBlockList(blockList.filter((block) => block.otherUserId !== id));
   };
   return (
     <Card>

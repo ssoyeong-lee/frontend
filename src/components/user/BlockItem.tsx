@@ -15,7 +15,7 @@ export default function BlockItem({ block, onClickDelete }: Props) {
         src="/icon/delete.png"
         alt="delete"
         className="w-[24px] h-[24px] cursor-pointer"
-        onClick={() => onClickDelete(block.id)}
+        onClick={() => onClickDelete(block.otherUserId)}
       />
     </FlexBox>
   );

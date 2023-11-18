@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 
 interface Block {
-  id: number;
+  otherUserId: number;
   nickname: string;
 }
 async function getBlockList(): Promise<AxiosResponse<Block[]>> {
