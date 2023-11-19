@@ -45,3 +45,10 @@ function receiveNotification(
 }
 
 export { receiveNotification };
+
+export type {
+  Notification,
+  NotiGameInvite,
+  NotiChannelInvite,
+  NotiFriendRequest,
+};

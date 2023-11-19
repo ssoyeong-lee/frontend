@@ -35,3 +35,4 @@ function ChannelMember(socket: Socket, callback: (res: Member[]) => void) {
 }
 
 export { ChannelIn, ChannelOut, ChannelMember };
+export type { Member };

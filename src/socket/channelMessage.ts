@@ -1,13 +1,13 @@
 import { Socket } from "socket.io-client";
 
-interface ChannelMessage {
+interface CM {
   channelId: string;
   senderId: string;
   message: string;
 }
 
-function receiveCM(socket: Socket, callback: (res: ChannelMessage) => void) {
-  socket.on("DM", (res: ChannelMessage) => callback(res));
+function receiveCM(socket: Socket, callback: (res: CM) => void) {
+  socket.on("DM", (res: CM) => callback(res));
 }
 
 function sendCM(socket: Socket, channelId: number, content: string) {
@@ -17,4 +17,5 @@ function sendCM(socket: Socket, channelId: number, content: string) {
   });
 }
 
+export type { CM };
 export { receiveCM, sendCM };

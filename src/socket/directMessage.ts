@@ -60,4 +60,5 @@ function sendDMRead(socket: Socket, senderId: number) {
   });
 }
 
+export type { DM, DMUnread };
 export { receiveDM, recieveDMList, receiveDMUnreadCount, sendDM, sendDMRead };
