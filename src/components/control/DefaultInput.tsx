@@ -5,6 +5,7 @@ interface Props {
   name?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   ref?: RefObject<HTMLInputElement>;
@@ -20,6 +21,7 @@ export default forwardRef<HTMLInputElement, Props>(function DefaultInput(
     name,
     value,
     onChange,
+    onKeyPress,
     onFocus,
     onBlur,
     placeholder,
@@ -38,6 +40,7 @@ export default forwardRef<HTMLInputElement, Props>(function DefaultInput(
         className={`w-full h-full bg-[#00000000] ${padding} border ${borderColor} ${className}`}
         name={name}
         placeholder={placeholder}
+        onKeyPress={onKeyPress}
         value={value ?? ""}
         onChange={onChange ?? (() => {})}
         onBlur={onBlur}
