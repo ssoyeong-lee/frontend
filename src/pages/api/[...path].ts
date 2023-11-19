@@ -25,6 +25,8 @@ export default async function handler(
   }
 
   try {
+    if (url.includes("/auth/user-redirect") || url.includes("/auth/login"))
+      req.headers.cookie = "";
     const requestToServer: AxiosRequestConfig = {
       url: url,
       method: req.method as any,
@@ -46,13 +48,9 @@ export default async function handler(
         .split("session-cookie=")[1]
         .split(".")[0]
         .substring(4);
-      console.log("session", session);
       axiosRes.data = { session: session, msg: axiosRes.data };
     }
-    res
-      .status(200)
-      .setHeader("Set-Cookie", axiosRes.headers["set-cookie"] as string[])
-      .json(axiosRes.data);
+    res.status(200).setHeader("Set-Cookie", setCookie).json(axiosRes.data);
   } catch (error) {
     console.log(error);
     const axiosError = error as AxiosError;
