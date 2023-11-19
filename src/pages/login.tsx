@@ -1,13 +1,16 @@
 import { login } from "@/api/login";
 import { testLogin } from "@/api/testLogin";
 import SpinningLoad from "@/components/SpinningLoad";
+import { useSocket } from "@/hooks/useSocket";
 import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
+import connectSocket from "@/socket/connectSocket";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Login() {
+  const { setSocket } = useSocket();
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
   const onClickBtn = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -20,7 +23,9 @@ export default function Login() {
   };
 
   const onClickTest = async (num: number) => {
-    await testLogin(num);
+    const res = await testLogin(num);
+    const socketInstance = connectSocket(res.data?.session);
+    setSocket(socketInstance);
     router.push("/main");
   };
 

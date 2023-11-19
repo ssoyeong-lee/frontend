@@ -1,66 +1,62 @@
-import { createContext, useContext, useState } from "react";
-
-interface Message {
-  [key: string]: { sender: string; message: string }[];
-}
-
-interface ChannelInfo {
-  [key: string]: {
-    userList: {
-      userId: string;
-      isAdmin?: boolean;
-      isOwner?: boolean;
-      isMuted?: boolean;
-    }[];
-  };
-}
-
-interface Notification {
-  type: string;
-  message: string;
-}
+import { CM, receiveCM } from "@/socket/channelMessage";
+import { DM, receiveDM } from "@/socket/directMessage";
+import { createContext, useContext, useEffect, useState } from "react";
+import { Socket } from "socket.io-client";
 
 interface SocketContextType {
-  channelInfo: ChannelInfo;
-  chennelMessage: Message;
-  directMessage: Message;
-  notification: Notification[];
-  setChannelInfo: (channelInfo: ChannelInfo) => void;
-  setChannelMessage: (channelMessage: Message) => void;
-  setDirectMessage: (directMessage: Message) => void;
-  setNotification: (notification: Notification[]) => void;
+  socket: Socket;
+  DMList: DM[];
+  CMList: CM[];
+  setSocket: (socket: Socket) => void;
+  setDM: (directMessage: DM) => void;
+  setCM: (channelMessage: CM) => void;
 }
 
 const SocketContext = createContext<SocketContextType>({
-  channelInfo: {},
-  chennelMessage: {},
-  directMessage: {},
-  notification: [],
-  setChannelInfo: () => {},
-  setChannelMessage: () => {},
-  setDirectMessage: () => {},
-  setNotification: () => {},
+  socket: {} as Socket,
+  DMList: [],
+  CMList: [],
+  setSocket: () => {},
+  setDM: () => {},
+  setCM: () => {},
 });
 
 function SocketImplement(): SocketContextType {
-  const [channelInfo, setChannelInfo] = useState<ChannelInfo>({});
-  const [channelMessage, setChannelMessage] = useState<Message>({});
-  const [directMessage, setDirectMessage] = useState<Message>({});
-  const [notification, setNotification] = useState<Notification[]>([]);
+  const [socket, setSocket] = useState<Socket>({} as Socket);
+  const [DMList, setDMList] = useState<DM[]>([]);
+  const [CMList, setCMList] = useState<CM[]>([]);
+  const setDM = (directMessage: DM) => {
+    setDMList((prev) => {
+      return [...prev, directMessage];
+    });
+  };
+  const setCM = (channelMessage: CM) => {
+    setCMList((prev) => {
+      return [...prev, channelMessage];
+    });
+  };
+
   return {
-    channelInfo,
-    chennelMessage: channelMessage,
-    directMessage,
-    notification,
-    setChannelInfo,
-    setChannelMessage,
-    setDirectMessage,
-    setNotification,
+    socket,
+    DMList,
+    CMList,
+    setSocket,
+    setDM,
+    setCM,
   };
 }
 
 function SocketProvider({ children }: { children: JSX.Element }) {
   const socket = SocketImplement();
+  useEffect(() => {
+    try {
+      receiveDM(socket.socket, socket.setDM);
+      receiveCM(socket.socket, socket.setCM);
+    } catch (error) {}
+  }, [socket.socket]);
+  useEffect(() => {
+    console.log(socket.DMList);
+  }, [socket.DMList]);
   return (
     <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
   );
