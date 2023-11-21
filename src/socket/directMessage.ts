@@ -1,15 +1,17 @@
 import { Socket } from "socket.io-client";
 
 interface DM {
-  data: {
+  id: number;
+  sender: {
     id: number;
-    sender: {
-      id: number; // userId
-      nickname: string;
-    };
-    content: string;
-    createdAt: Date;
+    nickname: string;
   };
+  receiver: {
+    id: number;
+    nickname: string;
+  };
+  content: string;
+  createdAt: Date;
 }
 
 interface DMUnread {

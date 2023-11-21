@@ -2,8 +2,10 @@ import { Socket } from "socket.io-client";
 
 interface CM {
   channelId: string;
-  senderId: string;
-  message: string;
+  sender: { id: number; nickname: string };
+  receiver: { id: number; nickname: string };
+  content: string;
+  createdAt: string;
 }
 
 function receiveCM(socket: Socket, callback: (res: CM) => void) {
