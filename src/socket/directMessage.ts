@@ -47,9 +47,9 @@ function receiveDMUnreadCount(
   );
 }
 
-function sendDM(socket: Socket, recieverId: number, content: string) {
+function sendDM(socket: Socket, receiverId: number, content: string) {
   socket.emit("DM", {
-    recieverId: recieverId,
+    receiverId: receiverId,
     content: content,
   });
 }
