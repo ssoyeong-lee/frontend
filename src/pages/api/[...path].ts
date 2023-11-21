@@ -48,7 +48,7 @@ export default async function handler(
         .split("session-cookie=")[1]
         .split(".")[0]
         .substring(4);
-      axiosRes.data = { session: session, msg: axiosRes.data };
+      axiosRes.data = { session: session, ...axiosRes.data };
     }
     res.status(200).setHeader("Set-Cookie", setCookie).json(axiosRes.data);
   } catch (error) {
