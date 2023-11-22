@@ -1,6 +1,9 @@
-import socket from "@/socket/index";
+import { Socket } from "socket.io-client";
 
-type NotificationType = "game-invite" | "channel_invite" | "friend-request";
+export type NotificationType =
+  | "game-invite"
+  | "channel_invite"
+  | "friend-request";
 interface Notification<T extends NotificationType> {
   type: T;
 }
@@ -28,9 +31,8 @@ interface NotiFriendRequest extends Notification<"friend-request"> {
 }
 
 function receiveNotification(
-  callbackGameInvite: (res: NotiGameInvite) => void,
-  callbackChannelInvite: (res: NotiChannelInvite) => void,
-  callbackFriendRequest: (res: NotiFriendRequest) => void
+  socket: Socket,
+  setNoti: (noti: Notification<NotificationType>) => void
 ) {
   socket.on("noti", (data: { type: NotificationType }) => {
     if (data.type === "game-invite") {
@@ -44,3 +46,10 @@ function receiveNotification(
 }
 
 export { receiveNotification };
+
+export type {
+  Notification,
+  NotiGameInvite,
+  NotiChannelInvite,
+  NotiFriendRequest,
+};

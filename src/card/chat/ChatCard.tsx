@@ -3,10 +3,12 @@ import IconInput from "@/components/control/IconInput";
 import BlockListModal from "@/components/modal/BlockListModal";
 import ChatroomSettinngModal from "@/components/modal/ChatroomSettingModal";
 import { useModal } from "@/hooks/useModal";
+import { useSocket } from "@/hooks/useSocket";
 import Card from "@/layouts/Card";
 import Divider from "@/layouts/Divider";
 import FlexBox from "@/layouts/FlexBox";
 import Icon from "@/layouts/Icon";
+import { sendDM } from "@/socket/directMessage";
 import { useState } from "react";
 
 interface Props {
@@ -16,6 +18,7 @@ interface Props {
 
 export default function ChatCard({type, selectedId}: Props) {
   const { openModal, closeModal } = useModal();
+  const { socket } = useSocket();
   const blockClick = () => {
     openModal(<BlockListModal />);
   };
@@ -27,7 +30,12 @@ export default function ChatCard({type, selectedId}: Props) {
   const [msg, setMsg] = useState("");
   const msgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMsg(e.target.value);
-  }
+  };
+  const msgSend = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== "Enter") return;
+    sendDM(socket, 2, msg);
+    setMsg("");
+  };
   return (
     <Card>
       <FlexBox direction="col" className="w-full h-full gap-6">
@@ -57,6 +65,7 @@ export default function ChatCard({type, selectedId}: Props) {
           className="border border-white"
           value={msg}
           onChange={msgChange}
+          onKeyPress={msgSend}
         />
       </FlexBox>
     </Card>

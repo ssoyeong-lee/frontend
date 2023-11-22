@@ -8,7 +8,7 @@ export function userRedirect(
   code: string,
   state: string,
   uri: string
-): Promise<AxiosResponse<{ redirect: "home" | "register" }>> {
+): Promise<AxiosResponse<{ session: string; redirect: "home" | "register" }>> {
   return axios.get(
     `/api/auth/user-redirect?code=${code}&state=${state}&callback_uri=${uri}`
   );

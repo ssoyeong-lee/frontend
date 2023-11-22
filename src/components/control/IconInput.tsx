@@ -10,6 +10,7 @@ interface Props {
   color?: "white" | "red";
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   ref?: RefObject<HTMLInputElement>;
@@ -23,6 +24,7 @@ export default forwardRef<HTMLInputElement, Props>(function IconInput(
     color = "white",
     value,
     onChange,
+    onKeyPress,
     onFocus,
     onBlur,
   }: Props,
@@ -42,6 +44,7 @@ export default forwardRef<HTMLInputElement, Props>(function IconInput(
         color={color}
         value={value}
         onChange={onChange}
+        onKeyPress={onKeyPress}
         onFocus={onFocus}
         onBlur={onBlur}
         ref={ref}
