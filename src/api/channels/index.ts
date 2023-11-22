@@ -26,8 +26,9 @@ async function createChannel({title, type, password}: Props){
 }
 
 async function updateChannel(channel_id: number, {title, type, password}: Props){
-    console.log(password);
+  if (type === "protected" && password !== "")
     return axios.put(`/api/channels/${channel_id}`, {title, type, password});
+  return axios.put(`/api/channels/${channel_id}`, {title, type});
 }
 
 async function joinChannel(channel_id: number){

@@ -1,4 +1,4 @@
-import { Channel, getChannelList } from "@/api/channels";
+import { Channel, getChannelList, joinChannel } from "@/api/channels";
 import ChatItem from "@/components/ChatItem";
 import NotificationDot from "@/components/NotificationDot";
 import SquareButton from "@/components/button/SquareButton";
@@ -7,7 +7,7 @@ import ChannelCreateModal from "@/components/modal/ChannelCreateModal";
 import { useModal } from "@/hooks/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
-import { ReactNode, useState } from "react";
+import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 
 const dmList = [
   {
@@ -28,7 +28,14 @@ const dmList = [
   },
 ];
 
-export default function ListCard() {
+interface Props {
+	type: string;
+	setType: Dispatch<SetStateAction<string>>;
+	selectedId: number;
+	setSelectedId: Dispatch<SetStateAction<number>>;
+};
+
+export default function ListCard({type, setType, selectedId, setSelectedId}: Props) {
   const { openModal, closeModal } = useModal();
   const onClick = () => {
     openModal(<ChannelCreateModal closeModal={onClickClose} />);
@@ -41,29 +48,27 @@ export default function ListCard() {
   };
 
   const [channelList, setChannelList] = useState<Channel[]>([]);
-  const [type, setType] = useState<string>("user");
   const clickUser = () => {
     setType("user");
-    setSelectedIdx(0);
+    setSelectedId(0);
   };
 
-  const [selectedIdx, setSelectedIdx] = useState(0);
   const clickChannel = async () => {
     setType("channel");
     const tmp = await getChannelList();
     setChannelList(tmp.data);
     console.log("channelList", channelList);
-    setSelectedIdx(0);
+    setSelectedId(0);
   };
 
   const dmNode = dmList.map((user, idx) => {
     return (
       <ChatItem
         title={user.title}
-        isSelected={user.id === selectedIdx ? true : false}
+        isSelected={user.id === selectedId ? true : false}
         idx={idx}
 		onClick={()=>{
-			setSelectedIdx(user.id);
+			setSelectedId(user.id);
 		}}
       />
     );
@@ -74,10 +79,11 @@ export default function ListCard() {
       return (
         <ChatItem
           title={channel.title}
-          isSelected={channel.id === selectedIdx ? true : false}
+          isSelected={channel.id === selectedId ? true : false}
           idx={idx}
-          onClick={() => {
-            setSelectedIdx(channel.id);
+          onClick={async () => {
+            setSelectedId(channel.id);
+            // await joinChannel(channel.id);
           }}
         />
       );

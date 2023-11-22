@@ -9,13 +9,19 @@ import FlexBox from "@/layouts/FlexBox";
 import Icon from "@/layouts/Icon";
 import { useState } from "react";
 
-export default function ChatCard() {
-  const { openModal } = useModal();
+interface Props {
+	type: string;
+	selectedId: number;
+};
+
+export default function ChatCard({type, selectedId}: Props) {
+  const { openModal, closeModal } = useModal();
   const blockClick = () => {
     openModal(<BlockListModal />);
   };
+
   const settingClick = () => {
-    openModal(<ChatroomSettinngModal />);
+    openModal(<ChatroomSettinngModal selectedId={selectedId} closeModal={closeModal} />);
   };
 
   const [msg, setMsg] = useState("");
