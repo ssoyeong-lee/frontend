@@ -1,21 +1,12 @@
-import React, { createContext, useContext, useState } from "react";
+import React from "react";
+import { atom, useAtom } from "jotai";
+
+const modalAtom = atom<JSX.Element>(<></>);
 
 interface ModalTemplateProps {
-  content: React.ReactNode;
+  content: JSX.Element;
   onClose: () => void;
 }
-
-interface ModalContextType {
-  modal: React.ReactNode | null;
-  openModal: (RC: React.ReactNode) => void;
-  closeModal: () => void;
-}
-
-const ModalContext = createContext<ModalContextType>({
-  modal: null,
-  openModal: () => {},
-  closeModal: () => {},
-});
 
 function ModalTemplate({ content, onClose }: ModalTemplateProps) {
   return (
@@ -27,35 +18,21 @@ function ModalTemplate({ content, onClose }: ModalTemplateProps) {
   );
 }
 
-function ModalImplement(): ModalContextType {
-  const [modal, setModal] = useState<React.ReactNode>(<></>);
+interface UseModalType {
+  modal: JSX.Element;
+  openModal: (RC: JSX.Element) => void;
+  closeModal: () => void;
+}
+
+function useModal() :UseModalType{
+  const [modal, setModal] = useAtom(modalAtom);
+  const openModal = (RC: JSX.Element) => {
+    setModal(<ModalTemplate content={RC} onClose={closeModal} />);
+  }
   const closeModal = () => {
     setModal(<></>);
-  };
-  const openModal = (RC: React.ReactNode) => {
-    console.log("openModal");
-    setModal(<ModalTemplate content={RC} onClose={closeModal} />);
   };
   return { modal, openModal, closeModal };
 }
 
-function ModalProvider({ children }: { children: JSX.Element }) {
-  const modal = ModalImplement();
-
-  return (
-    <ModalContext.Provider value={modal}>
-      {children}
-      {modal.modal}
-    </ModalContext.Provider>
-  );
-}
-
-function useModal() {
-  const context = useContext(ModalContext);
-  if (!context) {
-    throw new Error("useModalContext must be used within a ModalProvider");
-  }
-  return context;
-}
-
-export { ModalProvider, useModal };
+export { useModal };
