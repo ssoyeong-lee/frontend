@@ -32,32 +32,36 @@ export default function ChatCard({ type, selectedId }: Props) {
     setMsg(e.target.value);
   };
 
-  const icons = (
-    <>
-      <Icon
-        src="/icon/blockList.svg"
-        onClick={blockClick}
-        className="w-6 h-6"
-        alt="name"
-      />
-      <Icon
-        src="/icon/setting.svg"
-        onClick={settingClick}
-        className="w-6 h-6"
-        alt="name"
-      />
-    </>
+  const top = (
+    <FlexBox className="w-full justify-between">
+      <div>{type === "user" ? "Direct message" : "Channel"}</div>
+      <FlexBox className="gap-3">
+        <div>{type === "user" ? "user name" : "channel name"}</div>
+        {type === "user" ? (
+          ""
+        ) : (
+          <>
+            <Icon
+              src="/icon/blockList.svg"
+              onClick={blockClick}
+              className="w-6 h-6"
+              alt="name"
+            />
+            <Icon
+              src="/icon/setting.svg"
+              onClick={settingClick}
+              className="w-6 h-6"
+              alt="name"
+            />
+          </>
+        )}
+      </FlexBox>
+    </FlexBox>
   );
   return (
     <Card>
       <FlexBox direction="col" className="w-full h-full gap-6">
-        <FlexBox className="w-full justify-between">
-          <div>Direct message</div>
-          <FlexBox className="gap-3">
-            <div>user121</div>
-            {type === "channel" ? icons : ""}
-          </FlexBox>
-        </FlexBox>
+        {top}
         <Divider color="yellow" />
         <ChatDisplay />
         <IconInput

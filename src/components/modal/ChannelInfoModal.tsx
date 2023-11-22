@@ -41,7 +41,6 @@ export default  function ChannelInfoModal(){
             </FlexBox>
           </ScrollBox>
         </FlexBox>
-
       </FlexBox>
     </FlexBox>
   );
