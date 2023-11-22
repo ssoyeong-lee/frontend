@@ -1,6 +1,7 @@
 import ChatDisplay from "@/components/chat/ChatDisplay";
 import IconInput from "@/components/control/IconInput";
 import BlockListModal from "@/components/modal/BlockListModal";
+import ChannelInfoModal from "@/components/modal/ChannelInfoModal";
 import ChatroomSettinngModal from "@/components/modal/ChatroomSettingModal";
 import { useModal } from "@/hooks/useModal";
 import Card from "@/layouts/Card";
@@ -10,24 +11,43 @@ import Icon from "@/layouts/Icon";
 import { useState } from "react";
 
 interface Props {
-	type: string;
-	selectedId: number;
-};
+  type: string;
+  selectedId: number;
+}
 
-export default function ChatCard({type, selectedId}: Props) {
+export default function ChatCard({ type, selectedId }: Props) {
   const { openModal, closeModal } = useModal();
   const blockClick = () => {
-    openModal(<BlockListModal />);
+    openModal(<ChannelInfoModal />);
   };
 
   const settingClick = () => {
-    openModal(<ChatroomSettinngModal selectedId={selectedId} closeModal={closeModal} />);
+    openModal(
+      <ChatroomSettinngModal selectedId={selectedId} closeModal={closeModal} />
+    );
   };
 
   const [msg, setMsg] = useState("");
   const msgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMsg(e.target.value);
-  }
+  };
+
+  const icons = (
+    <>
+      <Icon
+        src="/icon/blockList.svg"
+        onClick={blockClick}
+        className="w-6 h-6"
+        alt="name"
+      />
+      <Icon
+        src="/icon/setting.svg"
+        onClick={settingClick}
+        className="w-6 h-6"
+        alt="name"
+      />
+    </>
+  );
   return (
     <Card>
       <FlexBox direction="col" className="w-full h-full gap-6">
@@ -35,18 +55,7 @@ export default function ChatCard({type, selectedId}: Props) {
           <div>Direct message</div>
           <FlexBox className="gap-3">
             <div>user121</div>
-            <Icon
-              src="/icon/blockList.svg"
-              onClick={blockClick}
-              className="w-6 h-6"
-              alt="name"
-            />
-            <Icon
-              src="/icon/setting.svg"
-              onClick={settingClick}
-              className="w-6 h-6"
-              alt="name"
-            />
+            {type === "channel" ? icons : ""}
           </FlexBox>
         </FlexBox>
         <Divider color="yellow" />
