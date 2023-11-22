@@ -11,8 +11,8 @@ import { Socket } from "socket.io-client";
 
 interface SocketContextType {
   socket: Socket;
-  DMData: { [key: string]: DM[] };
-  CMData: { [key: string]: CM[] };
+  DMData: { [key: number]: DM[] };
+  CMData: { [key: number]: CM[] };
   NotiData: Notification<NotificationType>[];
   setSocket: (socket: Socket) => void;
 }
@@ -48,7 +48,13 @@ function SocketImplement(): SocketContextType {
       }));
     }
   };
-  const setCM = (channelMessage: CM) => {};
+  const setCM = (channelMessage: CM) => {
+    const channelId = channelMessage.channelId;
+    setCMData((prev) => ({
+      ...prev,
+      [channelId]: [...(prev[channelId] ?? []), channelMessage],
+    }));
+  };
   const setNoti = (notification: Notification<NotificationType>) => {
     setNotiData((prev) => [...prev, notification]);
   };
