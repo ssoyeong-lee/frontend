@@ -54,23 +54,26 @@ import { createChannel, getChannel, updateChannel } from "@/api/channels";
 import SquareButton from "@/components/button/SquareButton";
 import DefaultInput from "@/components/control/DefaultInput";
 import SelectBox from "@/components/control/SelectBox";
+import { chatId, chatList } from "@/hooks/useChannelInfo";
 import { useModal } from "@/hooks/useModal";
 import FlexBox from "@/layouts/FlexBox";
 import ModalCard from "@/layouts/ModalCard";
+import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 
 interface Props {
-  selectedId: number;
   closeModal: () => void;
 }
 
 export default function ChatroomSettinngModal({
-  selectedId,
   closeModal,
 }: Props) {
   const [title, setTitle] = useState("");
   const [type, setType] = useState("");
   const [password, setPassword] = useState("");
+
+  const [ selectedId ] = useAtom(chatId);
+  const [ , setChannelList ] = useAtom(chatList);
 
   useEffect(()=> {
     const load = async () => {
@@ -93,10 +96,12 @@ export default function ChatroomSettinngModal({
     setPassword(e.target.value);
   };
 
-  const onClick = () => {
-    updateChannel(selectedId, {title, type, password});
+  const onClick = async () => {
+    const tmp = await updateChannel(selectedId, {title, type, password});
+    setChannelList(tmp.data);
     closeModal();
   };
+
   return (
     <ModalCard className="w-[500px] h-[450px]">
       <FlexBox className="w-full h-full justify-between" direction="col">

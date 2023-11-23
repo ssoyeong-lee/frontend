@@ -2,6 +2,7 @@ import ChatDisplay from "@/components/chat/ChatDisplay";
 import IconInput from "@/components/control/IconInput";
 import BlockListModal from "@/components/modal/BlockListModal";
 import ChatroomSettinngModal from "@/components/modal/ChatroomSettingModal";
+import { chatId, mode } from "@/hooks/useChannelInfo";
 import { useModal } from "@/hooks/useModal";
 import { useSocket } from "@/hooks/useSocket";
 import Card from "@/layouts/Card";
@@ -11,12 +12,7 @@ import Icon from "@/layouts/Icon";
 import { sendDM } from "@/socket/directMessage";
 import { useState } from "react";
 
-interface Props {
-	type: string;
-	selectedId: number;
-};
-
-export default function ChatCard({type, selectedId}: Props) {
+export default function ChatCard() {
   const { openModal, closeModal } = useModal();
   const { socket } = useSocket();
   const blockClick = () => {
@@ -24,7 +20,7 @@ export default function ChatCard({type, selectedId}: Props) {
   };
 
   const settingClick = () => {
-    openModal(<ChatroomSettinngModal selectedId={selectedId} closeModal={closeModal} />);
+    openModal(<ChatroomSettinngModal closeModal={closeModal} />);
   };
 
   const [msg, setMsg] = useState("");

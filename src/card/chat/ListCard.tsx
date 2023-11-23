@@ -4,9 +4,11 @@ import NotificationDot from "@/components/NotificationDot";
 import SquareButton from "@/components/button/SquareButton";
 import ChatSwitch from "@/components/chat/ChatSwitch";
 import ChannelCreateModal from "@/components/modal/ChannelCreateModal";
+import { chatId, chatList, mode } from "@/hooks/useChannelInfo";
 import { useModal } from "@/hooks/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
+import { useAtom } from "jotai";
 import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 
 const dmList = [
@@ -28,19 +30,7 @@ const dmList = [
   },
 ];
 
-interface Props {
-  type: string;
-  setType: Dispatch<SetStateAction<string>>;
-  selectedId: number;
-  setSelectedId: Dispatch<SetStateAction<number>>;
-}
-
-export default function ListCard({
-  type,
-  setType,
-  selectedId,
-  setSelectedId,
-}: Props) {
+export default function ListCard() {
   const { openModal, closeModal } = useModal();
   const onClick = () => {
     openModal(<ChannelCreateModal closeModal={onClickClose} />);
@@ -52,7 +42,10 @@ export default function ListCard({
     setChannelList(tmp.data);
   };
 
-  const [channelList, setChannelList] = useState<Channel[]>([]);
+  const [type, setType] = useAtom(mode);
+  const [selectedId, setSelectedId] = useAtom(chatId);
+  const [channelList, setChannelList] = useAtom(chatList);
+
   const clickUser = () => {
     setType("user");
     setSelectedId(0);
