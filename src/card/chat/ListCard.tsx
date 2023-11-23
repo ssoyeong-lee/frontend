@@ -4,7 +4,7 @@ import NotificationDot from "@/components/NotificationDot";
 import SquareButton from "@/components/button/SquareButton";
 import ChatSwitch from "@/components/chat/ChatSwitch";
 import ChannelCreateModal from "@/components/modal/ChannelCreateModal";
-import { chatId, chatList, mode } from "@/hooks/useChannelInfo";
+import { chatId, chatList, mode, updateChannelList } from "@/hooks/useChannelInfo";
 import { useModal } from "@/hooks/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
@@ -45,6 +45,7 @@ export default function ListCard() {
   const [type, setType] = useAtom(mode);
   const [selectedId, setSelectedId] = useAtom(chatId);
   const [channelList, setChannelList] = useAtom(chatList);
+  const [, updateChannel] = useAtom(updateChannelList);
 
   const clickUser = () => {
     setType("user");
@@ -54,9 +55,8 @@ export default function ListCard() {
   const clickChannel = async () => {
     setType("channel");
     const tmp = await getChannelList();
-    setChannelList(tmp.data);
-    console.log("channelList", channelList);
     setSelectedId(0);
+    updateChannel();
   };
 
   const dmNode = dmList.map((user, idx) => {
@@ -81,8 +81,8 @@ export default function ListCard() {
           isSelected={channel.id === selectedId ? true : false}
           onClick={async () => {
             setSelectedId(channel.id);
-            // await joinChannel(channel.id);
-          }}
+          }
+        }
         />
       );
   });

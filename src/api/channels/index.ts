@@ -39,9 +39,14 @@ async function leaveChannel(channel_id: number){
     return axios.delete(`/api/channels/${channel_id}`);
 }
 
+interface MyChannel {
+    channel: Channel;
+    role: string;
+}
+
 async function getMyChannel(){
   return axios.get('/api/channels/me');
 }
 
-export type { Channel };
+export type { Channel, MyChannel };
 export { getChannelList, getChannel, createChannel, updateChannel, joinChannel, leaveChannel, getMyChannel};
