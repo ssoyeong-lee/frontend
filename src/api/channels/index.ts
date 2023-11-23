@@ -36,7 +36,7 @@ async function joinChannel(channel_id: number){
 }
 
 async function leaveChannel(channel_id: number){
-    return axios.delete(`/api/channels/${channel_id}`, {});
+    return axios.delete(`/api/channels/${channel_id}`);
 }
 
 async function getMyChannel(){
