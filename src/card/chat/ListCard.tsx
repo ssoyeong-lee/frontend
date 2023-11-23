@@ -29,13 +29,18 @@ const dmList = [
 ];
 
 interface Props {
-	type: string;
-	setType: Dispatch<SetStateAction<string>>;
-	selectedId: number;
-	setSelectedId: Dispatch<SetStateAction<number>>;
-};
+  type: string;
+  setType: Dispatch<SetStateAction<string>>;
+  selectedId: number;
+  setSelectedId: Dispatch<SetStateAction<number>>;
+}
 
-export default function ListCard({type, setType, selectedId, setSelectedId}: Props) {
+export default function ListCard({
+  type,
+  setType,
+  selectedId,
+  setSelectedId,
+}: Props) {
   const { openModal, closeModal } = useModal();
   const onClick = () => {
     openModal(<ChannelCreateModal closeModal={onClickClose} />);
@@ -64,23 +69,23 @@ export default function ListCard({type, setType, selectedId, setSelectedId}: Pro
   const dmNode = dmList.map((user, idx) => {
     return (
       <ChatItem
+        key={user.id}
         title={user.title}
         isSelected={user.id === selectedId ? true : false}
-        idx={idx}
-		onClick={()=>{
-			setSelectedId(user.id);
-		}}
+        onClick={async () => {
+          setSelectedId(user.id);
+        }}
       />
     );
   });
 
-  const channelNode = channelList.map((channel, idx) => {
+  const channelNode = channelList.map((channel) => {
     if (channel.type !== "private")
       return (
         <ChatItem
+          key={channel.id}
           title={channel.title}
           isSelected={channel.id === selectedId ? true : false}
-          idx={idx}
           onClick={async () => {
             setSelectedId(channel.id);
             // await joinChannel(channel.id);
