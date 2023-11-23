@@ -1,6 +1,7 @@
-import socket from "@/socket/index";
+import { Socket } from "socket.io-client";
 
 function ChannelIn(
+  socket: Socket,
   callback: (res: { channelId: string; userId: string }) => void
 ) {
   socket.on("channel-in", (res: { channelId: string; userId: string }) =>
@@ -9,6 +10,7 @@ function ChannelIn(
 }
 
 function ChannelOut(
+  socket: Socket,
   callback: (res: { channelId: string; kickedUserId: string }) => void
 ) {
   socket.on(
@@ -26,10 +28,11 @@ interface Member {
   isMuted?: boolean;
 }
 
-function ChannelMember(callback: (res: Member[]) => void) {
+function ChannelMember(socket: Socket, callback: (res: Member[]) => void) {
   socket.on("channel-member", (res: Member[]) => {
     callback(res);
   });
 }
 
 export { ChannelIn, ChannelOut, ChannelMember };
+export type { Member };

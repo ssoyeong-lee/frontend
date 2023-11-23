@@ -11,6 +11,7 @@ async function getUserList(): Promise<AxiosResponse<UserAbstract[]>> {
 }
 
 interface UserDetail {
+  id: number;
   email: string;
   nickname: string;
   ladderPoint: number;

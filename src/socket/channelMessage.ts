@@ -1,20 +1,23 @@
-import socket from "@/socket/index";
+import { Socket } from "socket.io-client";
 
-interface ChannelMessage {
+interface CM {
   channelId: string;
-  senderId: string;
-  message: string;
+  sender: { id: number; nickname: string };
+  receiver: { id: number; nickname: string };
+  content: string;
+  createdAt: string;
 }
 
-function receiveCM(callback: (res: ChannelMessage) => void) {
-  socket.on("DM", (res: ChannelMessage) => callback(res));
+function receiveCM(socket: Socket, callback: (res: CM) => void) {
+  socket.on("DM", (res: CM) => callback(res));
 }
 
-function sendCM(channelId: number, content: string) {
+function sendCM(socket: Socket, channelId: number, content: string) {
   socket.emit("DM", {
     channelId: channelId,
     content: content,
   });
 }
 
+export type { CM };
 export { receiveCM, sendCM };
