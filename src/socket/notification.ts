@@ -35,13 +35,7 @@ function receiveNotification(
   setNoti: (noti: Notification<NotificationType>) => void
 ) {
   socket.on("noti", (data: { type: NotificationType }) => {
-    if (data.type === "game-invite") {
-      callbackGameInvite(data as NotiGameInvite);
-    } else if (data.type === "channel_invite") {
-      callbackChannelInvite(data as NotiChannelInvite);
-    } else if (data.type === "friend-request") {
-      callbackFriendRequest(data as NotiFriendRequest);
-    }
+    setNoti(data);
   });
 }
 
