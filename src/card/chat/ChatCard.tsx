@@ -1,6 +1,6 @@
 import ChatDisplay from "@/components/chat/ChatDisplay";
 import IconInput from "@/components/control/IconInput";
-import BlockListModal from "@/components/modal/BlockListModal";
+import ChannelInfoModal from "@/components/modal/ChannelInfoModal";
 import ChatroomSettinngModal from "@/components/modal/ChatroomSettingModal";
 import { useModal } from "@/hooks/display/useModal";
 import { useSocket } from "@/hooks/useSocket";
@@ -16,11 +16,10 @@ interface Props {
   selectedId: number;
 }
 
-export default function ChatCard({ type, selectedId }: Props) {
+function ChatCardTop({ type, selectedId }: Props){
   const { openModal, closeModal } = useModal();
-  const { socket } = useSocket();
-  const blockClick = () => {
-    openModal(<BlockListModal />);
+  const channelInfoClick = () => {
+    openModal(<ChannelInfoModal />);
   };
 
   const settingClick = () => {
@@ -28,37 +27,54 @@ export default function ChatCard({ type, selectedId }: Props) {
       <ChatroomSettinngModal selectedId={selectedId} closeModal={closeModal} />
     );
   };
+  return (
+    (
+      <FlexBox className="w-full justify-between">
+        <div>{type === "user" ? "Direct message" : "Channel"}</div>
+        <FlexBox className="gap-3">
+          <div>{type === "user" ? "user name" : "channel name"}</div>
+          {type === "user" ? (
+            ""
+          ) : (
+            <>
+              <Icon
+                src="/icon/blockList.svg"
+                onClick={channelInfoClick}
+                className="w-6 h-6"
+                alt="name"
+              />
+              <Icon
+                src="/icon/setting.svg"
+                onClick={settingClick}
+                className="w-6 h-6"
+                alt="name"
+              />
+            </>
+          )}
+        </FlexBox>
+      </FlexBox>
+    )
+  );
+}
+
+export default function ChatCard({ type, selectedId }: Props) {
+  const { socket } = useSocket();
 
   const [msg, setMsg] = useState("");
   const msgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMsg(e.target.value);
   };
+
   const msgSend = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter") return;
     sendDM(socket, 2, msg);
     setMsg("");
   };
+ 
   return (
     <Card>
       <FlexBox direction="col" className="w-full h-full gap-6">
-        <FlexBox className="w-full justify-between">
-          <div>Direct message</div>
-          <FlexBox className="gap-3">
-            <div>user121</div>
-            <Icon
-              src="/icon/blockList.svg"
-              onClick={blockClick}
-              className="w-6 h-6"
-              alt="name"
-            />
-            <Icon
-              src="/icon/setting.svg"
-              onClick={settingClick}
-              className="w-6 h-6"
-              alt="name"
-            />
-          </FlexBox>
-        </FlexBox>
+        <ChatCardTop type={type} selectedId={selectedId}/>
         <Divider color="yellow" />
         <ChatDisplay />
         <IconInput

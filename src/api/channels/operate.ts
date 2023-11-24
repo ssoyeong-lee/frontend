@@ -5,7 +5,7 @@ async function inviteUser(channel_id: number, user_id: number) {
 }
 
 async function kickMember(channel_id: number, user_id: number) {
-  return axios.delete(`/api/channels/${channel_id}/kick/${user_id}`, {});
+  return axios.delete(`/api/channels/${channel_id}/kick/${user_id}`);
 }
 
 async function getBanMemberList(channel_id: number) {
