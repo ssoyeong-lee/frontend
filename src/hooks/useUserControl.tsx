@@ -1,25 +1,15 @@
 import Divider from "@/layouts/Divider";
 import FlexBox from "@/layouts/FlexBox";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { atom, useAtom } from "jotai";
+import React, { useEffect, useState } from "react";
 
+const userControlAtom = atom<JSX.Element>(<></>);
 interface UserControlTemplateProps {
   x: number;
   y: number;
   type: "owner" | "admin" | "user";
   onClose?: () => void;
 }
-
-interface UserControlContextType {
-  userControl: React.ReactNode | null;
-  openUserControl: (props: UserControlTemplateProps) => void;
-  closeUserControl: () => void;
-}
-
-const UserControlContext = createContext<UserControlContextType>({
-  userControl: null,
-  openUserControl: () => {},
-  closeUserControl: () => {},
-});
 
 function UserControlTemplate({
   x,
@@ -76,37 +66,23 @@ function UserControlTemplate({
   );
 }
 
-function UserControlImplement(): UserControlContextType {
-  const [userControl, setUserControl] = useState<React.ReactNode>(<></>);
-  const closeUserControl = () => {
-    setUserControl(<></>);
-  };
+interface UseUserControlType {
+  userControl: JSX.Element | null;
+  openUserControl: (props: UserControlTemplateProps) => void;
+  closeUserControl: () => void;
+}
+
+function useUserControl(): UseUserControlType {
+  const [userControl, setUserControl] = useAtom(userControlAtom);
   const openUserControl = ({ x, y, type }: UserControlTemplateProps) => {
-    console.log("openUserControl");
     setUserControl(
       <UserControlTemplate x={x} y={y} type={type} onClose={closeUserControl} />
     );
   };
+  const closeUserControl = () => {
+    setUserControl(<></>);
+  };
   return { userControl, openUserControl, closeUserControl };
 }
 
-function UserControlProvider({ children }: { children: JSX.Element }) {
-  const userControl = UserControlImplement();
-
-  return (
-    <UserControlContext.Provider value={userControl}>
-      {children}
-      {userControl.userControl}
-    </UserControlContext.Provider>
-  );
-}
-
-function useUserControl() {
-  const context = useContext(UserControlContext);
-  if (!context) {
-    throw new Error("useModalContext must be used within a ModalProvider");
-  }
-  return context;
-}
-
-export { UserControlProvider, useUserControl };
+export { useUserControl };
