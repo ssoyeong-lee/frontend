@@ -23,9 +23,12 @@ function useSocket(): UseSocketType {
   const [socket, setSocket] = useAtom(socketAtom);
 
   useEffect(() => {
-    if (socket.id === undefined) return;
-    getUserMe().then((res) => {
-      setAuth(res.data);
+    if (socket.on === undefined) return;
+    socket.on("connect", () => {
+      console.log(socket);
+      getUserMe().then((res) => {
+        setAuth(res.data);
+      });
     });
   }, [socket]);
 
