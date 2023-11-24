@@ -1,27 +1,24 @@
 import { Orbitron } from "next/font/google";
-import { NotificationProvider } from "@/hooks/useNotification";
-import { ToastProvider } from "@/hooks/useToast";
-import { UserControlProvider } from "@/hooks/useUserControl";
-import { SocketProvider } from "@/hooks/useSocket";
-import { useModal } from "@/hooks/useModal";
+import { useModal } from "@/hooks/display/useModal";
+import { useNotification } from "@/hooks/display/useNotification";
+import { useToast } from "@/hooks/display/useToast";
+import { useUserControl } from "@/hooks/display/useUserControl";
 const orbitron = Orbitron({
   subsets: ["latin"],
 });
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const {modal} = useModal();
+  const { modal } = useModal();
+  const { notification } = useNotification();
+  const { toast } = useToast();
+  const { userControl } = useUserControl();
   return (
-    <SocketProvider>
-      <UserControlProvider>
-          <ToastProvider>
-            <NotificationProvider>
-              <main className={`h-screen w-screen ${orbitron.className}`}>
-                {modal}
-                {children}
-              </main>
-            </NotificationProvider>
-          </ToastProvider>
-      </UserControlProvider>
-    </SocketProvider>
+    <main className={`h-screen w-screen ${orbitron.className}`}>
+      {modal}
+      {notification}
+      {toast}
+      {userControl}
+      {children}
+    </main>
   );
 }
