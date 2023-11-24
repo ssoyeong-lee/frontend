@@ -12,11 +12,11 @@ import { sendDM } from "@/socket/directMessage";
 import { useState } from "react";
 
 interface Props {
-	type: string;
-	selectedId: number;
-};
+  type: string;
+  selectedId: number;
+}
 
-export default function ChatCard({type, selectedId}: Props) {
+export default function ChatCard({ type, selectedId }: Props) {
   const { openModal, closeModal } = useModal();
   const { socket } = useSocket();
   const blockClick = () => {
@@ -24,7 +24,9 @@ export default function ChatCard({type, selectedId}: Props) {
   };
 
   const settingClick = () => {
-    openModal(<ChatroomSettinngModal selectedId={selectedId} closeModal={closeModal} />);
+    openModal(
+      <ChatroomSettinngModal selectedId={selectedId} closeModal={closeModal} />
+    );
   };
 
   const [msg, setMsg] = useState("");
