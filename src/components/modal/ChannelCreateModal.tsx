@@ -2,16 +2,16 @@ import { createChannel } from "@/api/channels";
 import SquareButton from "@/components/button/SquareButton";
 import DefaultInput from "@/components/control/DefaultInput";
 import SelectBox from "@/components/control/SelectBox";
-import { useModal } from "@/hooks/useModal";
+import { useModal } from "@/hooks/display/useModal";
 import FlexBox from "@/layouts/FlexBox";
 import ModalCard from "@/layouts/ModalCard";
 import { useState } from "react";
 
 interface Props {
-	closeModal : () => void
+  closeModal: () => void;
 }
 
-export default function ChannelCreateModal({closeModal} : Props) {
+export default function ChannelCreateModal({ closeModal }: Props) {
   const [title, setTitle] = useState("");
   const [type, setType] = useState<string>("private");
   const [password, setPassword] = useState("");
@@ -30,14 +30,15 @@ export default function ChannelCreateModal({closeModal} : Props) {
       title === "" ||
       !(type === "public" || type === "protected" || type === "private") ||
       (type === "protected" && password === "")
-    )
-    {
+    ) {
       console.log("click err");
-	  return ;
+      return;
     }
-    createChannel({ title, type, password }).then((res)=>console.log(res)).catch((err)=>console.log(err));
-	closeModal();
-};
+    createChannel({ title, type, password })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+    closeModal();
+  };
   return (
     <ModalCard className="w-[500px] h-[450px]">
       <FlexBox className="w-full h-full justify-between" direction="col">

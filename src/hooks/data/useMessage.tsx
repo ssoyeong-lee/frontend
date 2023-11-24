@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/data/useAuth";
 import { CM } from "@/socket/channelMessage";
 import { DM } from "@/socket/directMessage";
 import { atom, useAtom } from "jotai";

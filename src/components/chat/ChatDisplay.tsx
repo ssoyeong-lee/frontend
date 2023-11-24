@@ -1,4 +1,4 @@
-import { useUserControl } from "@/hooks/useUserControl";
+import { useUserControl } from "@/hooks/display/useUserControl";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
 

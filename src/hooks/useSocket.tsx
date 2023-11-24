@@ -1,6 +1,6 @@
 import { getUserMe } from "@/api/users/index";
-import { useAuth } from "@/hooks/useAuth";
-import { useMessage } from "@/hooks/useMessage";
+import { useAuth } from "@/hooks/data/useAuth";
+import { useMessage } from "@/hooks/data/useMessage";
 import { receiveCM } from "@/socket/channelMessage";
 import { receiveDM } from "@/socket/directMessage";
 import { atom, useAtom } from "jotai";

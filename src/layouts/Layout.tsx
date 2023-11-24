@@ -1,8 +1,8 @@
 import { Orbitron } from "next/font/google";
-import { useModal } from "@/hooks/useModal";
-import { useNotification } from "@/hooks/useNotification";
-import { useToast } from "@/hooks/useToast";
-import { useUserControl } from "@/hooks/useUserControl";
+import { useModal } from "@/hooks/display/useModal";
+import { useNotification } from "@/hooks/display/useNotification";
+import { useToast } from "@/hooks/display/useToast";
+import { useUserControl } from "@/hooks/display/useUserControl";
 const orbitron = Orbitron({
   subsets: ["latin"],
 });

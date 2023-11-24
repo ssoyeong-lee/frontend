@@ -54,7 +54,7 @@ import { createChannel, getChannel, updateChannel } from "@/api/channels";
 import SquareButton from "@/components/button/SquareButton";
 import DefaultInput from "@/components/control/DefaultInput";
 import SelectBox from "@/components/control/SelectBox";
-import { useModal } from "@/hooks/useModal";
+import { useModal } from "@/hooks/display/useModal";
 import FlexBox from "@/layouts/FlexBox";
 import ModalCard from "@/layouts/ModalCard";
 import { useEffect, useState } from "react";
@@ -72,16 +72,16 @@ export default function ChatroomSettinngModal({
   const [type, setType] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(()=> {
+  useEffect(() => {
     const load = async () => {
       const info = await getChannel(selectedId);
       setTitle(info.data.title);
       setType(info.data.type);
-      setPassword("")
+      setPassword("");
       console.log(info.data);
-    }
+    };
     load();
-  },[]);
+  }, []);
 
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -94,7 +94,7 @@ export default function ChatroomSettinngModal({
   };
 
   const onClick = () => {
-    updateChannel(selectedId, {title, type, password});
+    updateChannel(selectedId, { title, type, password });
     closeModal();
   };
   return (

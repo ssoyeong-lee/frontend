@@ -2,7 +2,7 @@ import ChatDisplay from "@/components/chat/ChatDisplay";
 import IconInput from "@/components/control/IconInput";
 import BlockListModal from "@/components/modal/BlockListModal";
 import ChatroomSettinngModal from "@/components/modal/ChatroomSettingModal";
-import { useModal } from "@/hooks/useModal";
+import { useModal } from "@/hooks/display/useModal";
 import { useSocket } from "@/hooks/useSocket";
 import Card from "@/layouts/Card";
 import Divider from "@/layouts/Divider";

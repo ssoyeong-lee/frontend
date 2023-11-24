@@ -4,7 +4,7 @@ import NotificationDot from "@/components/NotificationDot";
 import SquareButton from "@/components/button/SquareButton";
 import ChatSwitch from "@/components/chat/ChatSwitch";
 import ChannelCreateModal from "@/components/modal/ChannelCreateModal";
-import { useModal } from "@/hooks/useModal";
+import { useModal } from "@/hooks/display/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import { Dispatch, ReactNode, SetStateAction, useState } from "react";
@@ -29,13 +29,18 @@ const dmList = [
 ];
 
 interface Props {
-	type: string;
-	setType: Dispatch<SetStateAction<string>>;
-	selectedId: number;
-	setSelectedId: Dispatch<SetStateAction<number>>;
-};
+  type: string;
+  setType: Dispatch<SetStateAction<string>>;
+  selectedId: number;
+  setSelectedId: Dispatch<SetStateAction<number>>;
+}
 
-export default function ListCard({type, setType, selectedId, setSelectedId}: Props) {
+export default function ListCard({
+  type,
+  setType,
+  selectedId,
+  setSelectedId,
+}: Props) {
   const { openModal, closeModal } = useModal();
   const onClick = () => {
     openModal(<ChannelCreateModal closeModal={onClickClose} />);
@@ -67,9 +72,9 @@ export default function ListCard({type, setType, selectedId, setSelectedId}: Pro
         title={user.title}
         isSelected={user.id === selectedId ? true : false}
         idx={idx}
-		onClick={()=>{
-			setSelectedId(user.id);
-		}}
+        onClick={() => {
+          setSelectedId(user.id);
+        }}
       />
     );
   });
