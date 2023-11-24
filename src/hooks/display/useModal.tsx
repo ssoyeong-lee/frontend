@@ -24,11 +24,11 @@ interface UseModalType {
   closeModal: () => void;
 }
 
-function useModal() :UseModalType{
+function useModal(): UseModalType {
   const [modal, setModal] = useAtom(modalAtom);
   const openModal = (RC: JSX.Element) => {
     setModal(<ModalTemplate content={RC} onClose={closeModal} />);
-  }
+  };
   const closeModal = () => {
     setModal(<></>);
   };
