@@ -1,5 +1,5 @@
 import { Block, getBlockList } from "@/api/users/block";
-import { Friend, getFriendList } from "@/api/users/friend";
+import { Friend, getFriendRelationList } from "@/api/users/friend";
 import { UserAbstract, getUserList } from "@/api/users/index";
 import BlockCard from "@/card/user/BlockCard";
 import FriendCard from "@/card/user/FriendCard";
@@ -28,7 +28,7 @@ export default function User() {
   useEffect(() => {
     const asyncFunc = async () => {
       await sleep(100);
-      Promise.all([getFriendList(), getBlockList()]).then((res) => {
+      Promise.all([getFriendRelationList(), getBlockList()]).then((res) => {
         setFriendList(res[0].data);
         setBlockList(res[1].data);
       });

@@ -5,8 +5,13 @@ interface Friend {
   otherUserId: number;
   status: "friend" | "pendingApproval" | "friendRequest";
 }
+
 async function getFriendList(): Promise<AxiosResponse<Friend[]>> {
   return axios.get("/api/user-relation/friends");
+}
+
+async function getFriendRelationList(): Promise<AxiosResponse<Friend[]>> {
+  return axios.get("/api/user-relation/friends/relations");
 }
 
 async function postRequestFriend(id: number): Promise<AxiosResponse> {
@@ -27,6 +32,7 @@ async function deleteFriend(id: number): Promise<AxiosResponse> {
 
 export {
   getFriendList,
+  getFriendRelationList,
   postRequestFriend,
   approveFriend,
   denyFriend,
