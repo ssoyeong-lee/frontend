@@ -40,7 +40,7 @@ async function leaveChannel(channel_id: number){
 }
 
 async function getMyChannel(){
-  return axios.get('/channels/me');
+  return axios.get('/api/channels/me');
 }
 
 export type { Channel };
