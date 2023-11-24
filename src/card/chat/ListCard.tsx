@@ -64,26 +64,25 @@ export default function ListCard({type, setType, selectedId, setSelectedId}: Pro
   const dmNode = dmList.map((user, idx) => {
     return (
       <ChatItem
+        key={user.id}
         title={user.title}
         isSelected={user.id === selectedId ? true : false}
-        idx={idx}
-		onClick={()=>{
-			setSelectedId(user.id);
-		}}
+	    	onClick={async ()=>{
+	    		setSelectedId(user.id);
+		    }}
       />
     );
   });
 
-  const channelNode = channelList.map((channel, idx) => {
+  const channelNode = channelList.map((channel) => {
     if (channel.type !== "private")
       return (
         <ChatItem
+          key={channel.id}
           title={channel.title}
           isSelected={channel.id === selectedId ? true : false}
-          idx={idx}
           onClick={async () => {
             setSelectedId(channel.id);
-            // await joinChannel(channel.id);
           }}
         />
       );
