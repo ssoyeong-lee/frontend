@@ -64,7 +64,7 @@ export default function SearchCard({
   const [keyword, setKeyword] = useState("");
   const keyworkdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
-  }
+  };
   return (
     <Card onClick={onClick}>
       <ScrollBox>
@@ -80,15 +80,17 @@ export default function SearchCard({
           {isSearch &&
             setIsSearch &&
             userList &&
-            userList.map((user) => {
-              return (
-                <SearchItem
-                  key={user.id}
-                  user={user}
-                  setIsSearch={setIsSearch}
-                />
-              );
-            })}
+            userList
+              .filter((user) => user.nickname.includes(keyword))
+              .map((user) => {
+                return (
+                  <SearchItem
+                    key={user.id}
+                    user={user}
+                    setIsSearch={setIsSearch}
+                  />
+                );
+              })}
         </FlexBox>
       </ScrollBox>
     </Card>
