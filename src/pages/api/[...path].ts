@@ -62,9 +62,10 @@ export default async function handler(
     res.status(200).setHeader("Set-Cookie", setCookie).json(axiosRes.data);
   } catch (error: any) {
     const axiosError = error as AxiosError;
-    console.warn("에러가 났어요");
-    console.warn("요청했던 헤더 :", axiosError.response?.config.headers);
-    console.warn("에러 :", axiosError.response?.data);
+    console.info("에러가 났어요");
+    console.info("요청했던 헤더 :", axiosError.response?.config.headers);
+    console.info("에러 :", axiosError.response?.data);
+    console.info();
     res
       .status(axiosError.response?.status || 500)
       .json(axiosError.response?.data);
