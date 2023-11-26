@@ -3,6 +3,7 @@ import Icon from "@/layouts/Icon";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useNotification } from "@/hooks/display/useNotification";
+import { logout } from "@/api/auth/login";
 
 export default function TopNav() {
   const router = useRouter();
@@ -12,7 +13,7 @@ export default function TopNav() {
   const activeMenuStyle = "text-white w-[200px] cursor-pointer";
 
   const { openNotification } = useNotification();
-  const onClick = () => {
+  const onClickNotification = () => {
     openNotification(
       <div className="w-full max-h-[200px]">
         <FlexBox direction="row" className="w-full h-fit justify-between p-2">
@@ -28,6 +29,11 @@ export default function TopNav() {
         <div className="p-2">user2님이 게임에 초대하였습니다.</div>
       </div>
     );
+  };
+
+  const onClickLogout = async () => {
+    await logout();
+    router.push("/login");
   };
 
   return (
@@ -56,12 +62,13 @@ export default function TopNav() {
         </Link>
         <FlexBox className="gap-6">
           <Icon
-            onClick={onClick}
+            onClick={onClickNotification}
             src="/icon/alarm.svg"
             alt="alarm"
             className="cursor-pointer"
           />
           <Icon
+            onClick={onClickLogout}
             src="/icon/logout.svg"
             alt="logout"
             className="cursor-pointer"

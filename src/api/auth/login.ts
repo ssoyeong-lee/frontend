@@ -5,7 +5,7 @@ export function login(uri: string): Promise<AxiosResponse<{ data: string }>> {
 }
 
 export function logout(): Promise<AxiosResponse> {
-  return axios.get("/api/auth/logout");
+  return axios.post("/api/auth/logout", {});
 }
 
 export function userRedirect(
