@@ -4,6 +4,10 @@ export function login(uri: string): Promise<AxiosResponse<{ data: string }>> {
   return axios.get(`/api/auth/sign-in?callback_uri=${uri}`);
 }
 
+export function logout(): Promise<AxiosResponse> {
+  return axios.get("/api/auth/logout");
+}
+
 export function userRedirect(
   code: string,
   state: string,
