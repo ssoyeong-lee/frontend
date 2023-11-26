@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 interface Channel {
     id: number;
@@ -7,11 +7,11 @@ interface Channel {
     password?: string;
 }
 
-async function getChannelList(){
+async function getChannelList() : Promise<AxiosResponse<Channel[]>>{
     return axios.get('/api/channels');
 }
 
-async function getChannel(channel_id: number){
+async function getChannel(channel_id: number): Promise<AxiosResponse<Channel>> {
     return axios.get(`/api/channels/${channel_id}`);
 }
 
@@ -39,9 +39,14 @@ async function leaveChannel(channel_id: number){
     return axios.delete(`/api/channels/${channel_id}`, {});
 }
 
-async function getMyChannel(){
+interface MyChannel {
+  channel: Channel;
+	role: 'Owner' | 'Admin' | 'User';
+}
+
+async function getMyChannel(): Promise<AxiosResponse<MyChannel>>{
   return axios.get('/channels/me');
 }
 
-export type { Channel };
+export type { Channel, MyChannel };
 export { getChannelList, getChannel, createChannel, updateChannel, joinChannel, leaveChannel, getMyChannel};
