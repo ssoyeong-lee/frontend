@@ -1,6 +1,6 @@
 import ChatDisplay from "@/components/chat/ChatDisplay";
 import IconInput from "@/components/control/IconInput";
-import BlockListModal from "@/components/modal/BlockListModal";
+import ChannelInfoModal from "@/components/modal/ChannelInfoModal";
 import ChatroomSettinngModal from "@/components/modal/ChatroomSettingModal";
 import useChatInfo from "@/hooks/data/useChatInfo";
 import { useModal } from "@/hooks/display/useModal";
@@ -12,11 +12,54 @@ import Icon from "@/layouts/Icon";
 import { sendDM } from "@/socket/directMessage";
 import { useState } from "react";
 
+function ChatCardTop(){
+  const { openModal, closeModal } = useModal();
+  const channelInfoClick = () => {
+    openModal(<ChannelInfoModal />);
+  };
+
+  const {chatInfo} = useChatInfo();
+  const settingClick = () => {
+    openModal(
+      <ChatroomSettinngModal selectedId={chatInfo.id} closeModal={closeModal} />
+    );
+  };
+  return (
+    (
+      <FlexBox className="w-full justify-between">
+        <div>{chatInfo.type === "DM" ? "Direct message" : "Channel"}</div>
+        <FlexBox className="gap-3">
+          <div>{chatInfo.type === "DM" ? "user name" : "channel name"}</div>
+          {chatInfo.type === "DM" ? (
+            ""
+          ) : (
+            <>
+              <Icon
+                src="/icon/blockList.svg"
+                onClick={channelInfoClick}
+                className="w-6 h-6"
+                alt="name"
+              />
+              <Icon
+                src="/icon/setting.svg"
+                onClick={settingClick}
+                className="w-6 h-6"
+                alt="name"
+              />
+            </>
+          )}
+        </FlexBox>
+      </FlexBox>
+    )
+  );
+}
+
+
 export default function ChatCard() {
   const { openModal, closeModal } = useModal();
   const { socket } = useSocket();
   const blockClick = () => {
-    openModal(<BlockListModal />);
+    // openModal(<BlockListModal />);
   };
 
   const {updateList} = useChatInfo();
@@ -42,24 +85,7 @@ export default function ChatCard() {
   return (
     <Card>
       <FlexBox direction="col" className="w-full h-full gap-6">
-        <FlexBox className="w-full justify-between">
-          <div>Direct message</div>
-          <FlexBox className="gap-3">
-            <div>user121</div>
-            <Icon
-              src="/icon/blockList.svg"
-              onClick={blockClick}
-              className="w-6 h-6"
-              alt="name"
-            />
-            <Icon
-              src="/icon/setting.svg"
-              onClick={settingClick}
-              className="w-6 h-6"
-              alt="name"
-            />
-          </FlexBox>
-        </FlexBox>
+        <ChatCardTop />
         <Divider color="yellow" />
         {/* <ChatDisplay /> */}
         <IconInput

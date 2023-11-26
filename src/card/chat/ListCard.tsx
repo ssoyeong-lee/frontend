@@ -57,6 +57,7 @@ export default function ListCard() {
   const dmNode = dmList.map((user, idx) => {
     return (
       <ChatItem
+        key={user.id}
         title={user.title}
         isSelected={user.id === chatInfo.id ? true : false}
         idx={idx}
@@ -67,13 +68,13 @@ export default function ListCard() {
     );
   });
 
-  const channelNode = chatInfo.list.map((channel, idx) => {
+  const channelNode = chatInfo.list.map((channel) => {
     if (channel.type !== "private")
       return (
         <ChatItem
+          key={channel.id}
           title={channel.title}
           isSelected={channel.id === chatInfo.id ? true : false}
-          idx={idx}
           onClick={async () => {
             changeId(channel.id);
           }}
