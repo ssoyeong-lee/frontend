@@ -4,10 +4,10 @@ import NotificationDot from "@/components/NotificationDot";
 import SquareButton from "@/components/button/SquareButton";
 import ChatSwitch from "@/components/chat/ChatSwitch";
 import ChannelCreateModal from "@/components/modal/ChannelCreateModal";
+import useChatInfo from "@/hooks/data/useChatInfo";
 import { useModal } from "@/hooks/display/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
-import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 
 const dmList = [
   {
@@ -28,67 +28,54 @@ const dmList = [
   },
 ];
 
-interface Props {
-  type: string;
-  setType: Dispatch<SetStateAction<string>>;
-  selectedId: number;
-  setSelectedId: Dispatch<SetStateAction<number>>;
-}
 
-export default function ListCard({
-  type,
-  setType,
-  selectedId,
-  setSelectedId,
-}: Props) {
+export default function ListCard() {
   const { openModal, closeModal } = useModal();
   const onClick = () => {
     openModal(<ChannelCreateModal closeModal={onClickClose} />);
   };
 
-  const onClickClose = async () => {
+  const onClickClose = () => {
     closeModal();
-    const tmp = await getChannelList();
-    setChannelList(tmp.data);
+    updateList("CM");
   };
 
-  const [channelList, setChannelList] = useState<Channel[]>([]);
+  const { chatInfo, changeType, changeId, updateList} = useChatInfo();
+
   const clickUser = () => {
-    setType("user");
-    setSelectedId(0);
+    console.log("clickUser");
+    changeType("DM");
   };
 
-  const clickChannel = async () => {
-    setType("channel");
-    const tmp = await getChannelList();
-    setChannelList(tmp.data);
-    console.log("channelList", channelList);
-    setSelectedId(0);
+  const clickChannel = () => {
+    console.log("clickChannel");
+    changeType("CM");
+    console.log("clickChannel:", chatInfo.type);
+    updateList("CM");
   };
 
   const dmNode = dmList.map((user, idx) => {
     return (
       <ChatItem
         title={user.title}
-        isSelected={user.id === selectedId ? true : false}
+        isSelected={user.id === chatInfo.id ? true : false}
         idx={idx}
         onClick={() => {
-          setSelectedId(user.id);
+          changeId(user.id);
         }}
       />
     );
   });
 
-  const channelNode = channelList.map((channel, idx) => {
+  const channelNode = chatInfo.list.map((channel, idx) => {
     if (channel.type !== "private")
       return (
         <ChatItem
           title={channel.title}
-          isSelected={channel.id === selectedId ? true : false}
+          isSelected={channel.id === chatInfo.id ? true : false}
           idx={idx}
           onClick={async () => {
-            setSelectedId(channel.id);
-            // await joinChannel(channel.id);
+            changeId(channel.id);
           }}
         />
       );
@@ -98,16 +85,14 @@ export default function ListCard({
     <Card>
       <FlexBox direction="col" className="w-full h-full gap-3">
         <ChatSwitch
-          type={type}
+          type={chatInfo.type}
           clickUser={clickUser}
           clickChannel={clickChannel}
         />
         <FlexBox direction="col" className="h-full w-full gap-3">
-          {type === "user" ? dmNode : channelNode}
+          {chatInfo.type === "CM" ? channelNode: dmNode}
         </FlexBox>
-        {type === "user" ? (
-          ""
-        ) : (
+        {chatInfo.type === "CM" &&(
           <SquareButton onClick={onClick}>Create Channel</SquareButton>
         )}
       </FlexBox>

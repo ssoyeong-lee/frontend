@@ -54,27 +54,28 @@ import { createChannel, getChannel, updateChannel } from "@/api/channels";
 import SquareButton from "@/components/button/SquareButton";
 import DefaultInput from "@/components/control/DefaultInput";
 import SelectBox from "@/components/control/SelectBox";
+import useChatInfo from "@/hooks/data/useChatInfo";
 import { useModal } from "@/hooks/display/useModal";
 import FlexBox from "@/layouts/FlexBox";
 import ModalCard from "@/layouts/ModalCard";
 import { useEffect, useState } from "react";
 
 interface Props {
-  selectedId: number;
   closeModal: () => void;
 }
 
 export default function ChatroomSettinngModal({
-  selectedId,
   closeModal,
 }: Props) {
   const [title, setTitle] = useState("");
   const [type, setType] = useState("");
   const [password, setPassword] = useState("");
-
+	const {chatInfo} = useChatInfo();
   useEffect(() => {
     const load = async () => {
-      const info = await getChannel(selectedId);
+      if (chatInfo.id === null)
+        return ;
+      const info = await getChannel(chatInfo.id);
       setTitle(info.data.title);
       setType(info.data.type);
       setPassword("");
@@ -94,7 +95,9 @@ export default function ChatroomSettinngModal({
   };
 
   const onClick = () => {
-    updateChannel(selectedId, { title, type, password });
+    if (chatInfo.id === null)
+      return ;
+    updateChannel(chatInfo.id, { title, type, password });
     closeModal();
   };
   return (

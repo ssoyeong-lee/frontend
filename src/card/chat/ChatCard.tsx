@@ -2,6 +2,7 @@ import ChatDisplay from "@/components/chat/ChatDisplay";
 import IconInput from "@/components/control/IconInput";
 import BlockListModal from "@/components/modal/BlockListModal";
 import ChatroomSettinngModal from "@/components/modal/ChatroomSettingModal";
+import useChatInfo from "@/hooks/data/useChatInfo";
 import { useModal } from "@/hooks/display/useModal";
 import { useSocket } from "@/hooks/useSocket";
 import Card from "@/layouts/Card";
@@ -11,21 +12,21 @@ import Icon from "@/layouts/Icon";
 import { sendDM } from "@/socket/directMessage";
 import { useState } from "react";
 
-interface Props {
-  type: string;
-  selectedId: number;
-}
-
-export default function ChatCard({ type, selectedId }: Props) {
+export default function ChatCard() {
   const { openModal, closeModal } = useModal();
   const { socket } = useSocket();
   const blockClick = () => {
     openModal(<BlockListModal />);
   };
 
+  const {updateList} = useChatInfo();
+  const closeClick = () => {
+    closeModal();
+    updateList("CM");
+  }
   const settingClick = () => {
     openModal(
-      <ChatroomSettinngModal selectedId={selectedId} closeModal={closeModal} />
+      <ChatroomSettinngModal closeModal={closeClick} />
     );
   };
 
@@ -60,7 +61,7 @@ export default function ChatCard({ type, selectedId }: Props) {
           </FlexBox>
         </FlexBox>
         <Divider color="yellow" />
-        <ChatDisplay />
+        {/* <ChatDisplay /> */}
         <IconInput
           src="/icon/send.png"
           placeholder="type message"

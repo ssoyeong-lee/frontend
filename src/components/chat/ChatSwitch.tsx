@@ -10,8 +10,8 @@ export default function ChatSwitch({type, clickUser, clickChannel}: Props) {
 
   const selectedStyle = "bg-purple-cyber text-white";
   const unselectedStyle = "text-gray-400 hover:text-white";
-  const userStyle = type === "user" ? selectedStyle : unselectedStyle;
-  const channelStyle = type === "channel" ? selectedStyle : unselectedStyle;
+  const userStyle = type === "DM" ? selectedStyle : unselectedStyle;
+  const channelStyle = type === "CM" ? selectedStyle : unselectedStyle;
   return (
     <FlexBox className="w-full border-b-2 border-purple-cyber text-center">
       <div
