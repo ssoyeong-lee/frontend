@@ -13,9 +13,6 @@ function connectSocket(session: string) {
     },
   });
 
-  socket.on("disconnect", () => {
-    console.log("disconnect");
-  });
   return socket;
 }
 

@@ -17,28 +17,37 @@ interface UseSocketType {
 }
 
 function useSocket(): UseSocketType {
-  const { auth, setAuth } = useAuth();
+  const { setAuth } = useAuth();
   const { setDM, setCM } = useMessage();
   const { setNoti } = useNoti();
   const [socket, setSocket] = useAtom(socketAtom);
 
   useEffect(() => {
     if (socket.on === undefined) return;
-    socket.on("connect", () => {
-      console.log(socket);
-      getUserMe().then((res) => {
-        setAuth(res.data);
+    if (socket.connected) return;
+    setSocket((s) => {
+      s.on("connect", () => {
+        console.log("socket connected");
+        getUserMe()
+          .then((res) => {
+            console.log(res.data.nickname + " authed");
+            setAuth(res.data);
+            receiveDM(socket, setDM);
+            receiveCM(socket, setCM);
+            receiveNotification(socket, setNoti);
+            console.log("set receive func finished");
+          })
+          .catch((err) => {
+            console.error("auth failed");
+            console.error(err);
+          });
       });
+      s.on("disconnect", () => {
+        console.log("disconnect");
+      });
+      return s;
     });
   }, [socket]);
-
-  useEffect(() => {
-    try {
-      receiveDM(socket, setDM);
-      receiveCM(socket, setCM);
-      receiveNotification(socket, setNoti);
-    } catch (error) {}
-  }, [auth]);
 
   return { socket, setSocket };
 }

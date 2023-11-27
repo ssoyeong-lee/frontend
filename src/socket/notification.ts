@@ -2,7 +2,7 @@ import { Socket } from "socket.io-client";
 
 export type NotificationType =
   | "game-invite"
-  | "channel_invite"
+  | "channel-invite"
   | "friend-request";
 interface Notification<T extends NotificationType> {
   type: T;
@@ -15,7 +15,7 @@ interface NotiGameInvite extends Notification<"game-invite"> {
   };
 }
 
-interface NotiChannelInvite extends Notification<"channel_invite"> {
+interface NotiChannelInvite extends Notification<"channel-invite"> {
   channelId: number; // channelId
   invitingUser: {
     id: number; // userId
@@ -35,6 +35,7 @@ function receiveNotification(
   setNoti: (noti: Notification<NotificationType>) => void
 ) {
   socket.on("noti", (data: { type: NotificationType }) => {
+    console.log(data);
     setNoti(data);
   });
 }
