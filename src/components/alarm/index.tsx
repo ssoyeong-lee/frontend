@@ -11,15 +11,16 @@ import {
 
 interface AlarmProps {
   noti: Notification<NotificationType>;
+  idx: number;
 }
-export default function Alarm({ noti }: AlarmProps) {
+export default function Alarm({ noti, idx }: AlarmProps) {
   switch (noti.type) {
     case "game-invite":
-      return <GameInviteAlarm noti={noti as NotiGameInvite} />;
+      return <GameInviteAlarm noti={noti as NotiGameInvite} idx={idx} />;
     case "channel-invite":
-      return <ChannelInviteAlarm noti={noti as NotiChannelInvite} />;
+      return <ChannelInviteAlarm noti={noti as NotiChannelInvite} idx={idx} />;
     case "friend-request":
-      return <FriendRequestAlarm noti={noti as NotiFriendRequest} />;
+      return <FriendRequestAlarm noti={noti as NotiFriendRequest} idx={idx} />;
     default:
       return <></>;
   }

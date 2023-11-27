@@ -21,7 +21,7 @@ export default function TopNav() {
     openNotification(
       <div className="w-full max-h-[200px] px-2">
         {notiList.map((noti, idx) => (
-          <Alarm key={idx} noti={noti} />
+          <Alarm key={idx} noti={noti} idx={idx} />
         ))}
       </div>
     );

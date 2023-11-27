@@ -9,6 +9,7 @@ interface UseNotiType {
   notiList: Notification<NotificationType>[];
   setNoti: (notiData: Notification<NotificationType>) => void;
   setNotiList: (notiList: Notification<NotificationType>[]) => void;
+  removeNoti: (idx: number) => void;
 }
 
 function useNoti(): UseNotiType {
@@ -18,7 +19,10 @@ function useNoti(): UseNotiType {
     setNotiList((prev) => [...prev, notiData]);
     openToast(<Toast noti={notiData} />);
   };
-  return { notiList, setNoti, setNotiList };
+  const removeNoti = (idx: number) => {
+    setNotiList((prev) => prev.filter((_, i) => i !== idx));
+  };
+  return { notiList, setNoti, setNotiList, removeNoti };
 }
 
 export { useNoti };
