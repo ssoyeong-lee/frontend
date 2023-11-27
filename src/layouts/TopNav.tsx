@@ -6,6 +6,7 @@ import { useNotification } from "@/hooks/display/useNotification";
 import { logout } from "@/api/auth/login";
 import { useNoti } from "@/hooks/data/useNoti";
 import Alarm from "@/components/alarm/index";
+import NotificationDot from "@/components/NotificationDot";
 
 export default function TopNav() {
   const router = useRouter();
@@ -56,12 +57,20 @@ export default function TopNav() {
           Chat
         </Link>
         <FlexBox className="gap-6">
-          <Icon
-            onClick={onClickNotification}
-            src="/icon/alarm.svg"
-            alt="alarm"
-            className="cursor-pointer"
-          />
+          <div className="relative min-w-[48px]">
+            <Icon
+              onClick={onClickNotification}
+              src="/icon/alarm.svg"
+              alt="alarm"
+              className="cursor-pointer"
+            />
+            {notiList.length > 0 && (
+              <NotificationDot
+                amount={-1}
+                className="absolute right-[-4px] bottom-[-4px]"
+              />
+            )}
+          </div>
           <Icon
             onClick={onClickLogout}
             src="/icon/logout.svg"
