@@ -16,6 +16,7 @@ const notiListAtom = atom<Notification<NotificationType>[]>([]);
 interface UseNotiType {
   notiList: Notification<NotificationType>[];
   setNoti: (notiData: Notification<NotificationType>) => void;
+  setNotiList: (notiList: Notification<NotificationType>[]) => void;
 }
 
 function useNoti(): UseNotiType {
@@ -30,7 +31,7 @@ function useNoti(): UseNotiType {
     else if (notiData.type === "friend-request")
       openToast(<FriendRequestToast noti={notiData as NotiFriendRequest} />);
   };
-  return { notiList, setNoti };
+  return { notiList, setNoti, setNotiList };
 }
 
 export { useNoti };

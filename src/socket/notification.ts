@@ -32,15 +32,25 @@ interface NotiFriendRequest extends Notification<"friend-request"> {
 
 function receiveNotification(
   socket: Socket,
-  setNoti: (noti: Notification<NotificationType>) => void
+  setNoti: (res: Notification<NotificationType>) => void
 ) {
-  socket.on("noti", (data: { type: NotificationType }) => {
-    console.log(data);
-    setNoti(data);
+  socket.on("noti", (res: { type: NotificationType }) => {
+    console.log(res);
+    setNoti(res);
   });
 }
 
-export { receiveNotification };
+function receiveNotificationList(
+  socket: Socket,
+  setNotiList: (notiList: Notification<NotificationType>[]) => void
+) {
+  socket.emit("noti-unread", (res: Notification<NotificationType>[]) => {
+    console.log(res);
+    setNotiList(res);
+  });
+}
+
+export { receiveNotification, receiveNotificationList };
 
 export type {
   Notification,

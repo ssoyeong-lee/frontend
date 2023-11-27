@@ -4,7 +4,10 @@ import { useMessage } from "@/hooks/data/useMessage";
 import { useNoti } from "@/hooks/data/useNoti";
 import { receiveCM } from "@/socket/channelMessage";
 import { receiveDM } from "@/socket/directMessage";
-import { receiveNotification } from "@/socket/notification";
+import {
+  receiveNotification,
+  receiveNotificationList,
+} from "@/socket/notification";
 import { atom, useAtom } from "jotai";
 import { useEffect } from "react";
 import { Socket } from "socket.io-client";
@@ -19,7 +22,7 @@ interface UseSocketType {
 function useSocket(): UseSocketType {
   const { setAuth } = useAuth();
   const { setDM, setCM } = useMessage();
-  const { setNoti } = useNoti();
+  const { setNoti, setNotiList } = useNoti();
   const [socket, setSocket] = useAtom(socketAtom);
 
   useEffect(() => {
@@ -32,6 +35,7 @@ function useSocket(): UseSocketType {
           .then((res) => {
             console.log(res.data.nickname + " authed");
             setAuth(res.data);
+            receiveNotificationList(socket, setNotiList);
             receiveDM(socket, setDM);
             receiveCM(socket, setCM);
             receiveNotification(socket, setNoti);
@@ -43,7 +47,7 @@ function useSocket(): UseSocketType {
           });
       });
       s.on("disconnect", () => {
-        console.log("disconnect");
+        console.log("socket disconnected");
       });
       return s;
     });
