@@ -50,6 +50,7 @@ export default function ListCard() {
       <ChatItem
         key={user.id}
         title={user.title}
+        id={user.id}
         isSelected={user.id === chatInfo.id ? true : false}
         onClick={async () => {
           changeId(user.id);
@@ -63,6 +64,7 @@ export default function ListCard() {
       return (
         <ChatItem
           key={channel.id}
+          id={channel.id}
           title={channel.title}
           isSelected={channel.id === chatInfo.id ? true : false}
           isJoined={channel.role !== null ? true : false}

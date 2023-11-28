@@ -1,5 +1,5 @@
 import { atom, useAtom } from "jotai";
-import { Channel, getChannelList, getMyChannels } from "@/api/channels";
+import { Channel, getChannelList, getMyChannels, joinChannel } from "@/api/channels";
 
 interface ChannelInfoType extends Channel {
   role: "Owner" | "Admin" | "User" | null;
@@ -36,8 +36,13 @@ function useChatInfo(): ChatInfoRetType {
   const changeId = (_id: number) => {
     setId(_id);
     if (type == "DM") return;
-    const ret = list.filter((e) => e.id == _id);
-    setRole(ret[0].role);
+    const ret = list.filter((e) => e.id == _id)[0];
+    if (ret.role === null)
+    {
+      const tmp = joinChannel(ret.id);
+      updateList("CM");
+    }
+    setRole(ret.role);
   };
 
   const updateList = async (_type: "DM" | "CM") => {
