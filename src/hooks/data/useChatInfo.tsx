@@ -31,15 +31,15 @@ function useChatInfo(): ChatInfoRetType {
   };
 
   const updateList = async (abc: "DM" | "CM") => {
-    if (abc === "DM"){
+    if (abc === "DM") {
       setList([]);
       console.log(abc, list);
-      return ;
+      return;
     }
     const tmp = await getChannelList();
     setList(tmp.data);
-  }
-  
+  };
+
   const chatInfo = { type, id, list };
   return { chatInfo, changeType, changeId, updateList };
 }

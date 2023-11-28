@@ -12,24 +12,25 @@ import Icon from "@/layouts/Icon";
 import { sendDM } from "@/socket/directMessage";
 import { useState } from "react";
 
-function ChatCardTop(){
+function ChatCardTop() {
   const { openModal } = useModal();
   const { chatInfo } = useChatInfo();
   const channelInfoClick = () => {
     openModal(<ChannelInfoModal />);
   };
   const settingClick = () => {
-    openModal(
-      <ChatroomSettinngModal />
-      );
+    openModal(<ChatroomSettinngModal />);
   };
   return (
-    (
-      <FlexBox className="w-full justify-between">
-        <div>{chatInfo.type === "DM" ? "Direct message" : "Channel"}</div>
-        {chatInfo.id !== null && (
-          <FlexBox className="gap-3">
-          <div>{chatInfo.type === "DM" ? "user name" : chatInfo.list[chatInfo.id].title }</div>
+    <FlexBox className="w-full justify-between">
+      <div>{chatInfo.type === "DM" ? "Direct message" : "Channel"}</div>
+      {chatInfo.id !== null && (
+        <FlexBox className="gap-3">
+          <div>
+            {chatInfo.type === "DM"
+              ? "user name"
+              : chatInfo.list[chatInfo.id].title}
+          </div>
           {chatInfo.type === "CM" && (
             <>
               <Icon
@@ -46,12 +47,11 @@ function ChatCardTop(){
               />
             </>
           )}
-        </FlexBox>)
-      }
+        </FlexBox>
+      )}
     </FlexBox>
-  ));
+  );
 }
-
 
 export default function ChatCard() {
   const { socket } = useSocket();

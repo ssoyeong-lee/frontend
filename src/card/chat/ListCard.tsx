@@ -28,10 +28,9 @@ const dmList = [
   },
 ];
 
-
 export default function ListCard() {
   const { openModal } = useModal();
-  const { chatInfo, changeType, changeId, updateList} = useChatInfo();
+  const { chatInfo, changeType, changeId, updateList } = useChatInfo();
 
   const createClick = () => {
     openModal(<ChannelCreateModal />);
@@ -83,9 +82,9 @@ export default function ListCard() {
           clickChannel={clickChannel}
         />
         <FlexBox direction="col" className="h-full w-full gap-3">
-          {chatInfo.type === "CM" ? channelNode: dmNode}
+          {chatInfo.type === "CM" ? channelNode : dmNode}
         </FlexBox>
-        {chatInfo.type === "CM" &&(
+        {chatInfo.type === "CM" && (
           <SquareButton onClick={createClick}>Create Channel</SquareButton>
         )}
       </FlexBox>

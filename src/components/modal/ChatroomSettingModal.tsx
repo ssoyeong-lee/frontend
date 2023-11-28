@@ -8,19 +8,17 @@ import FlexBox from "@/layouts/FlexBox";
 import ModalCard from "@/layouts/ModalCard";
 import { useEffect, useState } from "react";
 
-
 export default function ChatroomSettinngModal() {
   const [title, setTitle] = useState("");
   const [type, setType] = useState("");
   const [password, setPassword] = useState("");
 
-	const { chatInfo, updateList } = useChatInfo();
+  const { chatInfo, updateList } = useChatInfo();
   const { closeModal } = useModal();
 
   useEffect(() => {
     const load = async () => {
-      if (chatInfo.id === null)
-        return ;
+      if (chatInfo.id === null) return;
       const info = await getChannel(chatInfo.id);
       setTitle(info.data.title);
       setType(info.data.type);
@@ -41,8 +39,7 @@ export default function ChatroomSettinngModal() {
   };
 
   const okClick = () => {
-    if (chatInfo.id === null)
-      return ;
+    if (chatInfo.id === null) return;
     updateChannel(chatInfo.id, { title, type, password });
     updateList("CM");
     closeModal();

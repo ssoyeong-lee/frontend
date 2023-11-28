@@ -21,14 +21,14 @@ export default function ChannelCreateModal() {
   const passwordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
-  
+
   const { closeModal } = useModal();
-  const { updateList } = useChatInfo();  
+  const { updateList } = useChatInfo();
   const okClick = async () => {
     await createChannel({ title, type, password });
     closeModal();
     updateList("CM");
-  }
+  };
 
   return (
     <ModalCard className="w-[500px] h-[450px]">
