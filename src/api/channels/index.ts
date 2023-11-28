@@ -41,12 +41,12 @@ async function leaveChannel(channel_id: number){
 
 interface MyChannel {
   channel: Channel;
-	role: 'Owner' | 'Admin' | 'User';
+	role: "Owner" | "Admin" | "User";
 }
 
-async function getMyChannel(): Promise<AxiosResponse<MyChannel>>{
-  return axios.get('/channels/me');
+async function getMyChannels(): Promise<AxiosResponse<MyChannel[]>>{
+  return axios.get('/api/channels/me');
 }
 
 export type { Channel, MyChannel };
-export { getChannelList, getChannel, createChannel, updateChannel, joinChannel, leaveChannel, getMyChannel};
+export { getChannelList, getChannel, createChannel, updateChannel, joinChannel, leaveChannel, getMyChannels};
