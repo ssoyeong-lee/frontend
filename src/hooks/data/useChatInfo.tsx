@@ -18,7 +18,7 @@ interface ChatInfoRetType {
     role: "Owner" | "Admin" | "User" | null;
   };
   changeType: (type: "DM" | "CM") => void;
-  changeId: (id: number) => void;
+  changeId: (id: number | null) => void;
   updateList: (type: "DM" | "CM") => Promise<void>;
 }
 
@@ -33,9 +33,12 @@ function useChatInfo(): ChatInfoRetType {
     setId(null);
   };
 
-  const changeId = (_id: number) => {
+  const changeId = (_id: number | null) => {
     setId(_id);
-    if (type == "DM") return;
+    if (_id == null || type == "DM"){
+      updateList(type);
+      return ;
+    }
     const ret = list.filter((e) => e.id == _id)[0];
     if (ret.role === null)
     {

@@ -9,10 +9,10 @@ interface buttonProps {
 
 
 function LeaveButton({id}: buttonProps){
-  const { updateList} = useChatInfo();
+  const {changeId} = useChatInfo();
   const leaveClick = (e: React.MouseEvent)=>{
   leaveChannel(id);
-  updateList("CM");
+  changeId(null);
   console.log("lev")
   e.stopPropagation();
   }
@@ -49,8 +49,8 @@ export default function ChatItem({
       onClick={onClick}
     >
       <div className={`font-bold ${!isJoined && "text-gray-400"}`}>{title}</div>
-      {isJoined && (<LeaveButton id={id} />)}
       <NotificationDot amount={notiCount} />
+      {isJoined && (<LeaveButton id={id} />)}
     </FlexBox>
   );
 }
