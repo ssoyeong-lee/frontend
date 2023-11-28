@@ -1,6 +1,4 @@
-import { Channel, getChannelList, joinChannel } from "@/api/channels";
 import ChatItem from "@/components/ChatItem";
-import NotificationDot from "@/components/NotificationDot";
 import SquareButton from "@/components/button/SquareButton";
 import ChatSwitch from "@/components/chat/ChatSwitch";
 import ChannelCreateModal from "@/components/modal/ChannelCreateModal";
@@ -8,6 +6,7 @@ import useChatInfo from "@/hooks/data/useChatInfo";
 import { useModal } from "@/hooks/display/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
+import ScrollBox from "@/layouts/ScrollBox";
 
 const dmList = [
   {
@@ -81,9 +80,11 @@ export default function ListCard() {
           clickUser={clickUser}
           clickChannel={clickChannel}
         />
-        <FlexBox direction="col" className="h-full w-full gap-3">
-          {chatInfo.type === "CM" ? channelNode : dmNode}
-        </FlexBox>
+        <ScrollBox className="flex-1">
+          <FlexBox direction="col" className="h-full w-full gap-3">
+            {chatInfo.type === "CM" ? channelNode : dmNode}
+          </FlexBox>
+        </ScrollBox>
         {chatInfo.type === "CM" && (
           <SquareButton onClick={createClick}>Create Channel</SquareButton>
         )}
