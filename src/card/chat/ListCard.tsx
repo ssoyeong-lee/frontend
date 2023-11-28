@@ -30,27 +30,20 @@ const dmList = [
 
 
 export default function ListCard() {
-  const { openModal, closeModal } = useModal();
-  const onClick = () => {
-    openModal(<ChannelCreateModal closeModal={onClickClose} />);
-  };
-
-  const onClickClose = () => {
-    closeModal();
-    updateList("CM");
-  };
-
+  const { openModal } = useModal();
   const { chatInfo, changeType, changeId, updateList} = useChatInfo();
 
+  const createClick = () => {
+    openModal(<ChannelCreateModal />);
+  };
+
   const clickUser = () => {
-    console.log("clickUser");
     changeType("DM");
+    // updateList("DM");
   };
 
   const clickChannel = () => {
-    console.log("clickChannel");
     changeType("CM");
-    console.log("clickChannel:", chatInfo.type);
     updateList("CM");
   };
 
@@ -60,8 +53,7 @@ export default function ListCard() {
         key={user.id}
         title={user.title}
         isSelected={user.id === chatInfo.id ? true : false}
-        idx={idx}
-        onClick={() => {
+        onClick={async () => {
           changeId(user.id);
         }}
       />
@@ -94,7 +86,7 @@ export default function ListCard() {
           {chatInfo.type === "CM" ? channelNode: dmNode}
         </FlexBox>
         {chatInfo.type === "CM" &&(
-          <SquareButton onClick={onClick}>Create Channel</SquareButton>
+          <SquareButton onClick={createClick}>Create Channel</SquareButton>
         )}
       </FlexBox>
     </Card>

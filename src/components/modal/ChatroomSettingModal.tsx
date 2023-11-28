@@ -8,17 +8,15 @@ import FlexBox from "@/layouts/FlexBox";
 import ModalCard from "@/layouts/ModalCard";
 import { useEffect, useState } from "react";
 
-interface Props {
-  closeModal: () => void;
-}
 
-export default function ChatroomSettinngModal({
-  closeModal,
-}: Props) {
+export default function ChatroomSettinngModal() {
   const [title, setTitle] = useState("");
   const [type, setType] = useState("");
   const [password, setPassword] = useState("");
-	const {chatInfo} = useChatInfo();
+
+	const { chatInfo, updateList } = useChatInfo();
+  const { closeModal } = useModal();
+
   useEffect(() => {
     const load = async () => {
       if (chatInfo.id === null)
@@ -42,12 +40,14 @@ export default function ChatroomSettinngModal({
     setPassword(e.target.value);
   };
 
-  const onClick = () => {
+  const okClick = () => {
     if (chatInfo.id === null)
       return ;
     updateChannel(chatInfo.id, { title, type, password });
+    updateList("CM");
     closeModal();
   };
+
   return (
     <ModalCard className="w-[500px] h-[450px]">
       <FlexBox className="w-full h-full justify-between" direction="col">
@@ -77,7 +77,7 @@ export default function ChatroomSettinngModal({
           </FlexBox>
         </div>
         <FlexBox className="w-full justify-end">
-          <SquareButton className="w-[150px]" onClick={onClick}>
+          <SquareButton className="w-[150px]" onClick={okClick}>
             Ok
           </SquareButton>
         </FlexBox>

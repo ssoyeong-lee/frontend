@@ -16,9 +16,9 @@ export default function ChatItem({
 }: Props) {
   return (
     <FlexBox
-      className={`w-full justify-between p-2 ${
+      className={`w-full justify-between p-2  cursor-pointer ${
         isSelected === true ? "bg-gray-600" : ""
-      } hover:bg-gray-600 cursur-pointer`}
+      } hover:bg-gray-600`}
       onClick={onClick}
     >
       <div className="font-bold" onClick={onClick}>

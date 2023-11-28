@@ -2,20 +2,16 @@ import { createChannel } from "@/api/channels";
 import SquareButton from "@/components/button/SquareButton";
 import DefaultInput from "@/components/control/DefaultInput";
 import SelectBox from "@/components/control/SelectBox";
+import useChatInfo from "@/hooks/data/useChatInfo";
 import { useModal } from "@/hooks/display/useModal";
 import FlexBox from "@/layouts/FlexBox";
 import ModalCard from "@/layouts/ModalCard";
 import { useState } from "react";
 
-interface Props {
-  closeModal: () => void;
-}
-
-export default function ChannelCreateModal({ closeModal }: Props) {
+export default function ChannelCreateModal() {
   const [title, setTitle] = useState("");
   const [type, setType] = useState<string>("private");
   const [password, setPassword] = useState("");
-
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
@@ -25,20 +21,15 @@ export default function ChannelCreateModal({ closeModal }: Props) {
   const passwordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
-  const onClick = () => {
-    if (
-      title === "" ||
-      !(type === "public" || type === "protected" || type === "private") ||
-      (type === "protected" && password === "")
-    ) {
-      console.log("click err");
-      return;
-    }
-    createChannel({ title, type, password })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+  
+  const { closeModal } = useModal();
+  const { updateList } = useChatInfo();  
+  const okClick = async () => {
+    await createChannel({ title, type, password });
     closeModal();
-  };
+    updateList("CM");
+  }
+
   return (
     <ModalCard className="w-[500px] h-[450px]">
       <FlexBox className="w-full h-full justify-between" direction="col">
@@ -68,7 +59,7 @@ export default function ChannelCreateModal({ closeModal }: Props) {
           </FlexBox>
         </div>
         <FlexBox className="w-full justify-end">
-          <SquareButton className="w-[150px]" onClick={onClick}>
+          <SquareButton className="w-[150px]" onClick={okClick}>
             Ok
           </SquareButton>
         </FlexBox>

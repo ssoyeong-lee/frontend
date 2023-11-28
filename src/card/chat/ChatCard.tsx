@@ -13,26 +13,24 @@ import { sendDM } from "@/socket/directMessage";
 import { useState } from "react";
 
 function ChatCardTop(){
-  const { openModal, closeModal } = useModal();
+  const { openModal } = useModal();
+  const { chatInfo } = useChatInfo();
   const channelInfoClick = () => {
     openModal(<ChannelInfoModal />);
   };
-
-  const {chatInfo} = useChatInfo();
   const settingClick = () => {
     openModal(
-      <ChatroomSettinngModal selectedId={chatInfo.id} closeModal={closeModal} />
-    );
+      <ChatroomSettinngModal />
+      );
   };
   return (
     (
       <FlexBox className="w-full justify-between">
         <div>{chatInfo.type === "DM" ? "Direct message" : "Channel"}</div>
-        <FlexBox className="gap-3">
-          <div>{chatInfo.type === "DM" ? "user name" : "channel name"}</div>
-          {chatInfo.type === "DM" ? (
-            ""
-          ) : (
+        {chatInfo.id !== null && (
+          <FlexBox className="gap-3">
+          <div>{chatInfo.type === "DM" ? "user name" : chatInfo.list[chatInfo.id].title }</div>
+          {chatInfo.type === "CM" && (
             <>
               <Icon
                 src="/icon/blockList.svg"
@@ -48,30 +46,15 @@ function ChatCardTop(){
               />
             </>
           )}
-        </FlexBox>
-      </FlexBox>
-    )
-  );
+        </FlexBox>)
+      }
+    </FlexBox>
+  ));
 }
 
 
 export default function ChatCard() {
-  const { openModal, closeModal } = useModal();
   const { socket } = useSocket();
-  const blockClick = () => {
-    // openModal(<BlockListModal />);
-  };
-
-  const {updateList} = useChatInfo();
-  const closeClick = () => {
-    closeModal();
-    updateList("CM");
-  }
-  const settingClick = () => {
-    openModal(
-      <ChatroomSettinngModal closeModal={closeClick} />
-    );
-  };
 
   const [msg, setMsg] = useState("");
   const msgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +65,7 @@ export default function ChatCard() {
     sendDM(socket, 2, msg);
     setMsg("");
   };
+
   return (
     <Card>
       <FlexBox direction="col" className="w-full h-full gap-6">

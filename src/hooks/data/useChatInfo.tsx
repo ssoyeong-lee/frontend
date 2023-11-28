@@ -1,13 +1,13 @@
 import { atom, useAtom } from "jotai";
 import { Channel, getChannelList } from "@/api/channels";
 
-const typeAtom = atom<"DM" | "CM">("DM");
+const typeAtom = atom<string>("DM");
 const idAtom = atom<number | null>(null);
 const listAtom = atom<Channel[]>([]);
 
 interface ChatInfoRetType {
   chatInfo: {
-    type: "DM" | "CM";
+    type: string;
     id: number | null;
     list: Channel[];
   };
@@ -20,10 +20,9 @@ function useChatInfo(): ChatInfoRetType {
   const [type, setType] = useAtom(typeAtom);
   const [id, setId] = useAtom(idAtom);
   const [list, setList] = useAtom(listAtom);
-  
+
   const changeType = (abc: "DM" | "CM") => {
     setType(abc);
-    console.log("change Type: ",type);
     setId(null);
   };
 
