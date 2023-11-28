@@ -21,31 +21,28 @@ function ChatCardTop() {
   const settingClick = () => {
     openModal(<ChatroomSettinngModal />);
   };
+  console.log("ChatCard:", chatInfo);
   return (
     <FlexBox className="w-full justify-between">
       <div>{chatInfo.type === "DM" ? "Direct message" : "Channel"}</div>
       {chatInfo.id !== null && (
         <FlexBox className="gap-3">
-          <div>
-            {chatInfo.type === "DM"
-              ? "user name"
-              : chatInfo.list[chatInfo.id].title}
-          </div>
+          <div>{chatInfo.type === "DM" ? "user name" : "channel name"}</div>
           {chatInfo.type === "CM" && (
-            <>
-              <Icon
-                src="/icon/blockList.svg"
-                onClick={channelInfoClick}
-                className="w-6 h-6"
-                alt="name"
-              />
-              <Icon
-                src="/icon/setting.svg"
-                onClick={settingClick}
-                className="w-6 h-6"
-                alt="name"
-              />
-            </>
+            <Icon
+              src="/icon/blockList.svg"
+              onClick={channelInfoClick}
+              className="w-6 h-6"
+              alt="name"
+            />
+          )}
+          {chatInfo.role === "Owner" && (
+            <Icon
+              src="/icon/setting.svg"
+              onClick={settingClick}
+              className="w-6 h-6"
+              alt="name"
+            />
           )}
         </FlexBox>
       )}

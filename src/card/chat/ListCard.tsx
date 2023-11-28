@@ -65,6 +65,7 @@ export default function ListCard() {
           key={channel.id}
           title={channel.title}
           isSelected={channel.id === chatInfo.id ? true : false}
+          isJoined={channel.role !== null ? true : false}
           onClick={async () => {
             changeId(channel.id);
           }}

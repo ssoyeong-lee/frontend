@@ -4,6 +4,7 @@ import NotificationDot from "./NotificationDot";
 interface Props {
   title: string;
   isSelected?: boolean;
+  isJoined?: boolean;
   onClick?: () => {};
   notiCount?: number;
 }
@@ -11,6 +12,7 @@ interface Props {
 export default function ChatItem({
   title,
   isSelected,
+  isJoined,
   onClick,
   notiCount = 0,
 }: Props) {
@@ -21,7 +23,7 @@ export default function ChatItem({
       } hover:bg-gray-600`}
       onClick={onClick}
     >
-      <div className="font-bold" onClick={onClick}>
+      <div className={`font-bold ${!isJoined && "text-gray-400"}`} onClick={onClick}>
         {title}
       </div>
       <NotificationDot amount={notiCount} />
