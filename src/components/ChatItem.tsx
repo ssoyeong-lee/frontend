@@ -1,56 +1,63 @@
 import FlexBox from "@/layouts/FlexBox";
 import NotificationDot from "./NotificationDot";
-import useChatInfo from "@/hooks/data/useChatInfo";
+import useChatInfo, { ChannelInfoType } from "@/hooks/data/useChatInfo";
 import { leaveChannel } from "@/api/channels";
+import { useModal } from "@/hooks/display/useModal";
+import PasswordModal from "./modal/PasswordModal";
 
 interface buttonProps {
   id: number;
 }
 
-
-function LeaveButton({id}: buttonProps){
-  const {changeId} = useChatInfo();
-  const leaveClick = (e: React.MouseEvent)=>{
-  leaveChannel(id);
-  changeId(null);
-  console.log("lev")
-  e.stopPropagation();
-  }
+function LeaveButton({ id }: buttonProps) {
+  const { changeId } = useChatInfo();
+  const leaveClick = (e: React.MouseEvent) => {
+    leaveChannel(id);
+    changeId(null);
+    console.log("lev");
+    e.stopPropagation();
+  };
   return (
-    <button onClick={leaveClick} className="text-xs font-semibold px-2 py-1 border-[1.5px] border-deepred-cyber hover:bg-deepred-cyber hover:text-black">
+    <button
+      onClick={leaveClick}
+      className="text-xs font-semibold px-2 py-1 border-[1.5px] border-deepred-cyber hover:bg-deepred-cyber hover:text-black"
+    >
       Leave
     </button>
   );
 }
 
 interface Props {
-  title: string;
-  id: number;
+  data: ChannelInfoType;
   isSelected?: boolean;
   isJoined?: boolean;
-  onClick?: () => {};
   notiCount?: number;
 }
 
 export default function ChatItem({
-  title,
-  id,
+  data,
   isSelected,
   isJoined,
-  onClick,
   notiCount = 0,
 }: Props) {
-
+  const { openModal } = useModal();
+  const { changeId } = useChatInfo();
+  const itemClick = async () => {
+    changeId(data.id);
+    if (data.type === "protected") openModal(<PasswordModal id={data.id} />);
+  };
   return (
     <FlexBox
       className={`w-full justify-between p-2  cursor-pointer ${
         isSelected === true ? "bg-gray-600" : ""
       } hover:bg-gray-600`}
-      onClick={onClick}
+      onClick={itemClick}
     >
-      <div className={`font-bold ${!isJoined && "text-gray-400"}`}>{title}</div>
+      <div className={`font-bold ${!isJoined && "text-gray-400"}`}>
+        {data.title}
+      </div>
       <NotificationDot amount={notiCount} />
-      {isJoined && (<LeaveButton id={id} />)}
+      {isJoined && <LeaveButton id={data.id} />}
     </FlexBox>
   );
 }

@@ -1,31 +1,16 @@
 import ChatItem from "@/components/ChatItem";
+import ChipButton from "@/components/button/ChipButton";
 import SquareButton from "@/components/button/SquareButton";
 import ChatSwitch from "@/components/chat/ChatSwitch";
 import ChannelCreateModal from "@/components/modal/ChannelCreateModal";
-import useChatInfo from "@/hooks/data/useChatInfo";
+import PasswordModal from "@/components/modal/PasswordModal";
+import useChatInfo, { ChannelInfoType } from "@/hooks/data/useChatInfo";
 import { useModal } from "@/hooks/display/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
 
-const dmList = [
-  {
-    id: 1,
-    title: "user1",
-  },
-  {
-    id: 2,
-    title: "user2",
-  },
-  {
-    id: 3,
-    title: "user3",
-  },
-  {
-    id: 4,
-    title: "user4",
-  },
-];
+const dmList = [];
 
 export default function ListCard() {
   const { openModal } = useModal();
@@ -49,28 +34,20 @@ export default function ListCard() {
     return (
       <ChatItem
         key={user.id}
-        title={user.title}
-        id={user.id}
+        data={user}
         isSelected={user.id === chatInfo.id ? true : false}
-        onClick={async () => {
-          changeId(user.id);
-        }}
       />
     );
   });
 
   const channelNode = chatInfo.list.map((channel) => {
-    if (channel.type !== "private")
+    if (channel.type !== "private" || channel.role !== null)
       return (
         <ChatItem
           key={channel.id}
-          id={channel.id}
-          title={channel.title}
+          data={channel}
           isSelected={channel.id === chatInfo.id ? true : false}
           isJoined={channel.role !== null ? true : false}
-          onClick={async () => {
-            changeId(channel.id);
-          }}
         />
       );
   });
