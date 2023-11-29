@@ -15,6 +15,7 @@ interface ChannelInfoType extends Channel {
 
 const typeAtom = atom<"DM" | "CM">("DM");
 const idAtom = atom<number | null>(null);
+const indexAtom = atom<number | null>(null);
 const friendListAtom = atom<FriendInfoType[]>([]);
 const channelListAtom = atom<ChannelInfoType[]>([]);
 const roleAtom = atom<"Owner" | "Admin" | "User" | null>(null);
@@ -23,6 +24,7 @@ interface ChatInfoRetType {
   chatInfo: {
     type: "DM" | "CM";
     id: number | null;
+    index: number | null;
     friendList: FriendInfoType[];
     channelList: ChannelInfoType[];
     role: "Owner" | "Admin" | "User" | null;
@@ -35,12 +37,14 @@ interface ChatInfoRetType {
 function useChatInfo(): ChatInfoRetType {
   const [type, setType] = useAtom(typeAtom);
   const [id, setId] = useAtom(idAtom);
+  const [index, setIndex] = useAtom(indexAtom);
   const [friendList, setFriendList] = useAtom(friendListAtom);
   const [channelList, setChannelList] = useAtom(channelListAtom);
   const [role, setRole] = useAtom(roleAtom);
 
   const changeType = (_type: "DM" | "CM") => {
     setId(null);
+    setIndex(null);
     setType(_type);
   };
 
@@ -50,12 +54,10 @@ function useChatInfo(): ChatInfoRetType {
       return;
     }
     if (type === "DM") {
-      updateList("DM");
       setRole(null);
+      setIndex(friendList.findIndex((e) => e.otherUserId === _id));
     } else {
-      const ret = (channelList as ChannelInfoType[]).filter(
-        (e) => e.id == _id
-      )[0];
+      const ret = channelList.filter((e) => e.id == _id)[0];
       if (ret.type !== "protected") {
         if (ret.role === null) {
           const tmp = joinChannel(ret.id, ""); // TODO await? 안걸어도 되는지 확인 필요합니다.
@@ -63,6 +65,7 @@ function useChatInfo(): ChatInfoRetType {
         }
         setRole(ret.role);
       }
+      setIndex(channelList.findIndex((e) => e.id === _id));
     }
   };
 
@@ -92,7 +95,7 @@ function useChatInfo(): ChatInfoRetType {
     }
   };
 
-  const chatInfo = { type, id, friendList, channelList, role };
+  const chatInfo = { type, id, index, friendList, channelList, role };
   return { chatInfo, changeType, changeId, updateList };
 }
 

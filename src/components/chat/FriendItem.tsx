@@ -5,16 +5,10 @@ import FlexBox from "@/layouts/FlexBox";
 interface Props {
   data: FriendInfoType;
   isSelected?: boolean;
-  isJoined?: boolean;
   notiCount?: number;
 }
 
-export default function FriendItem({
-  data,
-  isSelected,
-  isJoined,
-  notiCount = 0,
-}: Props) {
+export default function FriendItem({ data, isSelected, notiCount = 0 }: Props) {
   const { changeId } = useChatInfo();
   const itemClick = async () => {
     changeId(data.otherUserId);
@@ -26,7 +20,9 @@ export default function FriendItem({
       } hover:bg-gray-600`}
       onClick={itemClick}
     >
-      <div className={`font-bold ${!isJoined && "text-gray-400"}`}>
+      <div
+        className={`font-bold ${isSelected ? "text-white" : "text-gray-400"}`}
+      >
         {data.nickname}
       </div>
       <NotificationDot amount={notiCount} />

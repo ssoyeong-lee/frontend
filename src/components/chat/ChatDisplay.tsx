@@ -16,22 +16,21 @@ export default function ChatDisplay() {
   const [chatData, setChatData] = useState<DM[] | CM[]>([]);
   useEffect(() => {
     if (chatInfo.id != null) {
-      // if (chatInfo.type === "DM") setChatData(DMData[chatInfo.id]);
-      // else setChatData(CMData[chatInfo.id]);
-      chatInfo.type === "CM" && setChatData(CMData[chatInfo.id]);
-			console.log(chatInfo.id);
+      if (chatInfo.type === "DM") setChatData(DMData[chatInfo.id] ?? []);
+      else setChatData(CMData[chatInfo.id] ?? []);
     }
-  }, [chatInfo]);
+  }, [chatInfo.id, chatInfo.type, DMData, CMData]);
 
   return (
     <ScrollBox>
       <FlexBox direction="col" className="w-full h-full">
-        {chatData.map((data) => {
+        {chatData.map((data, idx) => {
           if (data.sender.id === auth?.id)
-            return <MyChat content={data.content} />;
+            return <MyChat key={idx} content={data.content} />;
           else
             return (
               <OtherChat
+                key={idx}
                 id={data.sender.id}
                 nickname={data.sender.nickname}
                 content={data.content}

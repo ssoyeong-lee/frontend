@@ -23,7 +23,10 @@ interface DMUnread {
 }
 
 function receiveDM(socket: Socket, callback: (res: DM) => void) {
-  socket.on("DM", (res: DM) => callback(res));
+  socket.on("DM", (res: DM) => {
+    console.log(res);
+    callback(res);
+  });
 }
 
 function recieveDMList(
@@ -36,7 +39,10 @@ function recieveDMList(
     {
       otherUserId: otherUserId,
     },
-    (res: { messages: DM[] }) => callback(res.messages)
+    (res: { messages: DM[] }) => {
+      console.log(res);
+      callback(res.messages);
+    }
   );
 }
 
@@ -44,9 +50,10 @@ function receiveDMUnreadCount(
   socket: Socket,
   callback: (res: DMUnread[]) => void
 ) {
-  socket.emit("DM-unread-count", (res: { unreadMessagesCount: DMUnread[] }) =>
-    callback(res.unreadMessagesCount)
-  );
+  socket.emit("DM-unread-count", (res: { unreadMessagesCount: DMUnread[] }) => {
+    console.log(res);
+    callback(res.unreadMessagesCount);
+  });
 }
 
 function sendDM(socket: Socket, receiverId: number, content: string) {

@@ -36,7 +36,7 @@ function useSocket(): UseSocketType {
             console.log(res.data.nickname + " authed");
             setAuth(res.data);
             receiveNotificationList(socket, setNotiList);
-            receiveDM(socket, setDM);
+            receiveDM(socket, (data) => setDM(data, res.data.id));
             receiveCM(socket, setCM);
             receiveNotification(socket, setNoti);
             console.log("set receive func finished");

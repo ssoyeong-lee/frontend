@@ -10,23 +10,22 @@ interface UseMessageType {
   DMData: { [key: number]: DM[] };
   CMData: { [key: number]: CM[] };
   setCM: (channelMessage: CM) => void;
-  setDM: (directMessage: DM) => void;
+  setDM: (directMessage: DM, authId: number) => void;
 }
 
 function useMessage(): UseMessageType {
-  const { auth } = useAuth();
   const [DMData, setDMData] = useAtom(DMDataAtom);
   const [CMData, setCMData] = useAtom(CMDataAtom);
 
-  const setDM = (directMessage: DM) => {
+  const setDM = (directMessage: DM, authId: number) => {
     const senderId = directMessage.sender.id;
     const receiverId = directMessage.receiver.id;
-    if (senderId === auth?.id) {
+    if (senderId === authId) {
       setDMData((prev) => ({
         ...prev,
         [receiverId]: [...(prev[receiverId] ?? []), directMessage],
       }));
-    } else if (receiverId === auth?.id) {
+    } else if (receiverId === authId) {
       setDMData((prev) => ({
         ...prev,
         [senderId]: [...(prev[senderId] ?? []), directMessage],

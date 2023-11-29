@@ -9,6 +9,7 @@ import Card from "@/layouts/Card";
 import Divider from "@/layouts/Divider";
 import FlexBox from "@/layouts/FlexBox";
 import Icon from "@/layouts/Icon";
+import { sendCM } from "@/socket/channelMessage";
 import { sendDM } from "@/socket/directMessage";
 import { useState } from "react";
 
@@ -24,9 +25,13 @@ function ChatCardTop() {
   return (
     <FlexBox className="w-full justify-between">
       <div>{chatInfo.type === "DM" ? "Direct message" : "Channel"}</div>
-      {chatInfo.id !== null && (
+      {chatInfo.index !== null && (
         <FlexBox className="gap-3">
-          <div>{chatInfo.type === "DM" ? "user name" : "channel name"}</div>
+          <div>
+            {chatInfo.type === "DM"
+              ? chatInfo.friendList[chatInfo.index]?.nickname
+              : chatInfo.channelList[chatInfo.index]?.title}
+          </div>
           {chatInfo.type === "CM" && (
             <Icon
               src="/icon/blockList.svg"
@@ -51,14 +56,18 @@ function ChatCardTop() {
 
 export default function ChatCard() {
   const { socket } = useSocket();
-
+  const { chatInfo } = useChatInfo();
   const [msg, setMsg] = useState("");
+
   const msgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMsg(e.target.value);
   };
   const msgSend = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter") return;
-    sendDM(socket, 2, msg);
+    if (chatInfo.type === "DM" && chatInfo.id != null)
+      sendDM(socket, chatInfo.id, msg);
+    else if (chatInfo.type === "CM" && chatInfo.id != null)
+      sendCM(socket, chatInfo.id, msg);
     setMsg("");
   };
 
@@ -67,7 +76,7 @@ export default function ChatCard() {
       <FlexBox direction="col" className="w-full h-full gap-6">
         <ChatCardTop />
         <Divider color="yellow" />
-        {/* <ChatDisplay /> */}
+        <ChatDisplay />
         <IconInput
           src="/icon/send.png"
           placeholder="type message"
