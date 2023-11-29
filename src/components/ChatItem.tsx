@@ -41,10 +41,10 @@ export default function ChatItem({
   notiCount = 0,
 }: Props) {
   const { openModal } = useModal();
-  const { changeId } = useChatInfo();
+  const { chatInfo, changeId } = useChatInfo();
   const itemClick = async () => {
     changeId(data.id);
-    if (data.type === "protected") openModal(<PasswordModal id={data.id} />);
+    if (data.type === "protected" && chatInfo.role === null) openModal(<PasswordModal id={data.id} />);
   };
   return (
     <FlexBox
