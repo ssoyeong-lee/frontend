@@ -19,7 +19,6 @@ export default function ChatDisplay() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log(ref);
     ref.current?.scrollTo(0, ref.current.scrollHeight);
   }, [chatData]);
 
