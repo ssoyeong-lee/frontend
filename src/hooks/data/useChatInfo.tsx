@@ -82,5 +82,5 @@ function useChatInfo(): ChatInfoRetType {
   return { chatInfo, changeType, changeId, updateList };
 }
 
-export type { ChannelInfoType };
+export type {ChannelInfoType};
 export default useChatInfo;

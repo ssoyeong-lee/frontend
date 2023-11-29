@@ -4,7 +4,7 @@ import SquareButton from "@/components/button/SquareButton";
 import ChatSwitch from "@/components/chat/ChatSwitch";
 import ChannelCreateModal from "@/components/modal/ChannelCreateModal";
 import PasswordModal from "@/components/modal/PasswordModal";
-import useChatInfo, { ChannelInfoType } from "@/hooks/data/useChatInfo";
+import useChatInfo from "@/hooks/data/useChatInfo";
 import { useModal } from "@/hooks/display/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";

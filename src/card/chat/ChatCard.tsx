@@ -21,7 +21,6 @@ function ChatCardTop() {
   const settingClick = () => {
     openModal(<ChatroomSettinngModal />);
   };
-  console.log("ChatCard:", chatInfo);
   return (
     <FlexBox className="w-full justify-between">
       <div>{chatInfo.type === "DM" ? "Direct message" : "Channel"}</div>

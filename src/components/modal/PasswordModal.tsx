@@ -12,16 +12,20 @@ interface Props {
 
 export default function PasswordModal({ id }: Props) {
   const { closeModal } = useModal();
-  const { updateList } = useChatInfo();
+  const { changeId, updateList } = useChatInfo();
   const [password, setPassword] = useState("");
   const passwordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
-  const enterClick = () => {
+  const enterClick = async () => {
     console.log(password);
-    joinChannel(id, password);
-    updateList("CM");
     closeModal();
+    updateList("CM");
+    const ret = await joinChannel(id, password);
+    if (ret.status === 200)
+      changeId(id);
+    else
+      changeId(null);
   };
   return (
     <FlexBox
