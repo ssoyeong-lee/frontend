@@ -15,7 +15,7 @@ interface UserDetail {
   email: string;
   nickname: string;
   ladderPoint: number;
-  avatar: string;
+  avatar: 0 | 1 | 2 | 3 | 4;
   bio: string | null;
 }
 

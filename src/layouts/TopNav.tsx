@@ -3,6 +3,10 @@ import Icon from "@/layouts/Icon";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useNotification } from "@/hooks/display/useNotification";
+import { logout } from "@/api/auth/login";
+import { useNoti } from "@/hooks/data/useNoti";
+import Alarm from "@/components/alarm/index";
+import NotificationDot from "@/components/NotificationDot";
 
 export default function TopNav() {
   const router = useRouter();
@@ -12,22 +16,20 @@ export default function TopNav() {
   const activeMenuStyle = "text-white w-[200px] cursor-pointer";
 
   const { openNotification } = useNotification();
-  const onClick = () => {
+  const { notiList } = useNoti();
+  const onClickNotification = () => {
     openNotification(
-      <div className="w-full max-h-[200px]">
-        <FlexBox direction="row" className="w-full h-fit justify-between p-2">
-          <div>user1님이 게임에 초대하였습니다.</div>
-          <div className="px-2 border-solid border border-green-cyber">
-            수락
-          </div>
-        </FlexBox>
-        <div className="p-2">user2님이 게임에 초대하였습니다.</div>
-        <div className="p-2">user2님이 게임에 초대하였습니다.</div>
-        <div className="p-2">user2님이 게임에 초대하였습니다.</div>
-        <div className="p-2">user2님이 게임에 초대하였습니다.</div>
-        <div className="p-2">user2님이 게임에 초대하였습니다.</div>
+      <div className="w-full max-h-[200px] px-2">
+        {notiList.map((noti, idx) => (
+          <Alarm key={idx} noti={noti} idx={idx} />
+        ))}
       </div>
     );
+  };
+
+  const onClickLogout = async () => {
+    await logout();
+    router.push("/login");
   };
 
   return (
@@ -55,13 +57,22 @@ export default function TopNav() {
           Chat
         </Link>
         <FlexBox className="gap-6">
+          <div className="relative min-w-[48px]">
+            <Icon
+              onClick={onClickNotification}
+              src="/icon/alarm.svg"
+              alt="alarm"
+              className="cursor-pointer"
+            />
+            {notiList.length > 0 && (
+              <NotificationDot
+                amount={-1}
+                className="absolute right-[-4px] bottom-[-4px]"
+              />
+            )}
+          </div>
           <Icon
-            onClick={onClick}
-            src="/icon/alarm.svg"
-            alt="alarm"
-            className="cursor-pointer"
-          />
-          <Icon
+            onClick={onClickLogout}
             src="/icon/logout.svg"
             alt="logout"
             className="cursor-pointer"

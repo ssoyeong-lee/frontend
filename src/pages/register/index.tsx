@@ -1,4 +1,4 @@
-import { userRedirect } from "@/api/login";
+import { userRedirect } from "@/api/auth/login";
 import { useSocket } from "@/hooks/useSocket";
 import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";

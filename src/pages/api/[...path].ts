@@ -8,7 +8,8 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { path } = req.query;
-  console.log(req.query);
+  console.info("API 출발~");
+  console.info("method : " + req.method);
   let url = "/";
   if (typeof path === "object") url += path.join("/");
   else url += path || "";
@@ -24,9 +25,12 @@ export default async function handler(
     }
   }
 
+  console.info("url : " + url);
+  console.info();
+
   try {
-    if (url.includes("/auth/user-redirect") || url.includes("/auth/login"))
-      req.headers.cookie = "";
+    //if (url.includes("/auth/user-redirect") || url.includes("/auth/login"))
+    //  req.headers.cookie = "";
     const requestToServer: AxiosRequestConfig = {
       url: url,
       method: req.method as any,
@@ -41,6 +45,11 @@ export default async function handler(
       requestToServer.data = req.body;
     }
     const axiosRes = await api.request(requestToServer);
+    console.info("응답이 왔어요");
+    console.info("헤더 :", axiosRes.headers);
+    console.info("바디 :", axiosRes.data);
+    console.info();
+
     const setCookie = axiosRes.headers["set-cookie"] as string[];
     if (setCookie) {
       const session = setCookie[0]
@@ -51,9 +60,12 @@ export default async function handler(
       axiosRes.data = { session: session, ...axiosRes.data };
     }
     res.status(200).setHeader("Set-Cookie", setCookie).json(axiosRes.data);
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
     const axiosError = error as AxiosError;
+    console.info("에러가 났어요");
+    console.info("요청했던 헤더 :", axiosError.response?.config.headers);
+    console.info("에러 :", axiosError.response?.data);
+    console.info();
     res
       .status(axiosError.response?.status || 500)
       .json(axiosError.response?.data);

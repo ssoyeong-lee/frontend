@@ -4,7 +4,10 @@ import { useMessage } from "@/hooks/data/useMessage";
 import { useNoti } from "@/hooks/data/useNoti";
 import { receiveCM } from "@/socket/channelMessage";
 import { receiveDM } from "@/socket/directMessage";
-import { receiveNotification } from "@/socket/notification";
+import {
+  receiveNotification,
+  receiveNotificationList,
+} from "@/socket/notification";
 import { atom, useAtom } from "jotai";
 import { useEffect } from "react";
 import { Socket } from "socket.io-client";
@@ -17,25 +20,38 @@ interface UseSocketType {
 }
 
 function useSocket(): UseSocketType {
-  const { auth, setAuth } = useAuth();
+  const { setAuth } = useAuth();
   const { setDM, setCM } = useMessage();
-  const { setNoti } = useNoti();
+  const { setNoti, setNotiList } = useNoti();
   const [socket, setSocket] = useAtom(socketAtom);
 
   useEffect(() => {
-    if (socket.id === undefined) return;
-    getUserMe().then((res) => {
-      setAuth(res.data);
+    if (socket.on === undefined) return;
+    if (socket.connected) return;
+    setSocket((s) => {
+      s.on("connect", () => {
+        console.log("socket connected");
+        getUserMe()
+          .then((res) => {
+            console.log(res.data.nickname + " authed");
+            setAuth(res.data);
+            receiveNotificationList(socket, setNotiList);
+            receiveDM(socket, setDM);
+            receiveCM(socket, setCM);
+            receiveNotification(socket, setNoti);
+            console.log("set receive func finished");
+          })
+          .catch((err) => {
+            console.error("auth failed");
+            console.error(err);
+          });
+      });
+      s.on("disconnect", () => {
+        console.log("socket disconnected");
+      });
+      return s;
     });
   }, [socket]);
-
-  useEffect(() => {
-    try {
-      receiveDM(socket, setDM);
-      receiveCM(socket, setCM);
-      receiveNotification(socket, setNoti);
-    } catch (error) {}
-  }, [auth]);
 
   return { socket, setSocket };
 }

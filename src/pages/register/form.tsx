@@ -1,4 +1,4 @@
-import { register } from "@/api/login";
+import { register } from "@/api/auth/login";
 import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
