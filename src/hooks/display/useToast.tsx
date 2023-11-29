@@ -12,7 +12,6 @@ interface UseToastType {
 function useToast(): UseToastType {
   const toastTime = 3000;
   const [toast, setToast] = useAtom(toastAtom);
-  const [isStartTimer, setIsStartTimer] = useState(false);
 
   const openToast = (content: JSX.Element) => {
     setToast(
@@ -20,25 +19,12 @@ function useToast(): UseToastType {
         <div className="toast-container">{content}</div>
       </div>
     );
-    setIsStartTimer(true);
+    setTimeout(closeToast, toastTime);
   };
 
   const closeToast = () => {
     setToast(<></>);
-    setIsStartTimer(false);
   };
-
-  useEffect(() => {
-    if (isStartTimer == true) {
-      const timer = setTimeout(() => {
-        closeToast();
-        clearTimeout(timer);
-      }, toastTime);
-      return () => {
-        clearTimeout(timer);
-      };
-    }
-  }, [isStartTimer]);
 
   return { toast, openToast, closeToast };
 }
