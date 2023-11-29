@@ -1,9 +1,9 @@
-import FlexBox from "@/layouts/FlexBox";
-import NotificationDot from "./NotificationDot";
-import useChatInfo, { ChannelInfoType } from "@/hooks/data/useChatInfo";
 import { leaveChannel } from "@/api/channels";
+import useChatInfo, { ChannelInfoType } from "@/hooks/data/useChatInfo";
 import { useModal } from "@/hooks/display/useModal";
-import PasswordModal from "./modal/PasswordModal";
+import FlexBox from "@/layouts/FlexBox";
+import NotificationDot from "../NotificationDot";
+import PasswordModal from "../modal/PasswordModal";
 
 interface buttonProps {
   id: number;
@@ -14,7 +14,7 @@ function LeaveButton({ id }: buttonProps) {
   const leaveClick = (e: React.MouseEvent) => {
     leaveChannel(id);
     changeId(null);
-    console.log("lev");
+    console.log("leave channel");
     e.stopPropagation();
   };
   return (
@@ -34,7 +34,7 @@ interface Props {
   notiCount?: number;
 }
 
-export default function ChatItem({
+export default function ChannelItem({
   data,
   isSelected,
   isJoined,
