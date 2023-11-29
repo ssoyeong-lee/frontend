@@ -1,94 +1,53 @@
-import { Channel, getChannelList, joinChannel } from "@/api/channels";
 import ChatItem from "@/components/ChatItem";
-import NotificationDot from "@/components/NotificationDot";
+import ChipButton from "@/components/button/ChipButton";
 import SquareButton from "@/components/button/SquareButton";
 import ChatSwitch from "@/components/chat/ChatSwitch";
 import ChannelCreateModal from "@/components/modal/ChannelCreateModal";
+import PasswordModal from "@/components/modal/PasswordModal";
+import useChatInfo from "@/hooks/data/useChatInfo";
 import { useModal } from "@/hooks/display/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
-import { Dispatch, ReactNode, SetStateAction, useState } from "react";
+import ScrollBox from "@/layouts/ScrollBox";
 
-const dmList = [
-  {
-    id: 1,
-    title: "user1",
-  },
-  {
-    id: 2,
-    title: "user2",
-  },
-  {
-    id: 3,
-    title: "user3",
-  },
-  {
-    id: 4,
-    title: "user4",
-  },
-];
+const dmList = [];
 
-interface Props {
-  type: string;
-  setType: Dispatch<SetStateAction<string>>;
-  selectedId: number;
-  setSelectedId: Dispatch<SetStateAction<number>>;
-}
+export default function ListCard() {
+  const { openModal } = useModal();
+  const { chatInfo, changeType, changeId, updateList } = useChatInfo();
 
-export default function ListCard({
-  type,
-  setType,
-  selectedId,
-  setSelectedId,
-}: Props) {
-  const { openModal, closeModal } = useModal();
-  const onClick = () => {
-    openModal(<ChannelCreateModal closeModal={onClickClose} />);
+  const createClick = () => {
+    openModal(<ChannelCreateModal />);
   };
 
-  const onClickClose = async () => {
-    closeModal();
-    const tmp = await getChannelList();
-    setChannelList(tmp.data);
-  };
-
-  const [channelList, setChannelList] = useState<Channel[]>([]);
   const clickUser = () => {
-    setType("user");
-    setSelectedId(0);
+    changeType("DM");
+    // updateList("DM");
   };
 
-  const clickChannel = async () => {
-    setType("channel");
-    const tmp = await getChannelList();
-    setChannelList(tmp.data);
-    console.log("channelList", channelList);
-    setSelectedId(0);
+  const clickChannel = () => {
+    changeType("CM");
+    updateList("CM");
   };
 
   const dmNode = dmList.map((user, idx) => {
     return (
       <ChatItem
         key={user.id}
-        title={user.title}
-        isSelected={user.id === selectedId ? true : false}
-	    	onClick={async ()=>{
-	    		setSelectedId(user.id);
-		    }}
+        data={user}
+        isSelected={user.id === chatInfo.id ? true : false}
       />
     );
   });
 
-  const channelNode = channelList.map((channel) => {
-    if (channel.type !== "private")
+  const channelNode = chatInfo.list.map((channel) => {
+    if (channel.type !== "private" || channel.role !== null)
       return (
         <ChatItem
           key={channel.id}
-          title={channel.title}
-          isSelected={channel.id === selectedId ? true : false}
-          onClick={async () => {
-            setSelectedId(channel.id);
-          }}
+          data={channel}
+          isSelected={channel.id === chatInfo.id ? true : false}
+          isJoined={channel.role !== null ? true : false}
         />
       );
   });
@@ -97,17 +56,17 @@ export default function ListCard({
     <Card>
       <FlexBox direction="col" className="w-full h-full gap-3">
         <ChatSwitch
-          type={type}
+          type={chatInfo.type}
           clickUser={clickUser}
           clickChannel={clickChannel}
         />
-        <FlexBox direction="col" className="h-full w-full gap-3">
-          {type === "user" ? dmNode : channelNode}
-        </FlexBox>
-        {type === "user" ? (
-          ""
-        ) : (
-          <SquareButton onClick={onClick}>Create Channel</SquareButton>
+        <ScrollBox className="flex-1">
+          <FlexBox direction="col" className="h-full w-full gap-3">
+            {chatInfo.type === "CM" ? channelNode : dmNode}
+          </FlexBox>
+        </ScrollBox>
+        {chatInfo.type === "CM" && (
+          <SquareButton onClick={createClick}>Create Channel</SquareButton>
         )}
       </FlexBox>
     </Card>

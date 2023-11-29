@@ -3,21 +3,18 @@ import ListCard from "@/card/chat/ListCard";
 import Container from "@/layouts/Container";
 import FlexBox from "@/layouts/FlexBox";
 import TopNav from "@/layouts/TopNav";
-import { useState } from "react";
 
 export default function Chat() {
-  const [type, setType] = useState("user");
-  const [selectedId, setSelectedId] = useState(-1);
   return (
     <>
       <TopNav />
       <Container>
         <FlexBox className="h-full w-full gap-6">
           <div className="basis-1/3 h-full">
-            <ListCard type={type} setType={setType} selectedId={selectedId} setSelectedId={setSelectedId}/>
+            <ListCard />
           </div>
           <div className="basis-2/3 h-full">
-            <ChatCard type={type} selectedId={selectedId} />
+            <ChatCard />
           </div>
         </FlexBox>
       </Container>

@@ -2,27 +2,24 @@ import { getChannel, updateChannel } from "@/api/channels";
 import SquareButton from "@/components/button/SquareButton";
 import DefaultInput from "@/components/control/DefaultInput";
 import SelectBox from "@/components/control/SelectBox";
+import useChatInfo from "@/hooks/data/useChatInfo";
 import { useModal } from "@/hooks/display/useModal";
 import FlexBox from "@/layouts/FlexBox";
 import ModalCard from "@/layouts/ModalCard";
 import { useEffect, useState } from "react";
 
-interface Props {
-  selectedId: number;
-  closeModal: () => void;
-}
-
-export default function ChatroomSettinngModal({
-  selectedId,
-  closeModal,
-}: Props) {
+export default function ChatroomSettinngModal() {
   const [title, setTitle] = useState("");
   const [type, setType] = useState("");
   const [password, setPassword] = useState("");
 
+  const { chatInfo, updateList } = useChatInfo();
+  const { closeModal } = useModal();
+
   useEffect(() => {
     const load = async () => {
-      const info = await getChannel(selectedId);
+      if (chatInfo.id === null) return;
+      const info = await getChannel(chatInfo.id);
       setTitle(info.data.title);
       setType(info.data.type);
       setPassword("");
@@ -41,10 +38,13 @@ export default function ChatroomSettinngModal({
     setPassword(e.target.value);
   };
 
-  const onClick = () => {
-    updateChannel(selectedId, { title, type, password });
+  const okClick = () => {
+    if (chatInfo.id === null) return;
+    updateChannel(chatInfo.id, { title, type, password });
+    updateList("CM");
     closeModal();
   };
+
   return (
     <ModalCard className="w-[500px] h-[450px]">
       <FlexBox className="w-full h-full justify-between" direction="col">
@@ -74,7 +74,7 @@ export default function ChatroomSettinngModal({
           </FlexBox>
         </div>
         <FlexBox className="w-full justify-end">
-          <SquareButton className="w-[150px]" onClick={onClick}>
+          <SquareButton className="w-[150px]" onClick={okClick}>
             Ok
           </SquareButton>
         </FlexBox>
