@@ -39,9 +39,9 @@ function recieveDMList(
     {
       otherUserId: otherUserId,
     },
-    (res: { messages: DM[] }) => {
+    (res: DM[]) => {
       console.log(res);
-      callback(res.messages);
+      callback(res);
     }
   );
 }
