@@ -2,7 +2,12 @@ import { getUserMe } from "@/api/users/index";
 import { useAuth } from "@/hooks/data/useAuth";
 import { useMessage } from "@/hooks/data/useMessage";
 import { useNoti } from "@/hooks/data/useNoti";
-import { receiveCM } from "@/socket/channelMessage";
+import {
+  receiveCM,
+  receiveChannelIn,
+  receiveChannelMember,
+  receiveChannelOut,
+} from "@/socket/channelMessage";
 import { receiveDM, receiveDMUnreadCount } from "@/socket/directMessage";
 import {
   receiveNotification,
@@ -43,6 +48,9 @@ function useSocket(): UseSocketType {
               }
             });
             receiveCM(socket, setCM);
+            receiveChannelIn(socket, () => {});
+            receiveChannelOut(socket, () => {});
+            receiveChannelMember(socket, () => {});
             receiveNotification(socket, setNoti);
             console.log("set receive func finished");
           })
