@@ -1,6 +1,9 @@
 import NotificationDot from "@/components/NotificationDot";
 import useChatInfo, { FriendInfoType } from "@/hooks/data/useChatInfo";
+import { useMessage } from "@/hooks/data/useMessage";
+import { useSocket } from "@/hooks/useSocket";
 import FlexBox from "@/layouts/FlexBox";
+import { sendDMRead } from "@/socket/directMessage";
 
 interface Props {
   data: FriendInfoType;
@@ -9,9 +12,13 @@ interface Props {
 }
 
 export default function FriendItem({ data, isSelected, notiCount = 0 }: Props) {
+  const { socket } = useSocket();
   const { changeId } = useChatInfo();
+  const { setDMUnreadCount } = useMessage();
   const itemClick = async () => {
     changeId(data.otherUserId);
+    sendDMRead(socket, data.otherUserId);
+    setDMUnreadCount(data.otherUserId, 0);
   };
   return (
     <FlexBox

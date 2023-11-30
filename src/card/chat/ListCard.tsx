@@ -4,6 +4,7 @@ import ChatSwitch from "@/components/chat/ChatSwitch";
 import FriendItem from "@/components/chat/FriendItem";
 import ChannelCreateModal from "@/components/modal/ChannelCreateModal";
 import useChatInfo from "@/hooks/data/useChatInfo";
+import { useMessage } from "@/hooks/data/useMessage";
 import { useModal } from "@/hooks/display/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
@@ -13,6 +14,7 @@ import { useEffect } from "react";
 export default function ListCard() {
   const { openModal } = useModal();
   const { chatInfo, changeType, updateList } = useChatInfo();
+  const { DMData } = useMessage();
 
   const createClick = () => {
     openModal(<ChannelCreateModal />);
@@ -47,6 +49,7 @@ export default function ListCard() {
                       isSelected={
                         friend.otherUserId === chatInfo.id ? true : false
                       }
+                      notiCount={DMData[friend.otherUserId]?.unreadCount ?? 0}
                     />
                   );
                 })

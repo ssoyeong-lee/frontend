@@ -16,8 +16,7 @@ interface DM {
 
 interface DMUnread {
   sender: {
-    id: number; // userId
-    nickname: string;
+    id: number;
   };
   count: number;
 }
@@ -50,9 +49,9 @@ function receiveDMUnreadCount(
   socket: Socket,
   callback: (res: DMUnread[]) => void
 ) {
-  socket.emit("DM-unread-count", (res: { unreadMessagesCount: DMUnread[] }) => {
+  socket.emit("DM-unread-count", (res: DMUnread[]) => {
     console.log(res);
-    callback(res.unreadMessagesCount);
+    callback(res);
   });
 }
 

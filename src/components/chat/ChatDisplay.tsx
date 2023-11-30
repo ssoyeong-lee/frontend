@@ -24,8 +24,9 @@ export default function ChatDisplay() {
 
   useEffect(() => {
     if (chatInfo.id !== null) {
-      if (chatInfo.type === "DM") setChatData(DMData[chatInfo.id] ?? []);
-      else setChatData(CMData[chatInfo.id] ?? []);
+      if (chatInfo.type === "DM")
+        setChatData(DMData[chatInfo.id].message ?? []);
+      else setChatData(CMData[chatInfo.id].message ?? []);
     }
   }, [chatInfo.id, chatInfo.type, DMData, CMData]);
 

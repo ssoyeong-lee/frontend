@@ -2,16 +2,21 @@ import { CM } from "@/socket/channelMessage";
 import { DM } from "@/socket/directMessage";
 import { atom, useAtom } from "jotai";
 
-const DMDataAtom = atom<{ [key: number]: DM[] }>({});
-const CMDataAtom = atom<{ [key: number]: CM[] }>({});
+const DMDataAtom = atom<{
+  [key: number]: { message: DM[]; unreadCount: number };
+}>({});
+const CMDataAtom = atom<{
+  [key: number]: { message: CM[]; unreadCount: number };
+}>({});
 
 interface UseMessageType {
-  DMData: { [key: number]: DM[] };
-  CMData: { [key: number]: CM[] };
+  DMData: { [key: number]: { message: DM[]; unreadCount: number } };
+  CMData: { [key: number]: { message: CM[]; unreadCount: number } };
   setCM: (channelMessage: CM) => void;
   setDM: (directMessage: DM, authId: number) => void;
   setCMList: (channelMessages: CM[], id: number) => void;
   setDMList: (directMessages: DM[], id: number) => void;
+  setDMUnreadCount: (id: number, unreadCount: number) => void;
 }
 
 function useMessage(): UseMessageType {
@@ -24,12 +29,18 @@ function useMessage(): UseMessageType {
     if (senderId === authId) {
       setDMData((prev) => ({
         ...prev,
-        [receiverId]: [...(prev[receiverId] ?? []), directMessage],
+        [receiverId]: {
+          message: [...(prev[receiverId]?.message ?? []), directMessage],
+          unreadCount: prev[receiverId]?.unreadCount ?? 0,
+        },
       }));
     } else if (receiverId === authId) {
       setDMData((prev) => ({
         ...prev,
-        [senderId]: [...(prev[senderId] ?? []), directMessage],
+        [senderId]: {
+          message: [...(prev[senderId]?.message ?? []), directMessage],
+          unreadCount: prev[senderId]?.unreadCount ?? 0,
+        },
       }));
     }
   };
@@ -45,17 +56,40 @@ function useMessage(): UseMessageType {
   const setCMList = (channelMessages: CM[], id: number) => {
     setCMData((prev) => ({
       ...prev,
-      [id]: channelMessages,
+      [id]: {
+        message: channelMessages,
+        unreadCount: prev[id]?.unreadCount ?? 0,
+      },
     }));
   };
   const setDMList = (directMessages: DM[], id: number) => {
     setDMData((prev) => ({
       ...prev,
-      [id]: directMessages,
+      [id]: {
+        message: directMessages,
+        unreadCount: prev[id]?.unreadCount ?? 0,
+      },
     }));
   };
 
-  return { DMData, CMData, setCM, setDM, setCMList, setDMList };
+  const setDMUnreadCount = (id: number, unreadCount: number) => {
+    setDMData((prev) => ({
+      ...prev,
+      [id]: {
+        message: prev[id]?.message ?? [],
+        unreadCount: unreadCount,
+      },
+    }));
+  };
+  return {
+    DMData,
+    CMData,
+    setCM,
+    setDM,
+    setCMList,
+    setDMList,
+    setDMUnreadCount,
+  };
 }
 
 export { useMessage };
