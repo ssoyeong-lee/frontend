@@ -1,56 +1,34 @@
-import ChatItem from "@/components/ChatItem";
-import ChipButton from "@/components/button/ChipButton";
 import SquareButton from "@/components/button/SquareButton";
+import ChannelItem from "@/components/chat/ChannelItem";
 import ChatSwitch from "@/components/chat/ChatSwitch";
+import FriendItem from "@/components/chat/FriendItem";
 import ChannelCreateModal from "@/components/modal/ChannelCreateModal";
-import PasswordModal from "@/components/modal/PasswordModal";
 import useChatInfo from "@/hooks/data/useChatInfo";
+import { useMessage } from "@/hooks/data/useMessage";
 import { useModal } from "@/hooks/display/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
-
-const dmList = [];
+import { useEffect } from "react";
 
 export default function ListCard() {
   const { openModal } = useModal();
-  const { chatInfo, changeType, changeId, updateList } = useChatInfo();
+  const { chatInfo, changeType, updateList } = useChatInfo();
+  const { DMData } = useMessage();
 
   const createClick = () => {
     openModal(<ChannelCreateModal />);
   };
-
   const clickUser = () => {
     changeType("DM");
-    // updateList("DM");
   };
-
   const clickChannel = () => {
     changeType("CM");
-    updateList("CM");
   };
 
-  const dmNode = dmList.map((user, idx) => {
-    return (
-      <ChatItem
-        key={user.id}
-        data={user}
-        isSelected={user.id === chatInfo.id ? true : false}
-      />
-    );
-  });
-
-  const channelNode = chatInfo.list.map((channel) => {
-    if (channel.type !== "private" || channel.role !== null)
-      return (
-        <ChatItem
-          key={channel.id}
-          data={channel}
-          isSelected={channel.id === chatInfo.id ? true : false}
-          isJoined={channel.role !== null ? true : false}
-        />
-      );
-  });
+  useEffect(() => {
+    updateList(chatInfo.type);
+  }, [chatInfo.type]);
 
   return (
     <Card>
@@ -62,7 +40,30 @@ export default function ListCard() {
         />
         <ScrollBox className="flex-1">
           <FlexBox direction="col" className="h-full w-full gap-3">
-            {chatInfo.type === "CM" ? channelNode : dmNode}
+            {chatInfo.type === "DM"
+              ? chatInfo.friendList.map((friend, idx) => {
+                  return (
+                    <FriendItem
+                      key={idx}
+                      data={friend}
+                      isSelected={
+                        friend.otherUserId === chatInfo.id ? true : false
+                      }
+                      notiCount={DMData[friend.otherUserId]?.unreadCount ?? 0}
+                    />
+                  );
+                })
+              : chatInfo.channelList.map((channel, idx) => {
+                  if (channel.type !== "private" || channel.role !== null)
+                    return (
+                      <ChannelItem
+                        key={idx}
+                        data={channel}
+                        isSelected={channel.id === chatInfo.id ? true : false}
+                        isJoined={channel.role !== null ? true : false}
+                      />
+                    );
+                })}
           </FlexBox>
         </ScrollBox>
         {chatInfo.type === "CM" && (

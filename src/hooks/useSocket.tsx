@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/data/useAuth";
 import { useMessage } from "@/hooks/data/useMessage";
 import { useNoti } from "@/hooks/data/useNoti";
 import { receiveCM } from "@/socket/channelMessage";
-import { receiveDM } from "@/socket/directMessage";
+import { receiveDM, receiveDMUnreadCount } from "@/socket/directMessage";
 import {
   receiveNotification,
   receiveNotificationList,
@@ -21,7 +21,7 @@ interface UseSocketType {
 
 function useSocket(): UseSocketType {
   const { setAuth } = useAuth();
-  const { setDM, setCM } = useMessage();
+  const { setDM, setCM, setDMUnreadCount } = useMessage();
   const { setNoti, setNotiList } = useNoti();
   const [socket, setSocket] = useAtom(socketAtom);
 
@@ -36,7 +36,12 @@ function useSocket(): UseSocketType {
             console.log(res.data.nickname + " authed");
             setAuth(res.data);
             receiveNotificationList(socket, setNotiList);
-            receiveDM(socket, setDM);
+            receiveDM(socket, (data) => setDM(data, res.data.id));
+            receiveDMUnreadCount(socket, (data) => {
+              for (const key in data) {
+                setDMUnreadCount(data[key].sender.id, data[key].count);
+              }
+            });
             receiveCM(socket, setCM);
             receiveNotification(socket, setNoti);
             console.log("set receive func finished");

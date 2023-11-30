@@ -7,6 +7,7 @@ import { logout } from "@/api/auth/login";
 import { useNoti } from "@/hooks/data/useNoti";
 import Alarm from "@/components/alarm/index";
 import NotificationDot from "@/components/NotificationDot";
+import { useMessage } from "@/hooks/data/useMessage";
 
 export default function TopNav() {
   const router = useRouter();
@@ -17,6 +18,7 @@ export default function TopNav() {
 
   const { openNotification } = useNotification();
   const { notiList } = useNoti();
+  const { DMData } = useMessage();
   const onClickNotification = () => {
     openNotification(
       <div className="w-full max-h-[200px] px-2">
@@ -54,7 +56,17 @@ export default function TopNav() {
           href="/chat"
           className={pathname === "/chat" ? activeMenuStyle : menuStyle}
         >
-          Chat
+          <div className="relative w-fit mx-auto">
+            Chat
+            {Object.values(DMData).reduce((acc, cur) => {
+              return acc + cur.unreadCount;
+            }, 0) > 0 && (
+              <NotificationDot
+                amount={-1}
+                className="absolute right-[-4px] bottom-[-4px]"
+              />
+            )}
+          </div>
         </Link>
         <FlexBox className="gap-6">
           <div className="relative min-w-[48px]">
