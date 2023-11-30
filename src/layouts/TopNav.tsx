@@ -18,7 +18,7 @@ export default function TopNav() {
 
   const { openNotification } = useNotification();
   const { notiList } = useNoti();
-  const { DMData } = useMessage();
+  const { DMData, CMData } = useMessage();
   const onClickNotification = () => {
     openNotification(
       <div className="w-full max-h-[200px] px-2">
@@ -60,7 +60,11 @@ export default function TopNav() {
             Chat
             {Object.values(DMData).reduce((acc, cur) => {
               return acc + cur.unreadCount;
-            }, 0) > 0 && (
+            }, 0) +
+              Object.values(CMData).reduce((acc, cur) => {
+                return acc + cur.unreadCount;
+              }, 0) >
+              0 && (
               <NotificationDot
                 amount={-1}
                 className="absolute right-[-4px] bottom-[-4px]"

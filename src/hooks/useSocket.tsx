@@ -26,7 +26,13 @@ interface UseSocketType {
 
 function useSocket(): UseSocketType {
   const { setAuth } = useAuth();
-  const { setDM, setCM, setDMUnreadCount } = useMessage();
+  const {
+    setDM,
+    setCM,
+    setDMUnreadCount,
+    increaseDMUnreadCount,
+    increaseCMUnreadCount,
+  } = useMessage();
   const { setNoti, setNotiList } = useNoti();
   const [socket, setSocket] = useAtom(socketAtom);
 
@@ -41,13 +47,19 @@ function useSocket(): UseSocketType {
             console.log(res.data.nickname + " authed");
             setAuth(res.data);
             receiveNotificationList(socket, setNotiList);
-            receiveDM(socket, (data) => setDM(data, res.data.id));
+            receiveDM(socket, (data) => {
+              increaseDMUnreadCount(data.sender.id);
+              setDM(data, res.data.id);
+            });
             receiveDMUnreadCount(socket, (data) => {
               for (const key in data) {
                 setDMUnreadCount(data[key].sender.id, data[key].count);
               }
             });
-            receiveCM(socket, setCM);
+            receiveCM(socket, (data) => {
+              setCM(data);
+              increaseCMUnreadCount(data.channel.id);
+            });
             receiveChannelIn(socket, () => {});
             receiveChannelOut(socket, () => {});
             receiveChannelMember(socket, () => {});

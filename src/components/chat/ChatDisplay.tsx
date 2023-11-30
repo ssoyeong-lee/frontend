@@ -12,7 +12,8 @@ import { useEffect, useRef, useState } from "react";
 
 export default function ChatDisplay() {
   const { auth } = useAuth();
-  const { DMData, CMData, setDMList } = useMessage();
+  const { DMData, CMData, setDMList, setCMUnreadCount, setDMUnreadCount } =
+    useMessage();
   const { chatInfo } = useChatInfo();
   const { socket } = useSocket();
   const [chatData, setChatData] = useState<DM[] | CM[]>([]);
@@ -24,9 +25,15 @@ export default function ChatDisplay() {
 
   useEffect(() => {
     if (chatInfo.id !== null) {
-      if (chatInfo.type === "DM")
+      if (chatInfo.type === "DM") {
         setChatData(DMData[chatInfo.id]?.message ?? []);
-      else setChatData(CMData[chatInfo.id]?.message ?? []);
+        if (DMData[chatInfo.id]?.unreadCount !== 0)
+          setDMUnreadCount(chatInfo.id, 0);
+      } else {
+        setChatData(CMData[chatInfo.id]?.message ?? []);
+        if (CMData[chatInfo.id]?.unreadCount !== 0)
+          setCMUnreadCount(chatInfo.id, 0);
+      }
     }
   }, [chatInfo.id, chatInfo.type, DMData, CMData]);
 
