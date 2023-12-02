@@ -51,6 +51,7 @@ function useChatInfo(): ChatInfoRetType {
   const changeId = async (_id: number | null) => {
     setId(_id);
     if (_id == null) {
+      updateList(type);
       return;
     }
     if (type === "DM") {
@@ -59,9 +60,6 @@ function useChatInfo(): ChatInfoRetType {
     } else {
       const _idx = channelList.findIndex((e) => e.id === _id);
       setIndex(_idx);
-      if (_idx === null) {
-        return;
-      }
       const ret = channelList[_idx];
       if (ret.type !== "protected") {
         if (ret.role === null) {
