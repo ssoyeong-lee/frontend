@@ -1,13 +1,9 @@
-import {
-  banMember,
-  getBanMemberList,
-  removeBanMember,
-} from "@/api/channels/operate";
+import { ChannelRelation, SpecificChannel, getChannel } from "@/api/channels";
+import { getBanMemberList, removeBanMember } from "@/api/channels/operate";
 import { UserDetail } from "@/api/users";
 import useChatInfo from "@/hooks/data/useChatInfo";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
-import { channel } from "diagnostics_channel";
 import { useEffect, useState } from "react";
 
 // interface Props {
@@ -33,12 +29,18 @@ export default function ChannelInfoModal() {
     console.log("ChannelInfoModal(): chatInfo.index ===null");
     return <></>;
   }
-
-  const [bannedList, setBannedList] = useState<UserDetail[]>([]);
   const channel = chatInfo.channelList[chatInfo.index];
+
+  const [memberList, setMemberList] = useState<ChannelRelation[]>([]);
+  const [bannedList, setBannedList] = useState<UserDetail[]>([]);
+
   const getData = async () => {
-    const data = (await getBanMemberList(channel.id)).data;
-    setBannedList(data);
+    const memberData = (await getChannel(channel.id)).data.channelRelations;
+    const bannedData = (await getBanMemberList(channel.id)).data;
+
+    console.log("MemberList: ", memberData);
+    
+    setBannedList(bannedData);
   };
   useEffect(() => {
     getData();
