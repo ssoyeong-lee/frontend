@@ -17,13 +17,14 @@ function OtherChat({ id, nickname, content }: Props) {
           const target = e.target as HTMLDivElement;
           console.log(target.getBoundingClientRect());
           openUserControl({
+            id: id,
             x: target.getBoundingClientRect().x,
             y:
               target.getBoundingClientRect().y +
               target.getBoundingClientRect().height +
               5,
-            type: "user",
-          });
+          }
+          );
         }}
       >
         {nickname}

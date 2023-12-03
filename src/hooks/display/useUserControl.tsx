@@ -2,25 +2,33 @@ import Divider from "@/layouts/Divider";
 import FlexBox from "@/layouts/FlexBox";
 import { atom, useAtom } from "jotai";
 import React, { useEffect, useState } from "react";
+import useChatInfo from "../data/useChatInfo";
+import { banMember } from "@/api/channels/operate";
 
 const userControlAtom = atom<JSX.Element>(<></>);
 interface UserControlTemplateProps {
+  id: number;
   x: number;
   y: number;
-  type: "owner" | "admin" | "user";
   onClose?: () => void;
 }
 
-function UserControlTemplate({
-  x,
-  y,
-  type,
-  onClose,
-}: UserControlTemplateProps) {
+function UserControlTemplate({ id, x, y, onClose }: UserControlTemplateProps) {
   const divRef = React.useRef<HTMLDivElement>(null);
   const [yOffset, setYOffset] = useState(0);
   const [show, setShow] = useState(false);
   const className = "w-full p-2 cursor-pointer hover:bg-gray-700";
+  const { chatInfo } = useChatInfo();
+  const { closeUserControl } = useUserControl();
+  const banClick = async () => {
+    if (chatInfo.id !== null)
+      await banMember(chatInfo.id, id);
+    closeUserControl();
+  }
+  const tmpClick = () => {
+    closeUserControl();
+  }
+
   useEffect(() => {
     if (!divRef.current) return;
     const rect = divRef.current.getBoundingClientRect();
@@ -43,21 +51,20 @@ function UserControlTemplate({
         ref={divRef}
       >
         <FlexBox direction="col" className="w-[200px] gap-2 font-bold">
-          {type === "owner" && (
+          {chatInfo.role === "Owner" && (
             <>
               <div className={className}>make admin</div>
               <Divider color="white" />
             </>
           )}
-          {type === "owner" ||
-            (type === "admin" && (
-              <>
-                <div className={className}>kick</div>
-                <div className={className}>ban</div>
-                <div className={className}>mute for 5min</div>
-                <Divider color="white" />
-              </>
-            ))}
+          {(chatInfo.role === "Owner" || chatInfo.role === "Admin") && (
+            <>
+              <div className={className} onClick={tmpClick}>kick</div>
+              <div className={className} onClick={banClick}>ban</div>
+              <div className={className}>mute for 5min</div>
+              <Divider color="white" />
+            </>
+          )}
           <div className={className}>view profile</div>
           <div className={className}>play game</div>
         </FlexBox>
@@ -74,9 +81,9 @@ interface UseUserControlType {
 
 function useUserControl(): UseUserControlType {
   const [userControl, setUserControl] = useAtom(userControlAtom);
-  const openUserControl = ({ x, y, type }: UserControlTemplateProps) => {
+  const openUserControl = ({ id, x, y }: UserControlTemplateProps) => {
     setUserControl(
-      <UserControlTemplate x={x} y={y} type={type} onClose={closeUserControl} />
+      <UserControlTemplate id={id} x={x} y={y} onClose={closeUserControl} />
     );
   };
   const closeUserControl = () => {
