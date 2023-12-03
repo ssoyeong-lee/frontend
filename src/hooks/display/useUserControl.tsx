@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import useChatInfo from "../data/useChatInfo";
 import { banMember, kickMember } from "@/api/channels/operate";
 import { giveAdmin } from "@/api/channels/admin";
+import { useRouter } from "next/router";
 
 const userControlAtom = atom<JSX.Element>(<></>);
 interface UserControlTemplateProps {
@@ -15,6 +16,8 @@ interface UserControlTemplateProps {
 }
 
 function UserControlTemplate({ id, x, y, onClose }: UserControlTemplateProps) {
+  const router = useRouter();
+
   const divRef = React.useRef<HTMLDivElement>(null);
   const [yOffset, setYOffset] = useState(0);
   const [show, setShow] = useState(false);
@@ -44,6 +47,7 @@ function UserControlTemplate({ id, x, y, onClose }: UserControlTemplateProps) {
   const profileClick = async () => {
     console.log("profileClick");
     closeUserControl();
+    router.push(`/main/${id}`);
   };
   const gameClick = async () => {
     console.log("gameClick");
