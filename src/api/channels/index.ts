@@ -11,7 +11,20 @@ async function getChannelList(): Promise<AxiosResponse<Channel[]>> {
   return axios.get("/api/channels");
 }
 
-async function getChannel(channel_id: number): Promise<AxiosResponse<Channel>> {
+interface ChannelRelation {
+  createAt: string;
+  id: number;
+  isAdmin: boolean;
+  isBanned: boolean;
+  isOwner: boolean;
+  muteUntil: string | null;
+}
+
+interface SpecificChannel extends Channel {
+  channelRelations: {[key: number]: {channelRelation: ChannelRelation}}[];
+}
+
+async function getChannel(channel_id: number): Promise<AxiosResponse<SpecificChannel>> {
   return axios.get(`/api/channels/${channel_id}`);
 }
 
@@ -55,7 +68,7 @@ async function getMyChannels(): Promise<AxiosResponse<MyChannel[]>> {
   return axios.get("/api/channels/me");
 }
 
-export type { Channel, MyChannel };
+export type { Channel, ChannelRelation, SpecificChannel, MyChannel };
 export {
   getChannelList,
   getChannel,
