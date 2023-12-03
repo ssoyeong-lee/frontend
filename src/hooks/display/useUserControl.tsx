@@ -3,7 +3,8 @@ import FlexBox from "@/layouts/FlexBox";
 import { atom, useAtom } from "jotai";
 import React, { useEffect, useState } from "react";
 import useChatInfo from "../data/useChatInfo";
-import { banMember } from "@/api/channels/operate";
+import { banMember, kickMember } from "@/api/channels/operate";
+import { giveAdmin } from "@/api/channels/admin";
 
 const userControlAtom = atom<JSX.Element>(<></>);
 interface UserControlTemplateProps {
@@ -20,14 +21,34 @@ function UserControlTemplate({ id, x, y, onClose }: UserControlTemplateProps) {
   const className = "w-full p-2 cursor-pointer hover:bg-gray-700";
   const { chatInfo } = useChatInfo();
   const { closeUserControl } = useUserControl();
+
+  const adminClick = async () => {
+    console.log("adminClick");
+    if (chatInfo.id !== null) await giveAdmin(chatInfo.id, id);
+    closeUserControl();
+  };
+  const kickClick = async () => {
+    console.log("kickClick");
+    if (chatInfo.id !== null) await kickMember(chatInfo.id, id);
+    closeUserControl();
+  };
   const banClick = async () => {
-    if (chatInfo.id !== null)
-      await banMember(chatInfo.id, id);
+    console.log("banClick");
+    if (chatInfo.id !== null) await banMember(chatInfo.id, id);
     closeUserControl();
-  }
-  const tmpClick = () => {
+  };
+  const muteClick = async () => {
+    console.log("muteClick");
     closeUserControl();
-  }
+  };
+  const profileClick = async () => {
+    console.log("profileClick");
+    closeUserControl();
+  };
+  const gameClick = async () => {
+    console.log("gameClick");
+    closeUserControl();
+  };
 
   useEffect(() => {
     if (!divRef.current) return;
@@ -53,20 +74,24 @@ function UserControlTemplate({ id, x, y, onClose }: UserControlTemplateProps) {
         <FlexBox direction="col" className="w-[200px] gap-2 font-bold">
           {chatInfo.role === "Owner" && (
             <>
-              <div className={className}>make admin</div>
+              <div className={className} onClick={adminClick}>make admin</div>
               <Divider color="white" />
             </>
           )}
           {(chatInfo.role === "Owner" || chatInfo.role === "Admin") && (
             <>
-              <div className={className} onClick={tmpClick}>kick</div>
-              <div className={className} onClick={banClick}>ban</div>
-              <div className={className}>mute for 5min</div>
+              <div className={className} onClick={kickClick}>
+                kick
+              </div>
+              <div className={className} onClick={banClick}>
+                ban
+              </div>
+              <div className={className} onClick={muteClick}>mute for 5min</div>
               <Divider color="white" />
             </>
           )}
-          <div className={className}>view profile</div>
-          <div className={className}>play game</div>
+          <div className={className} onClick={profileClick}>view profile</div>
+          <div className={className} onClick={gameClick}>play game</div>
         </FlexBox>
       </div>
     </div>
