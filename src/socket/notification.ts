@@ -1,3 +1,4 @@
+import { Channel } from "@/api/channels";
 import { Socket } from "socket.io-client";
 
 export type NotificationType =
@@ -16,11 +17,8 @@ interface NotiGameInvite extends Notification<"game-invite"> {
 }
 
 interface NotiChannelInvite extends Notification<"channel-invite"> {
-  channelId: number; // channelId
-  invitingUser: {
-    id: number; // userId
-    nickname: string;
-  };
+  channel: Channel;
+  updateAt: string;
 }
 
 interface NotiFriendRequest extends Notification<"friend-request"> {
@@ -35,7 +33,7 @@ function receiveNotification(
   setNoti: (res: Notification<NotificationType>) => void
 ) {
   socket.on("noti", (res: { type: NotificationType }) => {
-    console.log(res);
+    console.log("receiveNotification: ", res);
     setNoti(res);
   });
 }
@@ -45,7 +43,7 @@ function receiveNotificationList(
   setNotiList: (notiList: Notification<NotificationType>[]) => void
 ) {
   socket.emit("noti-unread", (res: Notification<NotificationType>[]) => {
-    console.log(res);
+    console.log("receiveNotificationList: ", res);
     setNotiList(res);
   });
 }
