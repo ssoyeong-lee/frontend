@@ -13,8 +13,7 @@ export default function ChannelInviteAlarm({
   return (
     <FlexBox className="justify-between">
       <div>
-        <span>{noti.invitingUser.nickname}</span>
-        <span>님이 채널 초대를 보냈습니다.</span>
+        채널 <span>{noti.channel.title}</span>에 초대되었습니다!
       </div>
     </FlexBox>
   );
