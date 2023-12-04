@@ -11,20 +11,11 @@ import FlexBox from "@/layouts/FlexBox";
 import Icon from "@/layouts/Icon";
 import { sendCM } from "@/socket/channelMessage";
 import { sendDM } from "@/socket/directMessage";
-import React, { useState } from "react";
+import { useState } from "react";
 
-interface Props {
-  setIsSearch: (isSearch: boolean) => void;
-}
-
-function ChatCardTop({setIsSearch}: Props) {
+function ChatCardTop() {
   const { openModal } = useModal();
   const { chatInfo } = useChatInfo();
-  const inviteClick = (e: React.MouseEvent) => {
-    setIsSearch(true);
-    console.log('inviteClick');
-    e.stopPropagation();
-  }
   const channelInfoClick = () => {
     openModal(<ChannelInfoModal />);
   };
@@ -41,14 +32,6 @@ function ChatCardTop({setIsSearch}: Props) {
               ? chatInfo.friendList[chatInfo.index]?.nickname
               : chatInfo.channelList[chatInfo.index]?.title}
           </div>
-          {chatInfo.channelList[chatInfo.index].type === "private" && (
-            <Icon 
-              src="/icon/mail.svg"
-              onClick={inviteClick}
-              className="w-6 h-6"
-              alt="invite"
-            />
-          )}
           {chatInfo.type === "CM" && (
             <Icon
               src="/icon/blockList.svg"
@@ -71,7 +54,7 @@ function ChatCardTop({setIsSearch}: Props) {
   );
 }
 
-export default function ChatCard({setIsSearch}: Props) {
+export default function ChatCard() {
   const { socket } = useSocket();
   const { chatInfo } = useChatInfo();
   const [msg, setMsg] = useState("");
@@ -91,7 +74,7 @@ export default function ChatCard({setIsSearch}: Props) {
   return (
     <Card>
       <FlexBox direction="col" className="w-full h-full gap-6">
-        <ChatCardTop setIsSearch={setIsSearch}/>
+        <ChatCardTop />
         <Divider color="yellow" />
         <ChatDisplay />
         <IconInput

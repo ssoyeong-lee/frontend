@@ -42,7 +42,6 @@ export default function User() {
         <div className="w-full h-full" onClick={(e) => e.stopPropagation()}>
           {isSearch ? (
             <SearchCard
-              type="user"
               userList={userList}
               isSearch={isSearch}
               setIsSearch={setIsSearch}
@@ -51,7 +50,7 @@ export default function User() {
             <FlexBox className="h-full w-full gap-6">
               <FlexBox className="basis-1/3 h-full gap-6" direction="col">
                 <div className="w-full h-fit">
-                  <SearchCard type="user" onClick={() => setIsSearch(true)} />
+                  <SearchCard onClick={() => setIsSearch(true)} />
                 </div>
                 <RankingCard userList={userList} />
               </FlexBox>
