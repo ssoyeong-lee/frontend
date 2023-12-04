@@ -1,5 +1,9 @@
-import { useUserControl } from "@/hooks/display/useUserControl";
+import {
+  useUserControl,
+  UserControlTemplateProps,
+} from "@/hooks/display/useUserControl";
 import FlexBox from "@/layouts/FlexBox";
+import ChatControl from "../userControl/chatControl";
 
 interface Props {
   id: number;
@@ -16,15 +20,15 @@ function OtherChat({ id, nickname, content }: Props) {
         onClick={(e) => {
           const target = e.target as HTMLDivElement;
           console.log(target.getBoundingClientRect());
-          openUserControl({
-            id: id,
+          const arg: UserControlTemplateProps = {
+            content: <ChatControl id={id} />,
             x: target.getBoundingClientRect().x,
             y:
               target.getBoundingClientRect().y +
               target.getBoundingClientRect().height +
               5,
-          }
-          );
+          };
+          openUserControl(arg);
         }}
       >
         {nickname}
