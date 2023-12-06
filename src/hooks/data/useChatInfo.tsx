@@ -30,7 +30,7 @@ interface ChatInfoRetType {
     role: "Owner" | "Admin" | "User" | null;
   };
   changeType: (type: "DM" | "CM") => void;
-  changeId: (id: number | null) => void;
+  changeId: (id: number | null) => Promise<void>;
   updateList: (type: "DM" | "CM") => Promise<void>;
 }
 
@@ -48,24 +48,26 @@ function useChatInfo(): ChatInfoRetType {
     setType(_type);
   };
 
-  const changeId = (_id: number | null) => {
+  const changeId = async (_id: number | null) => {
     setId(_id);
     if (_id == null) {
+      updateList(type);
       return;
     }
     if (type === "DM") {
       setRole(null);
       setIndex(friendList.findIndex((e) => e.otherUserId === _id));
     } else {
-      const ret = channelList.filter((e) => e.id == _id)[0];
+      const _idx = channelList.findIndex((e) => e.id === _id);
+      setIndex(_idx);
+      const ret = channelList[_idx];
       if (ret.type !== "protected") {
         if (ret.role === null) {
-          const tmp = joinChannel(ret.id, ""); // TODO await? 안걸어도 되는지 확인 필요합니다.
+          await joinChannel(ret.id, "");
           updateList("CM");
         }
         setRole(ret.role);
       }
-      setIndex(channelList.findIndex((e) => e.id === _id));
     }
   };
 
