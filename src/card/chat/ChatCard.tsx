@@ -51,7 +51,7 @@ function ChatCardTop({ setIsSearch }: Props) {
           )}
           {chatInfo.type === "CM" && (
             <Icon
-              src="/icon/blockList.svg"
+              src="/icon/info.svg"
               onClick={channelInfoClick}
               className="w-6 h-6"
               alt="name"
