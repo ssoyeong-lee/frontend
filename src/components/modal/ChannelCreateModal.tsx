@@ -15,6 +15,11 @@ export default function ChannelCreateModal() {
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
+  const titleCheck = (value:string):string => {
+    if (value.length > 10)
+      return "too long";
+    return "";
+  }
   const typeChange = (type: string) => {
     setType(type);
   };
@@ -42,6 +47,7 @@ export default function ChannelCreateModal() {
               value={title}
               onChange={titleChange}
               placeholder="title"
+              checkValid={titleCheck}
             />
             <SelectBox
               list={["private", "protected", "public"]}
