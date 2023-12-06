@@ -1,8 +1,10 @@
+import { TFASetup } from "@/api/auth/2fa";
 import { UserDetail, putUserMe } from "@/api/users/index";
 import Avatar, { avatarObj } from "@/components/Avatar";
 import ChipButton from "@/components/button/ChipButton";
 import DefaultInput from "@/components/control/DefaultInput";
 import AvatarModal from "@/components/modal/AvatarModal";
+import TFAModal from "@/components/modal/TFAModal";
 import { useModal } from "@/hooks/display/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
@@ -37,7 +39,9 @@ export default function ProfileCard({ type, user, setUser }: Props) {
     if (!setUser || !user) return;
     openModal(<AvatarModal onClick={onCloseAvatar} />);
   };
-  const onClickTwoFactor = () => {};
+  const onClickTwoFactor = async () => {
+    openModal(<TFAModal />);
+  };
   const onBlur = async () => {
     if (!user) return;
     await putUserMe(user);
@@ -92,7 +96,9 @@ export default function ProfileCard({ type, user, setUser }: Props) {
             />
             <FlexBox className="w-full justify-between">
               <div className="font-bold">2 factor auth</div>
-              <ChipButton color="white">OFF</ChipButton>
+              <ChipButton color="white" onClick={onClickTwoFactor}>
+                {user ? "ON" : "OFF"}
+              </ChipButton>
             </FlexBox>
           </>
         )}
