@@ -41,14 +41,15 @@ function ChatCardTop({ setIsSearch }: Props) {
               ? chatInfo.friendList[chatInfo.index]?.nickname
               : chatInfo.channelList[chatInfo.index]?.title}
           </div>
-          {chatInfo.channelList[chatInfo.index].type === "private" && (
-            <Icon
-              src="/icon/mail.svg"
-              onClick={inviteClick}
-              className="w-6 h-6"
-              alt="invite"
-            />
-          )}
+          {chatInfo.type === "CM" &&
+            chatInfo.channelList[chatInfo.index].type === "private" && (
+              <Icon
+                src="/icon/mail.svg"
+                onClick={inviteClick}
+                className="w-6 h-6"
+                alt="invite"
+              />
+            )}
           {chatInfo.type === "CM" && (
             <Icon
               src="/icon/info.svg"

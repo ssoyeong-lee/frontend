@@ -48,8 +48,8 @@ function useSocket(): UseSocketType {
             setAuth(res.data);
             receiveNotificationList(socket, setNotiList);
             receiveDM(socket, (data) => {
-              increaseDMUnreadCount(data.sender.id);
               setDM(data, res.data.id);
+              increaseDMUnreadCount(data.sender.id);
             });
             receiveDMUnreadCount(socket, (data) => {
               for (const key in data) {

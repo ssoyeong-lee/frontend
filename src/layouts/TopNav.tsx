@@ -59,10 +59,10 @@ export default function TopNav() {
           <div className="relative w-fit mx-auto">
             Chat
             {Object.values(DMData).reduce((acc, cur) => {
-              return acc + cur.unreadCount;
+              return acc + cur.unreadCount ?? 0;
             }, 0) +
               Object.values(CMData).reduce((acc, cur) => {
-                return acc + cur.unreadCount;
+                return acc + cur.unreadCount ?? 0;
               }, 0) >
               0 && (
               <NotificationDot
