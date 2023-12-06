@@ -1,8 +1,10 @@
+import { inviteUser } from "@/api/channels/operate";
 import { postBlock } from "@/api/users/block";
 import { postRequestFriend } from "@/api/users/friend";
 import { UserAbstract } from "@/api/users/index";
 import ChipButton from "@/components/button/ChipButton";
 import IconInput from "@/components/control/IconInput";
+import useChatInfo from "@/hooks/data/useChatInfo";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
@@ -22,6 +24,7 @@ function SearchItem({
   user: UserAbstract;
   setIsSearch: (isSearch: boolean) => void;
 }) {
+  const {chatInfo} = useChatInfo();
   return (
     <FlexBox className="w-full px-4 py-2 justify-between">
       <div>{user.nickname}</div>
@@ -31,20 +34,10 @@ function SearchItem({
           className="w-[80px]"
           onClick={async () => {
             setIsSearch(false);
-            await postRequestFriend(user.id);
+            chatInfo.id !== null && await inviteUser(chatInfo.id, user.id);
           }}
         >
           invite
-        </ChipButton>
-        <ChipButton
-          color="red"
-          className="w-[80px]"
-          onClick={async () => {
-            setIsSearch(false);
-            await postBlock(user.id);
-          }}
-        >
-          block
         </ChipButton>
       </FlexBox>
     </FlexBox>
@@ -57,6 +50,7 @@ export default function SearchCard({
   setIsSearch,
   onClick,
 }: Props) {
+
   const ref = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (isSearch) ref.current?.focus();
