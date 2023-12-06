@@ -3,8 +3,7 @@ import {
   UserControlTemplateProps,
 } from "@/hooks/display/useUserControl";
 import FlexBox from "@/layouts/FlexBox";
-import ChatControl from "../userControl/chatControl";
-
+import ChatControl from "../userControl/ChatControl";
 interface Props {
   id: number;
   nickname: string;

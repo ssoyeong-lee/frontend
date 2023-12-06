@@ -1,26 +1,10 @@
-import { ChannelRelation, SpecificChannel, getChannel } from "@/api/channels";
+import { Channel, getChannel } from "@/api/channels";
 import { getBanMemberList, removeBanMember } from "@/api/channels/operate";
 import { UserDetail } from "@/api/users";
 import useChatInfo from "@/hooks/data/useChatInfo";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
 import { useEffect, useState } from "react";
-
-// interface Props {
-//   channel_id: number;
-//   user_id: number;
-// }
-
-// function CancelButton({channel_id, user_id}: Props) {
-//   const buttonClick = async () => {
-//     await removeBanMember(channel_id, user_id);
-//   }
-//   return (
-//     <button onClick={buttonClick} className="text-xs font-bold px-2 py-1 border-[1.5px] border-deepred-cyber hover:bg-deepred-cyber hover:text-black">
-//       X
-//     </button>
-//   );
-// }
 
 export default function ChannelInfoModal() {
   const { chatInfo } = useChatInfo();
@@ -31,15 +15,12 @@ export default function ChannelInfoModal() {
   }
   const channel = chatInfo.channelList[chatInfo.index];
 
-  const [memberList, setMemberList] = useState<ChannelRelation[]>([]);
+  // const [memberList, setMemberList] = useState<Channel[]>([]);
   const [bannedList, setBannedList] = useState<UserDetail[]>([]);
 
   const getData = async () => {
-    const memberData = (await getChannel(channel.id)).data.channelRelations;
+    // const memberData = (await getChannel(channel.id)).data;
     const bannedData = (await getBanMemberList(channel.id)).data;
-
-    console.log("MemberList: ", memberData);
-    
     setBannedList(bannedData);
   };
   useEffect(() => {
@@ -94,7 +75,6 @@ export default function ChannelInfoModal() {
                     <div className="w-fit h-fit">{_mem.nickname}</div>
                     {(chatInfo.role === "Owner" ||
                       chatInfo.role === "Admin") && (
-                      // <CancelButton channel_id={channel.id} user_id={_mem.id} />
                       <button
                         onClick={async () => {
                           await removeBanMember(channel.id, _mem.id);
