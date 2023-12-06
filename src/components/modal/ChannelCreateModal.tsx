@@ -26,6 +26,13 @@ export default function ChannelCreateModal() {
   const passwordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
+  const pwCheck = (value:string):string => {
+    if (value.length < 4)
+      return "too short";
+    else if (value.length > 10)
+      return "too long";
+    return "";
+  }
 
   const { closeModal } = useModal();
   const { updateList } = useChatInfo();
@@ -60,6 +67,7 @@ export default function ChannelCreateModal() {
                 value={password}
                 onChange={passwordChange}
                 type="password"
+                checkValid={pwCheck}
               />
             )}
           </FlexBox>

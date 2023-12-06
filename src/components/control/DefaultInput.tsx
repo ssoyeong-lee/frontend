@@ -60,7 +60,7 @@ export default forwardRef<HTMLInputElement, Props>(function DefaultInput(
           ref={ref}
         />
       </div>
-      <div className="h-fit w-fit text-sm tracking-wider text-red-cyber">
+      <div className="h-fit w-fit text-xs tracking-wider text-red-cyber">
         {msg}
       </div>
     </FlexBox>
