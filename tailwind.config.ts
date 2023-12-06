@@ -31,7 +31,7 @@ const config: Config = {
         },
       },
       aspectRatio: {
-        gameBoardRatio: "9 / 16",
+        gameBoardRatio: "1 / 2",
       },
       animation: {
         "sidenav-open": "sidenav-open 0.7s ease-in-out forwards",

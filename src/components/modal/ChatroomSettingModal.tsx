@@ -31,12 +31,24 @@ export default function ChatroomSettinngModal() {
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
+  const titleCheck = (value:string):string => {
+    if (value.length > 10)
+      return "too long";
+    return "";
+  }
   const typeChange = (type: string) => {
     setType(type);
   };
   const passwordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
+  const pwCheck = (value:string):string => {
+    if (value.length < 4)
+      return "too short";
+    else if (value.length > 10)
+      return "too long";
+    return "";
+  }
 
   const okClick = () => {
     if (chatInfo.id === null) return;
@@ -57,6 +69,7 @@ export default function ChatroomSettinngModal() {
               value={title}
               onChange={titleChange}
               placeholder="title"
+              checkValid={titleCheck}
             />
             <SelectBox
               list={["private", "protected", "public"]}
@@ -69,6 +82,7 @@ export default function ChatroomSettinngModal() {
                 value={password}
                 onChange={passwordChange}
                 type="password"
+                checkValid={pwCheck}
               />
             )}
           </FlexBox>

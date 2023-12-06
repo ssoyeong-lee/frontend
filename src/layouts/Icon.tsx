@@ -1,7 +1,8 @@
 import Image from "next/image";
+import React from "react";
 
 interface Props {
-  onClick?: () => void;
+  onClick?: (() => void) | ((e: React.MouseEvent) => void);
   className?: string;
   src: string;
   alt: string;
