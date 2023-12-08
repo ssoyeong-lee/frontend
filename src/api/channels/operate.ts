@@ -1,7 +1,16 @@
 import axios, { AxiosResponse } from "axios";
-import { UserDetail } from "../users";
+import { Channel, MemberAbstract } from ".";
 
-async function inviteUser(channel_id: number, user_id: number) {
+interface Info {
+  //...변수명...?
+  user: MemberAbstract;
+  channel: Channel;
+}
+
+async function inviteUser(
+  channel_id: number,
+  user_id: number
+): Promise<AxiosResponse<Info>> {
   return axios.post(`/api/channels/${channel_id}/invite/${user_id}`, {});
 }
 
@@ -17,7 +26,9 @@ async function kickMember(channel_id: number, user_id: number) {
   return axios.delete(`/api/channels/${channel_id}/kick/${user_id}`);
 }
 
-async function getBanMemberList(channel_id: number): Promise<AxiosResponse<UserDetail[]>> {
+async function getBanMemberList(
+  channel_id: number
+): Promise<AxiosResponse<MemberAbstract[]>> {
   return axios.get(`/api/channels/${channel_id}/ban`);
 }
 
