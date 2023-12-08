@@ -4,8 +4,10 @@ import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
 import connectSocket from "@/socket/connectSocket";
+import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 export default function Register() {
   const router = useRouter();
@@ -16,17 +18,22 @@ export default function Register() {
       if (!router.isReady) return;
       const { code, state } = router.query;
       if (code && state) {
-        const res = await userRedirect(
-          code as string,
-          state as string,
-          window.location.protocol + "//" + window.location.host + "/register"
-        );
-        const socketInstance = connectSocket(res.data?.session);
-        setSocket(socketInstance);
-        if (res.data?.redirect === "home") {
-          router.push("/main");
-        } else if (res.data?.redirect === "register") {
-          router.push("/register/form");
+        try {
+          const res = await userRedirect(
+            code as string,
+            state as string,
+            window.location.protocol + "//" + window.location.host + "/register"
+          );
+          const socketInstance = connectSocket(res.data?.session);
+          setSocket(socketInstance);
+          if (res.data?.redirect === "home") {
+            router.push("/main");
+          } else if (res.data?.redirect === "register") {
+            router.push("/register/form");
+          }
+        } catch (error) {
+          const axiosError = error as AxiosError;
+          toast.error(axiosError.response?.status);
         }
       } else {
         router.push("/login");

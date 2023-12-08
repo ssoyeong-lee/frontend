@@ -10,6 +10,8 @@ import FlexBox from "@/layouts/FlexBox";
 import TopNav from "@/layouts/TopNav";
 import { useEffect, useState } from "react";
 import sleep from "@/utils/sleep";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 export default function User() {
   const [userList, setUserList] = useState<UserAbstract[]>([]);
@@ -19,8 +21,13 @@ export default function User() {
 
   useEffect(() => {
     const asyncFunc = async () => {
-      const res = await getUserList();
-      setUserList(res.data);
+      try {
+        const res = await getUserList();
+        setUserList(res.data);
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        toast.error(axiosError.response?.status);
+      }
     };
     asyncFunc();
   }, []);

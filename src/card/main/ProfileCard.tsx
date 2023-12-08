@@ -8,7 +8,9 @@ import TFAModal from "@/components/modal/TFAModal";
 import { useModal } from "@/hooks/display/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
+import { AxiosError } from "axios";
 import { Dispatch, SetStateAction } from "react";
+import { toast } from "react-toastify";
 
 interface Props {
   user: UserDetail | null;
@@ -44,7 +46,12 @@ export default function ProfileCard({ type, user, setUser }: Props) {
   };
   const onBlur = async () => {
     if (!user) return;
-    await putUserMe(user);
+    try {
+      await putUserMe(user);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
   };
 
   return (

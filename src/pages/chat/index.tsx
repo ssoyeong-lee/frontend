@@ -5,7 +5,9 @@ import SearchCard from "@/card/chat/SearchCard";
 import Container from "@/layouts/Container";
 import FlexBox from "@/layouts/FlexBox";
 import TopNav from "@/layouts/TopNav";
+import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Chat() {
   const [isSearch, setIsSearch] = useState<boolean>(false);
@@ -13,8 +15,13 @@ export default function Chat() {
 
   useEffect(() => {
     const getData = async () => {
-      const tmp = (await getUserList()).data;
-      setUserList(tmp);
+      try {
+        const tmp = (await getUserList()).data;
+        setUserList(tmp);
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        toast.error(axiosError.response?.status);
+      }
     };
     getData();
   }, []);

@@ -6,6 +6,8 @@ import {
   joinChannel,
 } from "@/api/channels";
 import { getFriendList, Friend } from "@/api/users/friend";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 interface FriendInfoType extends Friend {}
 
@@ -63,8 +65,13 @@ function useChatInfo(): ChatInfoRetType {
       const ret = channelList[_idx];
       if (ret.type !== "protected") {
         if (ret.role === null) {
-          await joinChannel(ret.id, "");
-          updateList("CM");
+          try {
+            await joinChannel(ret.id, "");
+            updateList("CM");
+          } catch (error) {
+            const axiosError = error as AxiosError;
+            toast.error(axiosError.response?.status);
+          }
         }
         setRole(ret.role);
       }
@@ -73,27 +80,37 @@ function useChatInfo(): ChatInfoRetType {
 
   const updateList = async (_type: "DM" | "CM") => {
     if (_type === "DM") {
-      const myFriends = (await getFriendList()).data;
-      setFriendList(myFriends);
-      console.log(myFriends);
+      try {
+        const myFriends = (await getFriendList()).data;
+        setFriendList(myFriends);
+        console.log(myFriends);
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        toast.error(axiosError.response?.status);
+      }
     } else {
-      const allChan = (await getChannelList()).data;
-      const myChan = (await getMyChannels()).data;
+      try {
+        const allChan = (await getChannelList()).data;
+        const myChan = (await getMyChannels()).data;
 
-      const allChanExt = allChan.map((_chan) => {
-        const ret: ChannelInfoType = { ..._chan, role: null };
-        const idx = myChan.findIndex((elem) => elem.channel.id === ret.id);
-        if (idx !== -1) ret.role = myChan[idx].role;
-        return ret;
-      });
-      const myChanExt = myChan.map((_chan) => {
-        const ret: ChannelInfoType = { ..._chan.channel, role: _chan.role };
-        return ret;
-      });
-      const allChanFlt = allChanExt.filter((_chan) => _chan.role === null);
-      const channelList = myChanExt.concat(allChanFlt);
-      setChannelList(channelList);
-      console.log(channelList);
+        const allChanExt = allChan.map((_chan) => {
+          const ret: ChannelInfoType = { ..._chan, role: null };
+          const idx = myChan.findIndex((elem) => elem.channel.id === ret.id);
+          if (idx !== -1) ret.role = myChan[idx].role;
+          return ret;
+        });
+        const myChanExt = myChan.map((_chan) => {
+          const ret: ChannelInfoType = { ..._chan.channel, role: _chan.role };
+          return ret;
+        });
+        const allChanFlt = allChanExt.filter((_chan) => _chan.role === null);
+        const channelList = myChanExt.concat(allChanFlt);
+        setChannelList(channelList);
+        console.log(channelList);
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        toast.error(axiosError.response?.status);
+      }
     }
   };
 

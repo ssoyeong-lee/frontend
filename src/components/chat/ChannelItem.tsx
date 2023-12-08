@@ -4,6 +4,8 @@ import { useModal } from "@/hooks/display/useModal";
 import FlexBox from "@/layouts/FlexBox";
 import NotificationDot from "../NotificationDot";
 import PasswordModal from "../modal/PasswordModal";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 interface buttonProps {
   id: number;
@@ -12,9 +14,14 @@ interface buttonProps {
 function LeaveButton({ id }: buttonProps) {
   const { changeId } = useChatInfo();
   const leaveClick = async (e: React.MouseEvent) => {
-    await leaveChannel(id);
-    await changeId(null);
-    console.log("leave channel");
+    try {
+      await leaveChannel(id);
+      await changeId(null);
+      console.log("leave channel");
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
     e.stopPropagation();
   };
   return (
@@ -43,9 +50,14 @@ export default function ChannelItem({
   const { openModal } = useModal();
   const { changeId } = useChatInfo();
   const itemClick = async () => {
-    await changeId(data.id);
-    if (data.type === "protected" && data.role === null)
-      openModal(<PasswordModal id={data.id} />);
+    try {
+      await changeId(data.id);
+      if (data.type === "protected" && data.role === null)
+        openModal(<PasswordModal id={data.id} />);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
   };
   return (
     <FlexBox

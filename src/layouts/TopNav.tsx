@@ -8,6 +8,8 @@ import { useNoti } from "@/hooks/data/useNoti";
 import Alarm from "@/components/alarm/index";
 import NotificationDot from "@/components/NotificationDot";
 import { useMessage } from "@/hooks/data/useMessage";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 export default function TopNav() {
   const router = useRouter();
@@ -30,8 +32,13 @@ export default function TopNav() {
   };
 
   const onClickLogout = async () => {
-    await logout();
-    router.push("/login");
+    try {
+      await logout();
+      router.push("/login");
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
   };
 
   return (
