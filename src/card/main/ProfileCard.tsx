@@ -97,7 +97,7 @@ export default function ProfileCard({ type, user, setUser }: Props) {
             <FlexBox className="w-full justify-between">
               <div className="font-bold">2 factor auth</div>
               <ChipButton color="white" onClick={onClickTwoFactor}>
-                {user ? "ON" : "OFF"}
+                {user?.is2fa ? "ON" : "OFF"}
               </ChipButton>
             </FlexBox>
           </>

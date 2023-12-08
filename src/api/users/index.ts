@@ -17,6 +17,7 @@ interface UserDetail {
   ladderPoint: number;
   avatar: 0 | 1 | 2 | 3 | 4;
   bio: string | null;
+  is2fa?: boolean;
 }
 
 async function getUserMe(): Promise<AxiosResponse<UserDetail>> {
