@@ -1,7 +1,9 @@
 import { atom, useAtom } from "jotai";
 import {
   Channel,
+  MemberDetail,
   MyChannel,
+  getChannel,
   getChannelList,
   getMyChannels,
   joinChannel,
@@ -18,81 +20,60 @@ interface ChannelInfoType extends Channel {
 }
 
 const typeAtom = atom<"DM" | "CM">("DM");
-const idAtom = atom<number | null>(null);
-const indexAtom = atom<number | null>(null);
+const selectedAtom = atom<OtherUserAbstract | ChannelInfoType | null>(null);
 const friendListAtom = atom<OtherUserAbstract[]>([]);
 const channelListAtom = atom<ChannelInfoType[]>([]);
-const roleAtom = atom<"Owner" | "Admin" | "User" | null>(null);
+const memberListAtom = atom<MemberDetail[]>([]);
 
 interface ChatInfoRetType {
   chatInfo: {
     type: "DM" | "CM";
-    id: number | null;
-    index: number | null;
+    selected: OtherUserAbstract | ChannelInfoType | null;
     friendList: OtherUserAbstract[];
     channelList: ChannelInfoType[];
-    role: "Owner" | "Admin" | "User" | null;
+    memberList: MemberDetail[];
   };
   changeType: (type: "DM" | "CM") => void;
-  changeId: (id: number | null) => Promise<void>;
-  updateList: (type: "DM" | "CM") => Promise<void>;
+  changeSelected: (_id: number | null) => Promise<void>;
+  //memeberList 업데이트
 }
 
 function useChatInfo(): ChatInfoRetType {
   const [type, setType] = useAtom(typeAtom);
-  const [id, setId] = useAtom(idAtom);
-  const [index, setIndex] = useAtom(indexAtom);
+  const [selected, setSelected] = useAtom(selectedAtom);
   const [friendList, setFriendList] = useAtom(friendListAtom);
   const [channelList, setChannelList] = useAtom(channelListAtom);
-  const [role, setRole] = useAtom(roleAtom);
+  const [memberList, setMemberList] = useAtom(memberListAtom);
 
   const changeType = (_type: "DM" | "CM") => {
-    setId(null);
-    setIndex(null);
     setType(_type);
+    changeSelected(null);
   };
 
-  const changeId = async (_id: number | null) => {
-    console.log(_id);
-    setId(_id);
-    if (_id == null) {
-      updateList(type);
+  const changeSelected = async (_id: number | null) => {
+    await updateInfo();
+    if (_id === null)
       return;
-    }
     if (type === "DM") {
-      setRole(null);
-      setIndex(friendList.findIndex((e) => e.id === _id));
-    } else {
+      const _idx = friendList.findIndex((e) => e.id === _id);
+      _idx === null ? setSelected(null) : setSelected(friendList[_idx]);
+    } else if (type === "CM") {
       const _idx = channelList.findIndex((e) => e.id === _id);
-      setIndex(_idx);
-      const ret = channelList[_idx];
-      if (ret.type !== "protected") {
-        if (ret.role === null) {
-          try {
-            await joinChannel(ret.id, "");
-            updateList("CM");
-          } catch (error) {
-            const axiosError = error as AxiosError;
-            toast.error(axiosError.response?.status);
-          }
-        }
-        setRole(ret.role);
-      }
+      _idx === null ? setSelected(null) : setSelected(channelList[_idx]);
+      
+      const chanData = (await getChannel(_id)).data;
+      setMemberList(chanData.users);
     }
   };
 
-  const updateList = async (_type: "DM" | "CM") => {
-    if (_type === "DM") {
-      try {
+  const updateInfo = async () => {
+    try {
+      if (type === "DM") {
         const myFriends = (await getFriendList()).data;
         setFriendList(myFriends);
-        console.log("myFriends: ",myFriends);
-      } catch (error) {
-        const axiosError = error as AxiosError;
-        toast.error(axiosError.response?.status);
-      }
-    } else {
-      try {
+        console.log("myFriends: ", myFriends);
+        setSelected(null);
+      } else if (type === "CM") {
         const allChan = (await getChannelList()).data;
         const myChan = (await getMyChannels()).data;
 
@@ -110,15 +91,15 @@ function useChatInfo(): ChatInfoRetType {
         const channelList = myChanExt.concat(allChanFlt);
         setChannelList(channelList);
         console.log(channelList);
-      } catch (error) {
-        const axiosError = error as AxiosError;
-        toast.error(axiosError.response?.status);
       }
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
     }
   };
 
-  const chatInfo = { type, id, index, friendList, channelList, role };
-  return { chatInfo, changeType, changeId, updateList };
+  const chatInfo = { type, selected, friendList, channelList, memberList };
+  return { chatInfo, changeType, changeSelected };
 }
 
 export type { ChannelInfoType, FriendInfoType };
