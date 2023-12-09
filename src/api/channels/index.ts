@@ -59,8 +59,7 @@ async function leaveChannel(channel_id: number) {
   return axios.delete(`/api/channels/${channel_id}`);
 }
 
-interface MyChannel {
-  channel: Channel;
+interface MyChannel extends Channel{
   role: "Owner" | "Admin" | "User";
 }
 
@@ -68,7 +67,7 @@ async function getMyChannels(): Promise<AxiosResponse<MyChannel[]>> {
   return axios.get("/api/channels/me");
 }
 
-export type { Channel, MyChannel, SpecificChannel, MemberAbstract };
+export type { Channel, MyChannel, SpecificChannel, MemberAbstract, MemberDetail};
 export {
   getChannelList,
   getChannel,
