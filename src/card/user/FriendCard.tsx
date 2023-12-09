@@ -22,7 +22,7 @@ export default function FriendCard({ friendList, setFriendList }: Props) {
   const onClickDelete = async (id: number) => {
     try {
       await deleteFriend(id);
-      setFriendList(friendList.filter((friend) => friend.otherUserId !== id));
+      setFriendList(friendList.filter((friend) => friend.otherUser.id !== id));
     } catch (error) {
       const axiosError = error as AxiosError;
       toast.error(axiosError.response?.status);
@@ -33,7 +33,7 @@ export default function FriendCard({ friendList, setFriendList }: Props) {
       await approveFriend(id);
       setFriendList(
         friendList.map((friend) => {
-          if (friend.otherUserId === id) friend.status = "friend";
+          if (friend.otherUser.id === id) friend.status = "friend";
           return friend;
         })
       );
@@ -45,7 +45,7 @@ export default function FriendCard({ friendList, setFriendList }: Props) {
   const onClickDeny = async (id: number) => {
     try {
       await denyFriend(id);
-      setFriendList(friendList.filter((friend) => friend.otherUserId !== id));
+      setFriendList(friendList.filter((friend) => friend.otherUser.id !== id));
     } catch (error) {
       const axiosError = error as AxiosError;
       toast.error(axiosError.response?.status);
