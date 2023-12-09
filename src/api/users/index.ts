@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 
 interface OtherUserAbstract {
-  otherUserId: number;
+  id: number;
   nickname: string;
 }
 

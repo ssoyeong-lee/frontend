@@ -53,6 +53,7 @@ function useChatInfo(): ChatInfoRetType {
   };
 
   const changeId = async (_id: number | null) => {
+    console.log(_id);
     setId(_id);
     if (_id == null) {
       updateList(type);
@@ -60,7 +61,7 @@ function useChatInfo(): ChatInfoRetType {
     }
     if (type === "DM") {
       setRole(null);
-      setIndex(friendList.findIndex((e) => e.otherUserId === _id));
+      setIndex(friendList.findIndex((e) => e.id === _id));
     } else {
       const _idx = channelList.findIndex((e) => e.id === _id);
       setIndex(_idx);
