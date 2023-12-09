@@ -1,6 +1,10 @@
-import { Block, getBlockList } from "@/api/users/block";
+import { getBlockList } from "@/api/users/block";
 import { Friend, getFriendRelationList } from "@/api/users/friend";
-import { UserAbstract, getUserList } from "@/api/users/index";
+import {
+  OtherUserAbstract,
+  UserAbstract,
+  getUserList,
+} from "@/api/users/index";
 import BlockCard from "@/card/user/BlockCard";
 import FriendCard from "@/card/user/FriendCard";
 import RankingCard from "@/card/user/RankingCard";
@@ -10,17 +14,24 @@ import FlexBox from "@/layouts/FlexBox";
 import TopNav from "@/layouts/TopNav";
 import { useEffect, useState } from "react";
 import sleep from "@/utils/sleep";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 export default function User() {
   const [userList, setUserList] = useState<UserAbstract[]>([]);
   const [friendList, setFriendList] = useState<Friend[]>([]);
-  const [blockList, setBlockList] = useState<Block[]>([]);
+  const [blockList, setBlockList] = useState<OtherUserAbstract[]>([]);
   const [isSearch, setIsSearch] = useState(false);
 
   useEffect(() => {
     const asyncFunc = async () => {
-      const res = await getUserList();
-      setUserList(res.data);
+      try {
+        const res = await getUserList();
+        setUserList(res.data);
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        toast.error(axiosError.response?.status);
+      }
     };
     asyncFunc();
   }, []);

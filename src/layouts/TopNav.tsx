@@ -8,6 +8,8 @@ import { useNoti } from "@/hooks/data/useNoti";
 import Alarm from "@/components/alarm/index";
 import NotificationDot from "@/components/NotificationDot";
 import { useMessage } from "@/hooks/data/useMessage";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 export default function TopNav() {
   const router = useRouter();
@@ -18,7 +20,7 @@ export default function TopNav() {
 
   const { openNotification } = useNotification();
   const { notiList } = useNoti();
-  const { DMData } = useMessage();
+  const { DMData, CMData } = useMessage();
   const onClickNotification = () => {
     openNotification(
       <div className="w-full max-h-[200px] px-2">
@@ -30,8 +32,13 @@ export default function TopNav() {
   };
 
   const onClickLogout = async () => {
-    await logout();
-    router.push("/login");
+    try {
+      await logout();
+      router.push("/login");
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
   };
 
   return (
@@ -59,8 +66,12 @@ export default function TopNav() {
           <div className="relative w-fit mx-auto">
             Chat
             {Object.values(DMData).reduce((acc, cur) => {
-              return acc + cur.unreadCount;
-            }, 0) > 0 && (
+              return acc + cur.unreadCount ?? 0;
+            }, 0) +
+              Object.values(CMData).reduce((acc, cur) => {
+                return acc + cur.unreadCount ?? 0;
+              }, 0) >
+              0 && (
               <NotificationDot
                 amount={-1}
                 className="absolute right-[-4px] bottom-[-4px]"

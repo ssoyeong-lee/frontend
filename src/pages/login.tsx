@@ -6,8 +6,10 @@ import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
 import connectSocket from "@/socket/connectSocket";
+import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const { setSocket } = useSocket();
@@ -16,17 +18,28 @@ export default function Login() {
   const onClickBtn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsClicked(true);
-    const res = await login(
-      window.location.protocol + "//" + window.location.host + "/register"
-    );
-    router.push(res.data?.data);
+    try {
+      const res = await login(
+        window.location.protocol + "//" + window.location.host + "/register"
+      );
+      router.push(res.data?.data);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
   };
 
   const onClickTest = async (num: number) => {
-    const res = await testLogin(num);
-    const socketInstance = connectSocket(res.data?.session);
-    setSocket(socketInstance);
-    router.push("/main");
+    try {
+      const res = await testLogin(num);
+      if (res.data?.session !== undefined && res.data?.session !== null) {
+        sessionStorage.setItem("session", res.data?.session);
+      }
+      router.push("/main");
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
   };
 
   return (

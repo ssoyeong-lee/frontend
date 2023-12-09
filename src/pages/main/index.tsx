@@ -5,14 +5,21 @@ import StatusCard from "@/card/main/StatusCard";
 import Container from "@/layouts/Container";
 import FlexBox from "@/layouts/FlexBox";
 import TopNav from "@/layouts/TopNav";
+import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Home() {
   const [user, setUser] = useState<UserDetail | null>(null);
   useEffect(() => {
     const asyncFunc = async () => {
-      const res = await getUserMe();
-      setUser(res.data);
+      try {
+        const res = await getUserMe();
+        setUser(res.data);
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        toast.error(axiosError.response?.status);
+      }
     };
     asyncFunc();
   }, []);

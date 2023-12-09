@@ -5,6 +5,8 @@ import { useState } from "react";
 import { joinChannel } from "@/api/channels";
 import { useModal } from "@/hooks/display/useModal";
 import useChatInfo from "@/hooks/data/useChatInfo";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 interface Props {
   id: number;
@@ -19,13 +21,16 @@ export default function PasswordModal({ id }: Props) {
   };
   const enterClick = async () => {
     console.log(password);
-    closeModal();
-    updateList("CM");
-    const ret = await joinChannel(id, password);
-    if (ret.status === 200)
+    try {
+      await joinChannel(id, password);
+      closeModal();
+      updateList("CM");
       changeId(id);
-    else
+    } catch (error) {
       changeId(null);
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
   };
   return (
     <FlexBox

@@ -6,7 +6,9 @@ import useChatInfo from "@/hooks/data/useChatInfo";
 import { useModal } from "@/hooks/display/useModal";
 import FlexBox from "@/layouts/FlexBox";
 import ModalCard from "@/layouts/ModalCard";
+import { AxiosError } from "axios";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function ChannelCreateModal() {
   const [title, setTitle] = useState("");
@@ -15,31 +17,33 @@ export default function ChannelCreateModal() {
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
-  const titleCheck = (value:string):string => {
-    if (value.length > 10)
-      return "too long";
+  const titleCheck = (value: string): string => {
+    if (value.length > 10) return "too long";
     return "";
-  }
+  };
   const typeChange = (type: string) => {
     setType(type);
   };
   const passwordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
-  const pwCheck = (value:string):string => {
-    if (value.length < 4)
-      return "too short";
-    else if (value.length > 10)
-      return "too long";
+  const pwCheck = (value: string): string => {
+    if (value.length < 4) return "too short";
+    else if (value.length > 10) return "too long";
     return "";
-  }
+  };
 
   const { closeModal } = useModal();
   const { updateList } = useChatInfo();
   const okClick = async () => {
-    await createChannel({ title, type, password });
-    closeModal();
-    updateList("CM");
+    try {
+      await createChannel({ title, type, password });
+      closeModal();
+      updateList("CM");
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
   };
 
   return (

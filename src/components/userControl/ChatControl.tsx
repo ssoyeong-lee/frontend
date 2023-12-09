@@ -4,7 +4,9 @@ import useChatInfo from "@/hooks/data/useChatInfo";
 import { useUserControl } from "@/hooks/display/useUserControl";
 import Divider from "@/layouts/Divider";
 import FlexBox from "@/layouts/FlexBox";
+import { AxiosError } from "axios";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 interface Props {
   id: number;
@@ -17,17 +19,38 @@ export default function ChatControl({ id }: Props) {
 
   const adminClick = async () => {
     console.log("adminClick");
-    if (chatInfo.id !== null) await giveAdmin(chatInfo.id, id);
+    if (chatInfo.id !== null) {
+      try {
+        await giveAdmin(chatInfo.id, id);
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        toast.error(axiosError.response?.status);
+      }
+    }
     closeUserControl();
   };
   const kickClick = async () => {
     console.log("kickClick");
-    if (chatInfo.id !== null) await kickMember(chatInfo.id, id);
+    if (chatInfo.id !== null) {
+      try {
+        await kickMember(chatInfo.id, id);
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        toast.error(axiosError.response?.status);
+      }
+    }
     closeUserControl();
   };
   const banClick = async () => {
     console.log("banClick");
-    if (chatInfo.id !== null) await banMember(chatInfo.id, id);
+    if (chatInfo.id !== null) {
+      try {
+        await banMember(chatInfo.id, id);
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        toast.error(axiosError.response?.status);
+      }
+    }
     closeUserControl();
   };
   const muteClick = async () => {

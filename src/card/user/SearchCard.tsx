@@ -6,7 +6,9 @@ import IconInput from "@/components/control/IconInput";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
+import { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 interface Props {
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
@@ -30,8 +32,13 @@ function SearchItem({
           color="green"
           className="w-[80px]"
           onClick={async () => {
-            setIsSearch(false);
-            await postRequestFriend(user.id);
+            try {
+              await postRequestFriend(user.id);
+              setIsSearch(false);
+            } catch (error) {
+              const axiosError = error as AxiosError;
+              toast.error(axiosError.response?.status);
+            }
           }}
         >
           invite
@@ -40,8 +47,13 @@ function SearchItem({
           color="red"
           className="w-[80px]"
           onClick={async () => {
-            setIsSearch(false);
-            await postBlock(user.id);
+            try {
+              await postBlock(user.id);
+              setIsSearch(false);
+            } catch (error) {
+              const axiosError = error as AxiosError;
+              toast.error(axiosError.response?.status);
+            }
           }}
         >
           block

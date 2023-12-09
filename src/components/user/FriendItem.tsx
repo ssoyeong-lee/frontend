@@ -10,13 +10,13 @@ interface Props {
 export default function FriendItem({ friend, onClickDelete }: Props) {
   return (
     <FlexBox className="w-full justify-between">
-      <div>{friend.nickname}</div>
+      <div>{friend.otherUser.nickname}</div>
       <FlexBox className="gap-4">
         <Icon
           src="/icon/delete.png"
           alt="check"
           className="w-[24px] h-[24px] cursor-pointer"
-          onClick={() => onClickDelete(friend.otherUserId)}
+          onClick={() => onClickDelete(friend.otherUser.id)}
         />
       </FlexBox>
     </FlexBox>

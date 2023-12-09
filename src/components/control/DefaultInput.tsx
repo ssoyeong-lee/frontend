@@ -38,12 +38,11 @@ export default forwardRef<HTMLInputElement, Props>(function DefaultInput(
   const borderColor =
     color === "white" ? "border-white" : "border-deepred-cyber";
 
-
   const [msg, setMsg] = useState("");
-  const inputChanged = (e:  React.ChangeEvent<HTMLInputElement>) => {
+  const inputChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange && onChange(e);
     checkValid && setMsg(checkValid(e.target.value));
-  }
+  };
   return (
     <FlexBox direction="col" className="w-full h-full items-end gap-1">
       <div className="w-full">

@@ -4,28 +4,37 @@ import { UserDetail } from "@/api/users";
 import useChatInfo from "@/hooks/data/useChatInfo";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
+import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function ChannelInfoModal() {
   const { chatInfo } = useChatInfo();
-
-  if (chatInfo.index === null) {
-    console.log("ChannelInfoModal(): chatInfo.index ===null");
-    return <></>;
-  }
-  const channel = chatInfo.channelList[chatInfo.index];
-
-  // const [memberList, setMemberList] = useState<Channel[]>([]);
   const [bannedList, setBannedList] = useState<UserDetail[]>([]);
 
   const getData = async () => {
     // const memberData = (await getChannel(channel.id)).data;
-    const bannedData = (await getBanMemberList(channel.id)).data;
-    setBannedList(bannedData);
+    if (chatInfo.index === null) return;
+    try {
+      const bannedData = (await getBanMemberList(channel.id)).data;
+      setBannedList(bannedData);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
   };
+
   useEffect(() => {
     getData();
   }, []);
+
+  if (chatInfo.index === null) {
+    console.log("ChannelInfoModal(): chatInfo.index === null");
+    return <></>;
+  }
+
+  const channel = chatInfo.channelList[chatInfo.index];
+  // const [memberList, setMemberList] = useState<Channel[]>([]);
 
   console.log(chatInfo);
   return (
@@ -77,8 +86,13 @@ export default function ChannelInfoModal() {
                       chatInfo.role === "Admin") && (
                       <button
                         onClick={async () => {
-                          await removeBanMember(channel.id, _mem.id);
-                          getData();
+                          try {
+                            await removeBanMember(channel.id, _mem.id);
+                            getData();
+                          } catch (error) {
+                            const axiosError = error as AxiosError;
+                            toast.error(axiosError.response?.status);
+                          }
                         }}
                         className="text-xs font-bold px-2 py-1 border-[1.5px] border-deepred-cyber hover:bg-deepred-cyber hover:text-black"
                       >
