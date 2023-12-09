@@ -31,8 +31,8 @@ function drawBar(
   ctx.fillRect(
     user.bar.x + 1,
     user.bar.y + 1,
-    user.bar.width - 1,
-    user.bar.height - 1
+    user.bar.width - 2,
+    user.bar.height - 2
   );
 }
 

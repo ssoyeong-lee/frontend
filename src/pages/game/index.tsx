@@ -48,7 +48,7 @@ export default function Game() {
         id="pongCanvas"
         width="100"
         height="200"
-        className="w-full h-full"
+        className="w-full h-full z-[999]"
       />
     </GameBoard>
   );
