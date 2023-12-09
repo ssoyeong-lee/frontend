@@ -40,7 +40,7 @@ function useSocket(): UseSocketType {
   const router = useRouter();
   const { openModal, closeModal } = useModal();
   const { setAuth } = useAuth();
-  const { setGameInfo, setGameStartInfo } = useGame();
+  const { setGameInfo, setGameStartInfo, setIsGameSearching } = useGame();
   const {
     setDM,
     setCM,
@@ -80,6 +80,7 @@ function useSocket(): UseSocketType {
             receiveChannelMember(socket, () => {});
             receiveNotification(socket, setNoti);
             receiveGameStart(socket, (data) => {
+              setIsGameSearching(false);
               setGameStartInfo(data);
               openModal(<MatchFoundModal info={data} />, true);
               sleep(3000).then(() => {
