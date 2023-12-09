@@ -19,14 +19,14 @@ export default function MatchEndModal({ info, onClick }: Props) {
             <div className="w-full text-2xl mb-4">{info.user.nickname}</div>
             <div className="w-full text-3xl">
               {info.user.ladderPoint +
-                (info.result === "win" ? -info.lpchange : info.lpchange)}
+                (info.result === "win" ? -info.lpChange : info.lpChange)}
               <span
                 className={
                   info.result === "win" ? "text-green-cyber" : "text-red-cyber"
                 }
               >
                 {info.result === "win" ? " + " : " - "}
-                {info.lpchange}
+                {info.lpChange}
               </span>
               {" LP"}
             </div>

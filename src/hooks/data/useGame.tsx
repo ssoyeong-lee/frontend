@@ -13,7 +13,7 @@ interface GameStart extends GameInfo {
 interface GameResult {
   id: number;
   result: "win" | "lose";
-  lpchange: number;
+  lpChange: number;
   user: UserAbstract;
   opponent: UserAbstract;
   userScore: number;
