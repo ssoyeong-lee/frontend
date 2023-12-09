@@ -1,5 +1,10 @@
 import axios, { AxiosResponse } from "axios";
 
+interface OtherUserAbstract {
+  otherUserId: number;
+  nickname: string;
+}
+
 interface UserAbstract {
   id: number;
   nickname: string;
@@ -32,5 +37,5 @@ async function getUser(id: number): Promise<AxiosResponse<UserDetail>> {
   return axios.get(`/api/users/${id}`);
 }
 
-export type { UserAbstract, UserDetail };
+export type { UserAbstract, UserDetail, OtherUserAbstract };
 export { getUserList, getUserMe, putUserMe, getUser };
