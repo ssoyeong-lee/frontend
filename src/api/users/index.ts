@@ -19,6 +19,15 @@ interface UserDetail extends UserAbstract {
   email: string;
   bio: string | null;
   is2fa?: boolean;
+  status?: "online" | "offline" | "ingame";
+  matchHistorys?: {
+    id: number;
+    result: "loss" | "win" | "draw";
+    userScore: number;
+    opponentScore: number;
+    lpChange: number;
+    playedAt: string;
+  }[];
 }
 
 async function getUserMe(): Promise<AxiosResponse<UserDetail>> {

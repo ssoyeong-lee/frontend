@@ -42,11 +42,11 @@ export default function Home() {
               <ProfileCard type="other" user={user} />
             </div>
             <div className="basis-2/3 h-full">
-              <StatusCard />
+              <StatusCard user={user} />
             </div>
           </FlexBox>
           <div className="w-full">
-            <HistoryCard />
+            <HistoryCard user={user} />
           </div>
         </FlexBox>
       </Container>

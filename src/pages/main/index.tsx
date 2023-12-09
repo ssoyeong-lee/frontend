@@ -34,11 +34,11 @@ export default function Home() {
               <ProfileCard type="me" user={user} setUser={setUser} />
             </div>
             <div className="basis-2/3 h-full">
-              <StatusCard />
+              <StatusCard user={user} />
             </div>
           </FlexBox>
           <div className="w-full h-full max-h-[calc(100%-340px-24px)]">
-            <HistoryCard />
+            <HistoryCard user={user} />
           </div>
         </FlexBox>
       </Container>
