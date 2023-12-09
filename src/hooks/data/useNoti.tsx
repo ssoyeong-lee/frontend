@@ -1,7 +1,7 @@
 import Toast from "@/components/toast/index";
-import { useToast } from "@/hooks/display/useToast";
 import { Notification, NotificationType } from "@/socket/notification";
 import { atom, useAtom } from "jotai";
+import { toast } from "react-toastify";
 
 const notiListAtom = atom<Notification<NotificationType>[]>([]);
 
@@ -13,11 +13,10 @@ interface UseNotiType {
 }
 
 function useNoti(): UseNotiType {
-  const { openToast } = useToast();
   const [notiList, setNotiList] = useAtom(notiListAtom);
   const setNoti = (notiData: Notification<NotificationType>) => {
     setNotiList((prev) => [...prev, notiData]);
-    openToast(<Toast noti={notiData} />);
+    toast.info(<Toast noti={notiData} />);
   };
   const removeNoti = (idx: number) => {
     setNotiList((prev) => prev.filter((_, i) => i !== idx));

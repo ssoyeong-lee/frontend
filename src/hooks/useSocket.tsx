@@ -1,15 +1,31 @@
 import { getUserMe } from "@/api/users/index";
+import MatchFoundModal from "@/components/modal/MatchFoundModal";
 import { useAuth } from "@/hooks/data/useAuth";
+import { useGame } from "@/hooks/data/useGame";
 import { useMessage } from "@/hooks/data/useMessage";
 import { useNoti } from "@/hooks/data/useNoti";
-import { receiveCM } from "@/socket/channelMessage";
+import { useModal } from "@/hooks/display/useModal";
+import {
+  receiveCM,
+  receiveChannelIn,
+  receiveChannelMember,
+  receiveChannelOut,
+} from "@/socket/channelMessage";
 import { receiveDM, receiveDMUnreadCount } from "@/socket/directMessage";
+import {
+  receiveGameInfo,
+  receiveGameResult,
+  receiveGameStart,
+} from "@/socket/game";
 import {
   receiveNotification,
   receiveNotificationList,
 } from "@/socket/notification";
+import sleep from "@/utils/sleep";
 import { atom, useAtom } from "jotai";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 import { Socket } from "socket.io-client";
 
 const socketAtom = atom<Socket>({} as Socket);
@@ -20,8 +36,17 @@ interface UseSocketType {
 }
 
 function useSocket(): UseSocketType {
+  const router = useRouter();
+  const { openModal } = useModal();
   const { setAuth } = useAuth();
-  const { setDM, setCM, setDMUnreadCount } = useMessage();
+  const { setGameInfo } = useGame();
+  const {
+    setDM,
+    setCM,
+    setDMUnreadCount,
+    increaseDMUnreadCount,
+    increaseCMUnreadCount,
+  } = useMessage();
   const { setNoti, setNotiList } = useNoti();
   const [socket, setSocket] = useAtom(socketAtom);
 
@@ -36,14 +61,37 @@ function useSocket(): UseSocketType {
             console.log(res.data.nickname + " authed");
             setAuth(res.data);
             receiveNotificationList(socket, setNotiList);
-            receiveDM(socket, (data) => setDM(data, res.data.id));
+            receiveDM(socket, (data) => {
+              setDM(data, res.data.id);
+              increaseDMUnreadCount(data.sender.id);
+            });
             receiveDMUnreadCount(socket, (data) => {
               for (const key in data) {
                 setDMUnreadCount(data[key].sender.id, data[key].count);
               }
             });
-            receiveCM(socket, setCM);
+            receiveCM(socket, (data) => {
+              setCM(data);
+              increaseCMUnreadCount(data.channel.id);
+            });
+            receiveChannelIn(socket, () => {});
+            receiveChannelOut(socket, () => {});
+            receiveChannelMember(socket, () => {});
             receiveNotification(socket, setNoti);
+            receiveGameStart(socket, (data) => {
+              openModal(<MatchFoundModal info={data} />);
+              sleep(3000).then(() => {
+                router.push(`/game`);
+              });
+            });
+            receiveGameResult(socket, (data) => {
+              sleep(3000).then(() => {
+                router.push(`/main`);
+              });
+            });
+            receiveGameInfo(socket, (data) => {
+              setGameInfo(data);
+            });
             console.log("set receive func finished");
           })
           .catch((err) => {
@@ -53,6 +101,8 @@ function useSocket(): UseSocketType {
       });
       s.on("disconnect", () => {
         console.log("socket disconnected");
+        toast.error("서버와의 연결이 끊어졌습니다.");
+        router.push("/login");
       });
       return s;
     });

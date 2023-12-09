@@ -1,18 +1,26 @@
-import { Block, deleteBlock } from "@/api/users/block";
+import { deleteBlock } from "@/api/users/block";
+import { OtherUserAbstract } from "@/api/users/index";
 import BlockItem from "@/components/user/BlockItem";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 interface Props {
-  blockList: Block[];
-  setBlockList: (blockList: Block[]) => void;
+  blockList: OtherUserAbstract[];
+  setBlockList: (blockList: OtherUserAbstract[]) => void;
 }
 
 export default function BlockCard({ blockList, setBlockList }: Props) {
   const onClickDelete = async (id: number) => {
-    await deleteBlock(id);
-    setBlockList(blockList.filter((block) => block.otherUserId !== id));
+    try {
+      await deleteBlock(id);
+      setBlockList(blockList.filter((block) => block.otherUserId !== id));
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
   };
   return (
     <Card>

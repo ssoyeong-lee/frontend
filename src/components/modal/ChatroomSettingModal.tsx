@@ -6,7 +6,9 @@ import useChatInfo from "@/hooks/data/useChatInfo";
 import { useModal } from "@/hooks/display/useModal";
 import FlexBox from "@/layouts/FlexBox";
 import ModalCard from "@/layouts/ModalCard";
+import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function ChatroomSettinngModal() {
   const [title, setTitle] = useState("");
@@ -19,11 +21,16 @@ export default function ChatroomSettinngModal() {
   useEffect(() => {
     const load = async () => {
       if (chatInfo.id === null) return;
-      const info = await getChannel(chatInfo.id);
-      setTitle(info.data.title);
-      setType(info.data.type);
-      setPassword("");
-      console.log(info.data);
+      try {
+        const info = await getChannel(chatInfo.id);
+        setTitle(info.data.title);
+        setType(info.data.type);
+        setPassword("");
+        console.log(info.data);
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        toast.error(axiosError.response?.status);
+      }
     };
     load();
   }, []);
@@ -31,24 +38,21 @@ export default function ChatroomSettinngModal() {
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
-  const titleCheck = (value:string):string => {
-    if (value.length > 10)
-      return "too long";
+  const titleCheck = (value: string): string => {
+    if (value.length > 10) return "too long";
     return "";
-  }
+  };
   const typeChange = (type: string) => {
     setType(type);
   };
   const passwordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
-  const pwCheck = (value:string):string => {
-    if (value.length < 4)
-      return "too short";
-    else if (value.length > 10)
-      return "too long";
+  const pwCheck = (value: string): string => {
+    if (value.length < 4) return "too short";
+    else if (value.length > 10) return "too long";
     return "";
-  }
+  };
 
   const okClick = () => {
     if (chatInfo.id === null) return;

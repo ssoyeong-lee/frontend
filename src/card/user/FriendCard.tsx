@@ -10,6 +10,8 @@ import PendingApprovalItem from "@/components/user/PendingApprovalItem";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 interface Props {
   friendList: Friend[];
@@ -18,21 +20,36 @@ interface Props {
 
 export default function FriendCard({ friendList, setFriendList }: Props) {
   const onClickDelete = async (id: number) => {
-    await deleteFriend(id);
-    setFriendList(friendList.filter((friend) => friend.otherUserId !== id));
+    try {
+      await deleteFriend(id);
+      setFriendList(friendList.filter((friend) => friend.otherUser.id !== id));
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
   };
   const onClickApprove = async (id: number) => {
-    await approveFriend(id);
-    setFriendList(
-      friendList.map((friend) => {
-        if (friend.otherUserId === id) friend.status = "friend";
-        return friend;
-      })
-    );
+    try {
+      await approveFriend(id);
+      setFriendList(
+        friendList.map((friend) => {
+          if (friend.otherUser.id === id) friend.status = "friend";
+          return friend;
+        })
+      );
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
   };
   const onClickDeny = async (id: number) => {
-    await denyFriend(id);
-    setFriendList(friendList.filter((friend) => friend.otherUserId !== id));
+    try {
+      await denyFriend(id);
+      setFriendList(friendList.filter((friend) => friend.otherUser.id !== id));
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
   };
 
   return (

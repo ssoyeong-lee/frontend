@@ -8,7 +8,9 @@ import useChatInfo from "@/hooks/data/useChatInfo";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
+import { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 interface Props {
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
@@ -24,7 +26,7 @@ function SearchItem({
   user: UserAbstract;
   setIsSearch: (isSearch: boolean) => void;
 }) {
-  const {chatInfo} = useChatInfo();
+  const { chatInfo } = useChatInfo();
   return (
     <FlexBox className="w-full px-4 py-2 justify-between">
       <div>{user.nickname}</div>
@@ -33,8 +35,13 @@ function SearchItem({
           color="green"
           className="w-[80px]"
           onClick={async () => {
-            setIsSearch(false);
-            chatInfo.id !== null && await inviteUser(chatInfo.id, user.id);
+            try {
+              chatInfo.id !== null && (await inviteUser(chatInfo.id, user.id));
+              setIsSearch(false);
+            } catch (error) {
+              const axiosError = error as AxiosError;
+              toast.error(axiosError.response?.status);
+            }
           }}
         >
           invite
@@ -50,7 +57,6 @@ export default function SearchCard({
   setIsSearch,
   onClick,
 }: Props) {
-
   const ref = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (isSearch) ref.current?.focus();

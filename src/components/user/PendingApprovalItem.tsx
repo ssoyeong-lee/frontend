@@ -16,19 +16,19 @@ export default function PendingApprovalItem({
 }: Props) {
   return (
     <FlexBox className="w-full justify-between">
-      <div>{friend.nickname}</div>
+      <div>{friend.otherUser.nickname}</div>
       <FlexBox className="gap-4">
         <Icon
           src="/icon/approve.png"
           alt="ap"
           className="w-[24px] h-[24px] cursor-pointer"
-          onClick={() => onClickApprove(friend.otherUserId)}
+          onClick={() => onClickApprove(friend.otherUser.id)}
         />
         <Icon
           src="/icon/deny.png"
           alt="deny"
           className="w-[24px] h-[24px] cursor-pointer"
-          onClick={() => onClickDeny(friend.otherUserId)}
+          onClick={() => onClickDeny(friend.otherUser.id)}
         />
       </FlexBox>
     </FlexBox>

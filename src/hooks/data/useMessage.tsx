@@ -17,6 +17,9 @@ interface UseMessageType {
   setCMList: (channelMessages: CM[], id: number) => void;
   setDMList: (directMessages: DM[], id: number) => void;
   setDMUnreadCount: (id: number, unreadCount: number) => void;
+  setCMUnreadCount: (id: number, unreadCount: number) => void;
+  increaseDMUnreadCount: (id: number) => void;
+  increaseCMUnreadCount: (id: number) => void;
 }
 
 function useMessage(): UseMessageType {
@@ -45,13 +48,14 @@ function useMessage(): UseMessageType {
     }
   };
   const setCM = (channelMessage: CM) => {
-    /*
-    const channelId = channelMessage.channelId;
+    const channelId = channelMessage.channel.id;
     setCMData((prev) => ({
       ...prev,
-      [channelId]: [...(prev[channelId] ?? []), channelMessage],
+      [channelId]: {
+        message: [...(prev[channelId]?.message ?? []), channelMessage],
+        unreadCount: prev[channelId]?.unreadCount ?? 0,
+      },
     }));
-    */
   };
   const setCMList = (channelMessages: CM[], id: number) => {
     setCMData((prev) => ({
@@ -71,7 +75,6 @@ function useMessage(): UseMessageType {
       },
     }));
   };
-
   const setDMUnreadCount = (id: number, unreadCount: number) => {
     setDMData((prev) => ({
       ...prev,
@@ -81,6 +84,34 @@ function useMessage(): UseMessageType {
       },
     }));
   };
+  const setCMUnreadCount = (id: number, unreadCount: number) => {
+    setCMData((prev) => ({
+      ...prev,
+      [id]: {
+        message: prev[id]?.message ?? [],
+        unreadCount: unreadCount,
+      },
+    }));
+  };
+  const increaseDMUnreadCount = (id: number) => {
+    setDMData((prev) => ({
+      ...prev,
+      [id]: {
+        message: prev[id]?.message ?? [],
+        unreadCount: prev[id]?.unreadCount + 1 ?? 1,
+      },
+    }));
+  };
+  const increaseCMUnreadCount = (id: number) => {
+    setCMData((prev) => ({
+      ...prev,
+      [id]: {
+        message: prev[id]?.message ?? [],
+        unreadCount: prev[id]?.unreadCount + 1 ?? 1,
+      },
+    }));
+  };
+
   return {
     DMData,
     CMData,
@@ -89,6 +120,9 @@ function useMessage(): UseMessageType {
     setCMList,
     setDMList,
     setDMUnreadCount,
+    setCMUnreadCount,
+    increaseDMUnreadCount,
+    increaseCMUnreadCount,
   };
 }
 

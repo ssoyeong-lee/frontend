@@ -1,12 +1,16 @@
+import { TFAOff, TFASetup } from "@/api/auth/2fa";
 import { UserDetail, putUserMe } from "@/api/users/index";
 import Avatar, { avatarObj } from "@/components/Avatar";
 import ChipButton from "@/components/button/ChipButton";
 import DefaultInput from "@/components/control/DefaultInput";
 import AvatarModal from "@/components/modal/AvatarModal";
+import TFAModal from "@/components/modal/TFAModal";
 import { useModal } from "@/hooks/display/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
-import { Dispatch, SetStateAction } from "react";
+import { AxiosError } from "axios";
+import { Dispatch, SetStateAction, useState } from "react";
+import { toast } from "react-toastify";
 
 interface Props {
   user: UserDetail | null;
@@ -15,6 +19,7 @@ interface Props {
 }
 
 export default function ProfileCard({ type, user, setUser }: Props) {
+  const [onMouse, setOnMouse] = useState<boolean>(false);
   const { openModal, closeModal } = useModal();
   const onChange = (key: keyof UserDetail, value: any) => {
     if (!setUser || !user) return;
@@ -37,10 +42,29 @@ export default function ProfileCard({ type, user, setUser }: Props) {
     if (!setUser || !user) return;
     openModal(<AvatarModal onClick={onCloseAvatar} />);
   };
-  const onClickTwoFactor = () => {};
+  const onClickTwoFactor = async () => {
+    if (!setUser || !user) return;
+    try {
+      if (user?.is2fa) {
+        await TFAOff();
+        setUser((prev: UserDetail | null) => {
+          if (!prev) return null;
+          return { ...prev, is2fa: false };
+        });
+      } else openModal(<TFAModal />);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
+  };
   const onBlur = async () => {
     if (!user) return;
-    await putUserMe(user);
+    try {
+      await putUserMe(user);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
   };
 
   return (
@@ -92,7 +116,15 @@ export default function ProfileCard({ type, user, setUser }: Props) {
             />
             <FlexBox className="w-full justify-between">
               <div className="font-bold">2 factor auth</div>
-              <ChipButton color="white">OFF</ChipButton>
+              <ChipButton
+                color={user?.is2fa ? "white-contain" : "white"}
+                onClick={onClickTwoFactor}
+                onMouseEnter={() => setOnMouse(true)}
+                onMouseLeave={() => setOnMouse(false)}
+                className="w-16"
+              >
+                {user?.is2fa !== onMouse ? "ON" : "OFF"}
+              </ChipButton>
             </FlexBox>
           </>
         )}

@@ -1,12 +1,15 @@
+import { OtherUserAbstract } from "@/api/users/index";
 import axios, { AxiosResponse } from "axios";
 
 interface Friend {
-  nickname: string;
-  otherUserId: number;
+  otherUser: {
+    id: number;
+    nickname: string;
+  };
   status: "friend" | "pendingApproval" | "friendRequest";
 }
 
-async function getFriendList(): Promise<AxiosResponse<Friend[]>> {
+async function getFriendList(): Promise<AxiosResponse<OtherUserAbstract[]>> {
   return axios.get("/api/user-relation/friends");
 }
 

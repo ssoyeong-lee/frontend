@@ -50,7 +50,7 @@ function receiveDMUnreadCount(
   callback: (res: DMUnread[]) => void
 ) {
   socket.emit("DM-unread-count", (res: DMUnread[]) => {
-    console.log(res);
+    console.log("DM-unread-count", res);
     callback(res);
   });
 }

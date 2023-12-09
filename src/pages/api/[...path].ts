@@ -29,8 +29,8 @@ export default async function handler(
   console.info();
 
   try {
-    //if (url.includes("/auth/user-redirect") || url.includes("/auth/login"))
-    //  req.headers.cookie = "";
+    if (url.includes("/auth/user-redirect") || url.includes("/auth/login"))
+      req.headers.cookie = "";
     const requestToServer: AxiosRequestConfig = {
       url: url,
       method: req.method as any,

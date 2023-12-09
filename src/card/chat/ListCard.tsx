@@ -14,7 +14,7 @@ import { useEffect } from "react";
 export default function ListCard() {
   const { openModal } = useModal();
   const { chatInfo, changeType, updateList } = useChatInfo();
-  const { DMData } = useMessage();
+  const { DMData, CMData } = useMessage();
 
   const createClick = () => {
     openModal(<ChannelCreateModal />);
@@ -61,6 +61,7 @@ export default function ListCard() {
                         data={channel}
                         isSelected={channel.id === chatInfo.id ? true : false}
                         isJoined={channel.role !== null ? true : false}
+                        notiCount={CMData[channel.id]?.unreadCount ?? 0}
                       />
                     );
                 })}

@@ -5,7 +5,7 @@ import Icon from "@/layouts/Icon";
 export default function FriendRequestItem({ friend }: { friend: Friend }) {
   return (
     <FlexBox className="w-full justify-between">
-      <div>{friend.nickname}</div>
+      <div>{friend.otherUser.nickname}</div>
       <FlexBox className="gap-4">
         <Icon
           src="/icon/pending.png"
