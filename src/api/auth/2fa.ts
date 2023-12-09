@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-export function TFASetup(): Promise<AxiosResponse<{ otpauthurl: string }>> {
+export function TFASetup(): Promise<AxiosResponse<{ qrimgurl: string }>> {
   return axios.post("/api/auth/2fa/setup", {});
 }
 
