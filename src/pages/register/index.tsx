@@ -1,9 +1,7 @@
 import { userRedirect } from "@/api/auth/login";
-import { useSocket } from "@/hooks/useSocket";
 import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
-import connectSocket from "@/socket/connectSocket";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -11,7 +9,6 @@ import { toast } from "react-toastify";
 
 export default function Register() {
   const router = useRouter();
-  const { setSocket } = useSocket();
 
   useEffect(() => {
     const asyncFunc = async () => {
@@ -24,8 +21,9 @@ export default function Register() {
             state as string,
             window.location.protocol + "//" + window.location.host + "/register"
           );
-          const socketInstance = connectSocket(res.data?.session);
-          setSocket(socketInstance);
+          if (res.data?.session !== undefined && res.data?.session !== null) {
+            sessionStorage.setItem("session", res.data?.session);
+          }
           if (res.data?.redirect === "home") {
             router.push("/main");
           } else if (res.data?.redirect === "register") {

@@ -32,8 +32,9 @@ export default function Login() {
   const onClickTest = async (num: number) => {
     try {
       const res = await testLogin(num);
-      const socketInstance = connectSocket(res.data?.session);
-      setSocket(socketInstance);
+      if (res.data?.session !== undefined && res.data?.session !== null) {
+        sessionStorage.setItem("session", res.data?.session);
+      }
       router.push("/main");
     } catch (error) {
       const axiosError = error as AxiosError;
