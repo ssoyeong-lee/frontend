@@ -1,7 +1,10 @@
 import { getUserMe } from "@/api/users/index";
+import MatchFoundModal from "@/components/modal/MatchFoundModal";
 import { useAuth } from "@/hooks/data/useAuth";
+import { useGame } from "@/hooks/data/useGame";
 import { useMessage } from "@/hooks/data/useMessage";
 import { useNoti } from "@/hooks/data/useNoti";
+import { useModal } from "@/hooks/display/useModal";
 import {
   receiveCM,
   receiveChannelIn,
@@ -18,6 +21,7 @@ import {
   receiveNotification,
   receiveNotificationList,
 } from "@/socket/notification";
+import sleep from "@/utils/sleep";
 import { atom, useAtom } from "jotai";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -32,8 +36,10 @@ interface UseSocketType {
 }
 
 function useSocket(): UseSocketType {
-  const { setAuth } = useAuth();
   const router = useRouter();
+  const { openModal } = useModal();
+  const { setAuth } = useAuth();
+  const { setGameInfo } = useGame();
   const {
     setDM,
     setCM,
@@ -73,13 +79,19 @@ function useSocket(): UseSocketType {
             receiveChannelMember(socket, () => {});
             receiveNotification(socket, setNoti);
             receiveGameStart(socket, (data) => {
-              router.push(`/game`);
+              openModal(<MatchFoundModal info={data} />);
+              sleep(3000).then(() => {
+                router.push(`/game`);
+              });
             });
             receiveGameResult(socket, (data) => {
-              router.push(`/main`);
+              sleep(3000).then(() => {
+                router.push(`/main`);
+              });
             });
-            receiveGameInfo(socket, (data) => {});
-
+            receiveGameInfo(socket, (data) => {
+              setGameInfo(data);
+            });
             console.log("set receive func finished");
           })
           .catch((err) => {

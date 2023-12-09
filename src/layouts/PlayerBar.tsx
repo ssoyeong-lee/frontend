@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { GameUserInfo } from "@/hooks/data/useGame";
 
 interface Props {
   who?: "me" | "opponent";
-  where?: number;
+  info?: GameUserInfo;
 }
 
-export default function PlayerBar({ who, where }: Props) {
+export default function PlayerBar({ who, info }: Props) {
   let barStyle = {
-    left: `${where}%`,
+    left: `${info?.bar.x}%`,
   };
   return (
     <div

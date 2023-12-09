@@ -1,4 +1,4 @@
-import { enterQueue, leaveQueue } from "@/api/game/index";
+import { enterQueue, leaveQueue } from "@/api/games/index";
 import HowToPlayCard from "@/card/play/HowToPlayCard";
 import OptionCard from "@/card/play/OptionCard";
 import GameLoader from "@/components/GameLoader";
