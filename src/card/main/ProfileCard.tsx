@@ -1,4 +1,4 @@
-import { TFASetup } from "@/api/auth/2fa";
+import { TFAOff, TFASetup } from "@/api/auth/2fa";
 import { UserDetail, putUserMe } from "@/api/users/index";
 import Avatar, { avatarObj } from "@/components/Avatar";
 import ChipButton from "@/components/button/ChipButton";
@@ -9,7 +9,7 @@ import { useModal } from "@/hooks/display/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import { AxiosError } from "axios";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
 
 interface Props {
@@ -19,6 +19,7 @@ interface Props {
 }
 
 export default function ProfileCard({ type, user, setUser }: Props) {
+  const [onMouse, setOnMouse] = useState<boolean>(false);
   const { openModal, closeModal } = useModal();
   const onChange = (key: keyof UserDetail, value: any) => {
     if (!setUser || !user) return;
@@ -42,7 +43,19 @@ export default function ProfileCard({ type, user, setUser }: Props) {
     openModal(<AvatarModal onClick={onCloseAvatar} />);
   };
   const onClickTwoFactor = async () => {
-    openModal(<TFAModal />);
+    if (!setUser || !user) return;
+    try {
+      if (user?.is2fa) {
+        await TFAOff();
+        setUser((prev: UserDetail | null) => {
+          if (!prev) return null;
+          return { ...prev, is2fa: false };
+        });
+      } else openModal(<TFAModal />);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
   };
   const onBlur = async () => {
     if (!user) return;
@@ -103,8 +116,14 @@ export default function ProfileCard({ type, user, setUser }: Props) {
             />
             <FlexBox className="w-full justify-between">
               <div className="font-bold">2 factor auth</div>
-              <ChipButton color="white" onClick={onClickTwoFactor}>
-                {user?.is2fa ? "ON" : "OFF"}
+              <ChipButton
+                color={user?.is2fa ? "white-contain" : "white"}
+                onClick={onClickTwoFactor}
+                onMouseEnter={() => setOnMouse(true)}
+                onMouseLeave={() => setOnMouse(false)}
+                className="w-16"
+              >
+                {user?.is2fa !== onMouse ? "ON" : "OFF"}
               </ChipButton>
             </FlexBox>
           </>
