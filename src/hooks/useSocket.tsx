@@ -14,7 +14,9 @@ import {
   receiveNotificationList,
 } from "@/socket/notification";
 import { atom, useAtom } from "jotai";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 import { Socket } from "socket.io-client";
 
 const socketAtom = atom<Socket>({} as Socket);
@@ -26,6 +28,7 @@ interface UseSocketType {
 
 function useSocket(): UseSocketType {
   const { setAuth } = useAuth();
+  const router = useRouter();
   const {
     setDM,
     setCM,
@@ -73,6 +76,8 @@ function useSocket(): UseSocketType {
       });
       s.on("disconnect", () => {
         console.log("socket disconnected");
+        toast.error("서버와의 연결이 끊어졌습니다.");
+        router.push("/login");
       });
       return s;
     });
