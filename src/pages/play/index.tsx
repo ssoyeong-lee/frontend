@@ -3,6 +3,7 @@ import HowToPlayCard from "@/card/play/HowToPlayCard";
 import OptionCard from "@/card/play/OptionCard";
 import GameLoader from "@/components/GameLoader";
 import GameButton from "@/components/button/GameButton";
+import { useGame } from "@/hooks/data/useGame";
 import Container from "@/layouts/Container";
 import FlexBox from "@/layouts/FlexBox";
 import TopNav from "@/layouts/TopNav";
@@ -16,19 +17,20 @@ export interface Option {
 }
 
 export default function Play() {
-  const [isFinding, setIsFinding] = useState(false);
+  const { isGameSearching, setIsGameSearching } = useGame();
   const [option, setOption] = useState<Option>({
     speed: "normal",
     mode: "standard",
   });
   const onClick = async () => {
     try {
-      if (isFinding) {
+      if (isGameSearching) {
         await leaveQueue();
+        setIsGameSearching(false);
       } else {
         await enterQueue();
+        setIsGameSearching(true);
       }
-      setIsFinding((prev) => !prev);
     } catch (error) {
       const axiosError = error as AxiosError;
       toast.error(axiosError.response?.status);
@@ -46,8 +48,8 @@ export default function Play() {
             <div className="h-fit w-full">
               <OptionCard option={option} setOption={setOption} />
             </div>
-            <GameButton isFinding={isFinding} onClick={onClick} />
-            {isFinding && <GameLoader />}
+            <GameButton isFinding={isGameSearching} onClick={onClick} />
+            {isGameSearching && <GameLoader />}
           </FlexBox>
         </FlexBox>
       </Container>

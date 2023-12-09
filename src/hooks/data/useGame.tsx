@@ -45,8 +45,11 @@ interface GameInfo {
 
 const gameInfoAtom = atom<GameInfo | null>(null);
 const gameStartInfoAtom = atom<GameStart | null>(null);
+const isGameSearchingAtom = atom<boolean>(false);
 
 interface UseGameType {
+  isGameSearching: boolean;
+  setIsGameSearching: (isGameSearching: boolean) => void;
   gameInfo: GameInfo | null;
   setGameInfo: (gameInfo: GameInfo) => void;
   gameStartInfo: GameStart | null;
@@ -56,6 +59,8 @@ interface UseGameType {
 function useGame(): UseGameType {
   const [gameInfo, setGameInfoAtom] = useAtom(gameInfoAtom);
   const [gameStartInfo, setGameStartInfoAtom] = useAtom(gameStartInfoAtom);
+  const [isGameSearching, setIsGameSearchingAtom] =
+    useAtom(isGameSearchingAtom);
 
   const setGameInfo = (gameInfo: GameInfo) => {
     setGameInfoAtom(gameInfo);
@@ -63,12 +68,17 @@ function useGame(): UseGameType {
   const setGameStartInfo = (gameStartInfo: GameStart) => {
     setGameStartInfoAtom(gameStartInfo);
   };
+  const setIsGameSearching = (isGameSearching: boolean) => {
+    setIsGameSearchingAtom(isGameSearching);
+  };
 
   return {
     gameInfo,
     setGameInfo,
     gameStartInfo,
     setGameStartInfo,
+    isGameSearching,
+    setIsGameSearching,
   };
 }
 
