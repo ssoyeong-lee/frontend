@@ -40,22 +40,31 @@ interface GameInfo {
 }
 
 const gameInfoAtom = atom<GameInfo | null>(null);
+const gameStartInfoAtom = atom<GameStart | null>(null);
 
 interface UseGameType {
   gameInfo: GameInfo | null;
   setGameInfo: (gameInfo: GameInfo) => void;
+  gameStartInfo: GameStart | null;
+  setGameStartInfo: (gameStartInfo: GameStart) => void;
 }
 
 function useGame(): UseGameType {
   const [gameInfo, setGameInfoAtom] = useAtom(gameInfoAtom);
+  const [gameStartInfo, setGameStartInfoAtom] = useAtom(gameStartInfoAtom);
 
   const setGameInfo = (gameInfo: GameInfo) => {
     setGameInfoAtom(gameInfo);
+  };
+  const setGameStartInfo = (gameStartInfo: GameStart) => {
+    setGameStartInfoAtom(gameStartInfo);
   };
 
   return {
     gameInfo,
     setGameInfo,
+    gameStartInfo,
+    setGameStartInfo,
   };
 }
 

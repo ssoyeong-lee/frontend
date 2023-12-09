@@ -1,4 +1,5 @@
 import { getUserMe } from "@/api/users/index";
+import MatchEndModal from "@/components/modal/MatchEndModal";
 import MatchFoundModal from "@/components/modal/MatchFoundModal";
 import { useAuth } from "@/hooks/data/useAuth";
 import { useGame } from "@/hooks/data/useGame";
@@ -37,9 +38,9 @@ interface UseSocketType {
 
 function useSocket(): UseSocketType {
   const router = useRouter();
-  const { openModal } = useModal();
+  const { openModal, closeModal } = useModal();
   const { setAuth } = useAuth();
-  const { setGameInfo } = useGame();
+  const { setGameInfo, setGameStartInfo } = useGame();
   const {
     setDM,
     setCM,
@@ -79,15 +80,24 @@ function useSocket(): UseSocketType {
             receiveChannelMember(socket, () => {});
             receiveNotification(socket, setNoti);
             receiveGameStart(socket, (data) => {
-              openModal(<MatchFoundModal info={data} />);
+              setGameStartInfo(data);
+              openModal(<MatchFoundModal info={data} />, true);
               sleep(3000).then(() => {
+                closeModal();
                 router.push(`/game`);
               });
             });
             receiveGameResult(socket, (data) => {
-              sleep(3000).then(() => {
-                router.push(`/main`);
-              });
+              openModal(
+                <MatchEndModal
+                  info={data}
+                  onClick={() => {
+                    closeModal();
+                    router.push(`/main`);
+                  }}
+                />,
+                true
+              );
             });
             receiveGameInfo(socket, (data) => {
               setGameInfo(data);
