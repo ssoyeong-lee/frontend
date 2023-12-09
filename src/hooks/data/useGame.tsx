@@ -4,6 +4,10 @@ import { atom, useAtom } from "jotai";
 interface GameStart extends GameInfo {
   me: GameUserInfo & { info: UserAbstract };
   oppense: GameUserInfo & { info: UserAbstract };
+  canvasHeight: number;
+  canvasWidth: number;
+  barHeight: number;
+  barWidth: number;
 }
 
 interface GameResult {

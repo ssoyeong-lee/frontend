@@ -1,18 +1,22 @@
-import { GameBallInfo, GameInfo, GameUserInfo } from "@/hooks/data/useGame";
+import {
+  GameBallInfo,
+  GameInfo,
+  GameStart,
+  GameUserInfo,
+} from "@/hooks/data/useGame";
 
 function draw(
   ctx: CanvasRenderingContext2D,
-  width: number,
-  height: number,
+  startInfo: GameStart,
   info: GameInfo
 ) {
-  ctx.clearRect(0, 0, width, height);
+  ctx.clearRect(0, 0, startInfo.canvasWidth, startInfo.canvasHeight);
 
   drawBar(ctx, info.me, "me");
   drawBar(ctx, info.oppense, "oppense");
   drawBall(ctx, info.ball);
 
-  requestAnimationFrame(() => draw(ctx, width, height, info));
+  requestAnimationFrame(() => draw(ctx, startInfo, info));
 }
 
 function drawBar(
