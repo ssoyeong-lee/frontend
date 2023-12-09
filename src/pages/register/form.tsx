@@ -3,7 +3,7 @@ import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
 import TextBox from "@/layouts/TextBox";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-toastify";

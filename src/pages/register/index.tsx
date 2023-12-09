@@ -28,6 +28,8 @@ export default function Register() {
             router.push("/main");
           } else if (res.data?.redirect === "register") {
             router.push("/register/form");
+          } else if (res.data?.redirect === "2fa") {
+            router.push("/register/2fa");
           }
         } catch (error) {
           const axiosError = error as AxiosError;
