@@ -9,18 +9,14 @@ interface UserAbstract {
   id: number;
   nickname: string;
   ladderPoint: number;
-  avatar: string;
+  avatar: 0 | 1 | 2 | 3 | 4;
 }
 async function getUserList(): Promise<AxiosResponse<UserAbstract[]>> {
   return axios.get("/api/users");
 }
 
-interface UserDetail {
-  id: number;
+interface UserDetail extends UserAbstract {
   email: string;
-  nickname: string;
-  ladderPoint: number;
-  avatar: 0 | 1 | 2 | 3 | 4;
   bio: string | null;
   is2fa?: boolean;
 }

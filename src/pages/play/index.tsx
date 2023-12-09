@@ -1,3 +1,4 @@
+import { enterQueue, leaveQueue } from "@/api/game/index";
 import HowToPlayCard from "@/card/play/HowToPlayCard";
 import OptionCard from "@/card/play/OptionCard";
 import GameLoader from "@/components/GameLoader";
@@ -5,7 +6,9 @@ import GameButton from "@/components/button/GameButton";
 import Container from "@/layouts/Container";
 import FlexBox from "@/layouts/FlexBox";
 import TopNav from "@/layouts/TopNav";
+import { AxiosError } from "axios";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export interface Option {
   speed: "normal" | "fast";
@@ -18,8 +21,18 @@ export default function Play() {
     speed: "normal",
     mode: "standard",
   });
-  const onClick = () => {
-    setIsFinding((prev) => !prev);
+  const onClick = async () => {
+    try {
+      if (isFinding) {
+        await leaveQueue();
+      } else {
+        await enterQueue();
+      }
+      setIsFinding((prev) => !prev);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
   };
   return (
     <>

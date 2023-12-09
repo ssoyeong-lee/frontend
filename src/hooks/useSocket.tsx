@@ -10,6 +10,11 @@ import {
 } from "@/socket/channelMessage";
 import { receiveDM, receiveDMUnreadCount } from "@/socket/directMessage";
 import {
+  receiveGameInfo,
+  receiveGameResult,
+  receiveGameStart,
+} from "@/socket/game";
+import {
   receiveNotification,
   receiveNotificationList,
 } from "@/socket/notification";
@@ -67,6 +72,14 @@ function useSocket(): UseSocketType {
             receiveChannelOut(socket, () => {});
             receiveChannelMember(socket, () => {});
             receiveNotification(socket, setNoti);
+            receiveGameStart(socket, (data) => {
+              router.push(`/game`);
+            });
+            receiveGameResult(socket, (data) => {
+              router.push(`/main`);
+            });
+            receiveGameInfo(socket, (data) => {});
+
             console.log("set receive func finished");
           })
           .catch((err) => {
