@@ -1,6 +1,7 @@
 import { atom, useAtom } from "jotai";
 import {
   Channel,
+  MyChannel,
   getChannelList,
   getMyChannels,
   joinChannel,
@@ -8,6 +9,7 @@ import {
 import { getFriendList, Friend } from "@/api/users/friend";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import { OtherUserAbstract } from "@/api/users";
 
 interface FriendInfoType extends Friend {}
 
@@ -18,7 +20,7 @@ interface ChannelInfoType extends Channel {
 const typeAtom = atom<"DM" | "CM">("DM");
 const idAtom = atom<number | null>(null);
 const indexAtom = atom<number | null>(null);
-const friendListAtom = atom<FriendInfoType[]>([]);
+const friendListAtom = atom<OtherUserAbstract[]>([]);
 const channelListAtom = atom<ChannelInfoType[]>([]);
 const roleAtom = atom<"Owner" | "Admin" | "User" | null>(null);
 
@@ -27,7 +29,7 @@ interface ChatInfoRetType {
     type: "DM" | "CM";
     id: number | null;
     index: number | null;
-    friendList: FriendInfoType[];
+    friendList: OtherUserAbstract[];
     channelList: ChannelInfoType[];
     role: "Owner" | "Admin" | "User" | null;
   };
@@ -83,7 +85,7 @@ function useChatInfo(): ChatInfoRetType {
       try {
         const myFriends = (await getFriendList()).data;
         setFriendList(myFriends);
-        console.log(myFriends);
+        console.log("myFriends: ",myFriends);
       } catch (error) {
         const axiosError = error as AxiosError;
         toast.error(axiosError.response?.status);
@@ -95,12 +97,12 @@ function useChatInfo(): ChatInfoRetType {
 
         const allChanExt = allChan.map((_chan) => {
           const ret: ChannelInfoType = { ..._chan, role: null };
-          const idx = myChan.findIndex((elem) => elem.channel.id === ret.id);
+          const idx = myChan.findIndex((elem) => elem.id === ret.id);
           if (idx !== -1) ret.role = myChan[idx].role;
           return ret;
         });
         const myChanExt = myChan.map((_chan) => {
-          const ret: ChannelInfoType = { ..._chan.channel, role: _chan.role };
+          const ret: ChannelInfoType = { ..._chan, role: _chan.role };
           return ret;
         });
         const allChanFlt = allChanExt.filter((_chan) => _chan.role === null);
