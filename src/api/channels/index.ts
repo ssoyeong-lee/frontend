@@ -4,14 +4,27 @@ interface Channel {
   id: number;
   title: string;
   type: "public" | "protected" | "private";
-  password?: string;
 }
 
 async function getChannelList(): Promise<AxiosResponse<Channel[]>> {
   return axios.get("/api/channels");
 }
 
-async function getChannel(channel_id: number): Promise<AxiosResponse<Channel>> {
+interface MemberAbstract {
+  id: number;
+  nickname: string;
+}
+interface MemberDetail extends MemberAbstract {
+  role: "Owner" | "Admin" | "User";
+}
+
+interface SpecificChannel extends Channel {
+  users: MemberDetail[];
+}
+
+async function getChannel(
+  channel_id: number
+): Promise<AxiosResponse<SpecificChannel>> {
   return axios.get(`/api/channels/${channel_id}`);
 }
 
@@ -46,8 +59,7 @@ async function leaveChannel(channel_id: number) {
   return axios.delete(`/api/channels/${channel_id}`);
 }
 
-interface MyChannel {
-  channel: Channel;
+interface MyChannel extends Channel{
   role: "Owner" | "Admin" | "User";
 }
 
@@ -55,7 +67,7 @@ async function getMyChannels(): Promise<AxiosResponse<MyChannel[]>> {
   return axios.get("/api/channels/me");
 }
 
-export type { Channel, MyChannel };
+export type { Channel, MyChannel, SpecificChannel, MemberAbstract, MemberDetail};
 export {
   getChannelList,
   getChannel,

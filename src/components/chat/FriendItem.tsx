@@ -1,12 +1,15 @@
+import { OtherUserAbstract } from "@/api/users";
 import NotificationDot from "@/components/NotificationDot";
 import useChatInfo, { FriendInfoType } from "@/hooks/data/useChatInfo";
 import { useMessage } from "@/hooks/data/useMessage";
 import { useSocket } from "@/hooks/useSocket";
 import FlexBox from "@/layouts/FlexBox";
 import { sendDMRead } from "@/socket/directMessage";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 interface Props {
-  data: FriendInfoType;
+  data: OtherUserAbstract;
   isSelected?: boolean;
   notiCount?: number;
 }
@@ -16,9 +19,15 @@ export default function FriendItem({ data, isSelected, notiCount = 0 }: Props) {
   const { changeId } = useChatInfo();
   const { setDMUnreadCount } = useMessage();
   const itemClick = async () => {
-    changeId(data.otherUserId);
-    sendDMRead(socket, data.otherUserId);
-    setDMUnreadCount(data.otherUserId, 0);
+    try {
+      console.log("data:", data);
+      await changeId(data.id);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
+    sendDMRead(socket, data.id);
+    setDMUnreadCount(data.id, 0);
   };
   return (
     <FlexBox
