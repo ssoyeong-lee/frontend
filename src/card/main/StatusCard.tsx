@@ -39,11 +39,11 @@ function CoinDisplay({ title, content, color }: CoinDisplayProps) {
 }
 
 export default function StatusCard({ user }: { user: UserDetail | null }) {
-  const win =
-    user?.matchHistorys?.map((history) => history.result === "win").length ?? 0;
-  const lose =
-    user?.matchHistorys?.map((history) => history.result === "loss").length ??
-    0;
+  let win = 0;
+  let lose = 0;
+  user?.matchHistorys?.forEach((history) =>
+    history.result === "win" ? win++ : lose++
+  );
   let rank: "S" | "A" | "B" | "C" | "D" | "E" | "F" = "F";
   if (user?.ladderPoint !== undefined) {
     if (user?.ladderPoint >= 2000) rank = "S";
@@ -66,7 +66,7 @@ export default function StatusCard({ user }: { user: UserDetail | null }) {
           <CoinDisplay title="Lose" content={lose} color="red" />
           <CoinDisplay
             title="Win Rate"
-            content={(win * 100) / (win + lose) + "%"}
+            content={Math.floor((win * 100) / (win + lose)) + "%"}
             color="green"
           />
         </FlexBox>
