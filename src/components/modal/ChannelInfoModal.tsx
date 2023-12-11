@@ -1,42 +1,42 @@
-import { Channel, getChannel } from "@/api/channels";
+import { MemberAbstract, MemberDetail, getChannel } from "@/api/channels";
 import { getBanMemberList, removeBanMember } from "@/api/channels/operate";
-import { UserDetail } from "@/api/users";
 import useChatInfo from "@/hooks/data/useChatInfo";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export default function ChannelInfoModal() {
   const { chatInfo } = useChatInfo();
-  const [bannedList, setBannedList] = useState<UserDetail[]>([]);
+
+  if (chatInfo.index === null) {
+    console.log("ChannelInfoModal(): chatInfo.index ===null");
+    return <></>;
+  }
+
+  const channel = chatInfo.channelList[chatInfo.index];
+
+  const [memberList, setMemberList] = useState<MemberDetail[]>([]);
+  const [bannedList, setBannedList] = useState<MemberAbstract[]>([]);
 
   const getData = async () => {
-    // const memberData = (await getChannel(channel.id)).data;
-    if (chatInfo.index === null) return;
     try {
+      const memberData = (await getChannel(channel.id)).data;
       const bannedData = (await getBanMemberList(channel.id)).data;
+      setMemberList(memberData.users);
       setBannedList(bannedData);
     } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(axiosError.response?.status);
+      const AxiosError = error as AxiosError;
+      toast.error(AxiosError.response?.status);
     }
+
   };
 
   useEffect(() => {
     getData();
   }, []);
 
-  if (chatInfo.index === null) {
-    console.log("ChannelInfoModal(): chatInfo.index === null");
-    return <></>;
-  }
-
-  const channel = chatInfo.channelList[chatInfo.index];
-  // const [memberList, setMemberList] = useState<Channel[]>([]);
-
-  console.log(chatInfo);
   return (
     <FlexBox
       direction="col"
@@ -58,13 +58,16 @@ export default function ChannelInfoModal() {
           <div className="w-full h-fit p-1 text-xl border-b-2">Member</div>
           <ScrollBox className="max-h-[280px]">
             <FlexBox direction="col" className="w-full h-full gap-2 p-1">
-              <div className="w-full h-fit">hello 👑</div>
-              <div className="w-full h-fit">hello 👤</div>
-              <div className="w-full h-fit">hello 👤</div>
-              <div className="w-full h-fit">hello 👤</div>
-              <div className="w-full h-fit">hello</div>
-              <div className="w-full h-fit">hello</div>
-              <div className="w-full h-fit">hello</div>
+              {memberList !== null &&
+                memberList.map((_mem, idx) => {
+                  return (
+                    <div key={idx} className="w-full h-fit">
+                      {_mem.nickname}
+                      {_mem.role === "Owner" && " 👑"}
+                      {_mem.role === "Admin" && " 👤"}
+                    </div>
+                  );
+                })}
             </FlexBox>
           </ScrollBox>
         </FlexBox>

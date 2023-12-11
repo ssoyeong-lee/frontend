@@ -23,11 +23,13 @@ export default function TopNav() {
   const { DMData, CMData } = useMessage();
   const onClickNotification = () => {
     openNotification(
-      <div className="w-full max-h-[200px] px-2">
-        {notiList.map((noti, idx) => (
-          <Alarm key={idx} noti={noti} idx={idx} />
-        ))}
-      </div>
+      <FlexBox direction="col" className="w-full max-h-[200px] px-2 gap-1">
+        {notiList.length === 0 ? (
+          <div className="w-full text-cover-white-80">새로운 알림이 없습니다</div>
+        ) : (
+          notiList.map((noti, idx) => <Alarm key={idx} noti={noti} idx={idx} />)
+        )}
+      </FlexBox>
     );
   };
 

@@ -47,9 +47,9 @@ export default function ListCard() {
                       key={idx}
                       data={friend}
                       isSelected={
-                        friend.otherUserId === chatInfo.id ? true : false
+                        friend.id === chatInfo.id ? true : false
                       }
-                      notiCount={DMData[friend.otherUserId]?.unreadCount ?? 0}
+                      notiCount={DMData[friend.id]?.unreadCount ?? 0}
                     />
                   );
                 })
