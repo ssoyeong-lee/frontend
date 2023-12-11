@@ -7,7 +7,7 @@ interface ChannelInviteToastProps {
 export default function ChannelInviteToast({ noti }: ChannelInviteToastProps) {
   return (
     <div>
-      <span>{noti.invitingUser.nickname}</span>
+      <span>{noti.channel.title}</span>
       <span>님이 채널 초대를 보냈습니다.</span>
     </div>
   );

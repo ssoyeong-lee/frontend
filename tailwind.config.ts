@@ -67,6 +67,8 @@ const config: Config = {
       "cover-black-100": "#00000050",
       "cover-black-200": "#00000080",
       "cover-white": "#D8D8D850",
+
+      "cover-white-80" : "#D8D8D850",
     },
   },
   plugins: [],
