@@ -1,5 +1,6 @@
 import { giveAdmin } from "@/api/channels/admin";
 import { banMember, kickMember } from "@/api/channels/operate";
+import { inviteGame } from "@/api/games/index";
 import useChatInfo from "@/hooks/data/useChatInfo";
 import { useUserControl } from "@/hooks/display/useUserControl";
 import Divider from "@/layouts/Divider";
@@ -63,8 +64,14 @@ export default function ChatControl({ id }: Props) {
     router.push(`/main/${id}`);
   };
   const gameClick = async () => {
-    console.log("gameClick");
-    closeUserControl();
+    try {
+      console.log("gameClick");
+      await inviteGame(id);
+      closeUserControl();
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
   };
   return (
     <FlexBox direction="col" className="w-[200px] gap-2 font-bold">
