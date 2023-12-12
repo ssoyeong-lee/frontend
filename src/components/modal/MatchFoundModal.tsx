@@ -29,7 +29,7 @@ export default function MatchFoundModal({ info }: { info: GameStart }) {
     <ModalCard>
       <div className="text-4xl font-bold mb-12 text-center">Match Found</div>
       <FlexBox className="gap-12">
-        <UserDisplay user={info.oppense} type="enemy" />
+        <UserDisplay user={info.opponent} type="enemy" />
         <div className="text-4xl">vs</div>
         <UserDisplay user={info.me} type="user" />
       </FlexBox>

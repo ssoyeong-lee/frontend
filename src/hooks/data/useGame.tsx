@@ -3,7 +3,7 @@ import { atom, useAtom } from "jotai";
 
 interface GameStart extends GameInfo {
   me: GameUserInfo & { info: UserAbstract };
-  oppense: GameUserInfo & { info: UserAbstract };
+  opponent: GameUserInfo & { info: UserAbstract };
   canvasHeight: number;
   canvasWidth: number;
   barHeight: number;
@@ -39,7 +39,7 @@ interface GameBallInfo {
 
 interface GameInfo {
   me: GameUserInfo;
-  oppense: GameUserInfo;
+  opponent: GameUserInfo;
   ball: GameBallInfo;
 }
 

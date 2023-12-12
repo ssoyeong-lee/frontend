@@ -13,14 +13,14 @@ export default function GameBoard({ children }: Props) {
         <div className="absolute z-0 top-1/4 w-full h-1/2">
           <div className="absolute z-0 top-1/2 w-full border-dashed border-[1px] border-white" />
           <div className="absolute z-0 top-1/4 right-[20px] text-xl">
-            {gameStartInfo?.oppense.info.nickname}
+            {gameStartInfo?.opponent.info.nickname}
           </div>
           <div className="absolute z-0 top-3/4 right-[20px] text-xl">
             {gameStartInfo?.me.info.nickname}
           </div>
         </div>
         <div className="absolute z-0 top-1/4 left-[20px] text-3xl">
-          {gameInfo?.oppense.score}
+          {gameInfo?.opponent.score}
         </div>
         <div className="absolute z-0 top-3/4 left-[20px] text-3xl">
           {gameInfo?.me.score}

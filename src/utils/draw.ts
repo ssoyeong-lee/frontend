@@ -13,7 +13,7 @@ function draw(
   ctx.clearRect(0, 0, startInfo.canvasWidth, startInfo.canvasHeight);
 
   drawBar(ctx, info.me, "me");
-  drawBar(ctx, info.oppense, "oppense");
+  drawBar(ctx, info.opponent, "opponent");
   drawBall(ctx, info.ball);
 
   requestAnimationFrame(() => draw(ctx, startInfo, info));
@@ -22,7 +22,7 @@ function draw(
 function drawBar(
   ctx: CanvasRenderingContext2D,
   user: GameUserInfo,
-  type: "me" | "oppense"
+  type: "me" | "opponent"
 ) {
   if (type === "me") {
     ctx.fillStyle = "#3691FC";
