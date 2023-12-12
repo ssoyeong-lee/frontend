@@ -62,14 +62,14 @@ function useGame(): UseGameType {
   const [isGameSearching, setIsGameSearchingAtom] =
     useAtom(isGameSearchingAtom);
 
-  const setGameInfo = (gameInfo: GameInfo) => {
-    setGameInfoAtom(gameInfo);
+  const setGameInfo = (_gameInfo: GameInfo) => {
+    setGameInfoAtom(_gameInfo);
   };
-  const setGameStartInfo = (gameStartInfo: GameStart) => {
-    setGameStartInfoAtom(gameStartInfo);
+  const setGameStartInfo = (_gameStartInfo: GameStart) => {
+    setGameStartInfoAtom(_gameStartInfo);
   };
-  const setIsGameSearching = (isGameSearching: boolean) => {
-    setIsGameSearchingAtom(isGameSearching);
+  const setIsGameSearching = (_isGameSearching: boolean) => {
+    setIsGameSearchingAtom(_isGameSearching);
   };
 
   return {

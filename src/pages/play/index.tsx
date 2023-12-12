@@ -8,7 +8,7 @@ import Container from "@/layouts/Container";
 import FlexBox from "@/layouts/FlexBox";
 import TopNav from "@/layouts/TopNav";
 import { AxiosError } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export interface Option {
@@ -25,17 +25,21 @@ export default function Play() {
   const onClick = async () => {
     try {
       if (isGameSearching) {
-        await leaveQueue();
         setIsGameSearching(false);
+        await leaveQueue();
       } else {
-        await enterQueue();
         setIsGameSearching(true);
+        await enterQueue(option.mode);
       }
     } catch (error) {
       const axiosError = error as AxiosError;
       toast.error(axiosError.response?.status);
     }
   };
+
+  useEffect(() => {
+    console.log("isGameSearching", isGameSearching);
+  }, [isGameSearching]);
   return (
     <>
       <TopNav />
