@@ -36,8 +36,8 @@ export default function Home() {
     <>
       <TopNav />
       <Container>
-        <FlexBox className="w-full gap-6" direction="col">
-          <FlexBox className="w-full h-[380px] gap-6">
+        <FlexBox className="w-full h-full gap-6" direction="col">
+          <FlexBox className="w-full h-[340px] gap-6">
             <div className="basis-1/3 h-full">
               <ProfileCard type="other" user={user} />
             </div>
@@ -45,7 +45,7 @@ export default function Home() {
               <StatusCard user={user} />
             </div>
           </FlexBox>
-          <div className="w-full">
+          <div className="w-full h-full max-h-[calc(100%-340px-24px)]">
             <HistoryCard user={user} />
           </div>
         </FlexBox>
