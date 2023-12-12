@@ -24,5 +24,12 @@ function receiveGameResult(
     callback(data);
   });
 }
+interface MoveBar {
+  type: "keydown" | "keyup";
+  key: KeyboardEvent["key"];
+}
+function sendMoveBar(socket: Socket, info: MoveBar) {
+  socket.emit("move-bar", info);
+}
 
-export { receiveGameStart, receiveGameInfo, receiveGameResult };
+export { receiveGameStart, receiveGameInfo, receiveGameResult, sendMoveBar };

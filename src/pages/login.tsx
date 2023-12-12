@@ -5,14 +5,12 @@ import { useSocket } from "@/hooks/useSocket";
 import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
-import connectSocket from "@/socket/connectSocket";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
 export default function Login() {
-  const { setSocket } = useSocket();
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
   const onClickBtn = async (e: React.MouseEvent<HTMLButtonElement>) => {

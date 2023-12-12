@@ -18,6 +18,8 @@ export default function App({ Component, pageProps }: AppProps) {
       !(
         router.pathname === "/login" ||
         router.pathname === "/register" ||
+        router.pathname === "/register/form" ||
+        router.pathname === "/register/2fa" ||
         router.pathname === "/"
       )
     ) {

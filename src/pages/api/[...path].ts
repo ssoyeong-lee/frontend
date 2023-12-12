@@ -29,7 +29,11 @@ export default async function handler(
   console.info();
 
   try {
-    if (url.includes("/auth/user-redirect") || url.includes("/auth/login"))
+    if (
+      url.includes("/auth/user-redirect") ||
+      url.includes("/auth/login") ||
+      url.includes("/auth/register")
+    )
       req.headers.cookie = "";
     const requestToServer: AxiosRequestConfig = {
       url: url,
@@ -52,12 +56,15 @@ export default async function handler(
 
     const setCookie = axiosRes.headers["set-cookie"] as string[];
     if (setCookie) {
-      const session = setCookie[0]
-        .split(";")[0]
-        .split("session-cookie=")[1]
-        .split(".")[0]
-        .substring(4);
-      axiosRes.data = { session: session, ...axiosRes.data };
+      try {
+        const session = setCookie[0]
+          .split(";")[0]
+          .split("session-cookie=")[1]
+          .split(".")[0]
+          .substring(4);
+        axiosRes.data = { session: session, ...axiosRes.data };
+        console.info("세션 쿠키 파싱 완료");
+      } catch (error) {}
     }
     res.status(200).setHeader("Set-Cookie", setCookie).json(axiosRes.data);
   } catch (error: any) {

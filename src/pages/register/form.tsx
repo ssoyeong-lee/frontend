@@ -3,7 +3,7 @@ import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
 import TextBox from "@/layouts/TextBox";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -19,7 +19,10 @@ export default function Register() {
   const onClickBtn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      await register(nickName);
+      const res = await register(nickName);
+      if (res.data?.session !== undefined && res.data?.session !== null) {
+        sessionStorage.setItem("session", res.data?.session);
+      }
       router.push("/main");
     } catch (error) {
       const axiosError = error as AxiosError;

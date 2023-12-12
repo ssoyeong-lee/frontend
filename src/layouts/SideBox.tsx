@@ -11,7 +11,7 @@ export default function SideBox({ children, animate }: Props) {
     <FlexBox
       direction="row"
       className={`absolute right-0 h-full overflow-hidden ${
-        animate ? "animate-sidenav-open w-[calc(100%+530px)]" : "w-full"
+        animate ? "animate-sidenav-open " : "w-full"
       }`}
     >
       <FlexBox
