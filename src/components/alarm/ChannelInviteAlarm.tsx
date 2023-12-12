@@ -13,7 +13,7 @@ export default function ChannelInviteAlarm({
   noti,
   idx,
 }: ChannelInviteAlarmProps) {
-  const {removeNoti} = useNoti();
+  const { removeNoti } = useNoti();
   const acceptClick = async () => {
     console.log("acceptClick");
     removeNoti(idx);
