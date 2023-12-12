@@ -6,18 +6,16 @@ export function TFASetup(): Promise<AxiosResponse<{ qrimgurl: string }>> {
 
 export function TFAOn(
   token: string
-): Promise<AxiosResponse<{ success: "true" | "false" }>> {
+): Promise<AxiosResponse<{ success: boolean }>> {
   return axios.post("/api/auth/2fa/on", { token });
 }
 
-export function TFAOff(): Promise<
-  AxiosResponse<{ success: "true" | "false" }>
-> {
+export function TFAOff(): Promise<AxiosResponse<{ success: boolean }>> {
   return axios.post("/api/auth/2fa/off", {});
 }
 
 export function TFALogin(
   token: string
-): Promise<AxiosResponse<{ success: "true" | "false" }>> {
+): Promise<AxiosResponse<{ success: boolean }>> {
   return axios.post("/api/auth/2fa/login", { token });
 }
