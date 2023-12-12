@@ -16,6 +16,6 @@ export function TFAOff(): Promise<AxiosResponse<{ success: boolean }>> {
 
 export function TFALogin(
   token: string
-): Promise<AxiosResponse<{ success: boolean }>> {
+): Promise<AxiosResponse<{ session?: string; success: boolean }>> {
   return axios.post("/api/auth/2fa/login", { token });
 }

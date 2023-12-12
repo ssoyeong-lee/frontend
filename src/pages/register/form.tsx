@@ -19,7 +19,10 @@ export default function Register() {
   const onClickBtn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      await register(nickName);
+      const res = await register(nickName);
+      if (res.data?.session !== undefined && res.data?.session !== null) {
+        sessionStorage.setItem("session", res.data?.session);
+      }
       router.push("/main");
     } catch (error) {
       const axiosError = error as AxiosError;

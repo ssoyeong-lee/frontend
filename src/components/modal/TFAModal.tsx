@@ -41,7 +41,6 @@ export default function TFAModal() {
     if (code.length === 6)
       TFAOn(code)
         .then((res) => {
-          console.log(res.data);
           if (res.data.success === false)
             toast.error("유효하지 않은 Token 입니다.");
           else router.reload();
