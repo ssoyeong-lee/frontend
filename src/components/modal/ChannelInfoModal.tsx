@@ -1,11 +1,85 @@
-import { MemberAbstract, MemberDetail, getChannel } from "@/api/channels";
+import {
+  Channel,
+  MemberAbstract,
+  MemberDetail,
+  getChannel,
+} from "@/api/channels";
+import { depriveAdmin } from "@/api/channels/admin";
 import { getBanMemberList, removeBanMember } from "@/api/channels/operate";
-import useChatInfo from "@/hooks/data/useChatInfo";
+import useChatInfo, { ChannelInfoType } from "@/hooks/data/useChatInfo";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+
+interface MemItemProps {
+  mem: MemberDetail;
+  idx: number;
+  channel: ChannelInfoType;
+  getData: () => Promise<void>;
+}
+function MemberItem({ mem, idx, channel, getData }: MemItemProps) {
+  const depriveAdminClick = async () => {
+    try {
+      await depriveAdmin(channel.id, mem.id);
+      await getData();
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
+  };
+  return (
+    <FlexBox className="w-full h-fit justify-between" key={idx} direction="row">
+      <div className="w-fit h-fit">
+        {mem.nickname}
+        {mem.role === "Owner" && " 👑"}
+        {mem.role === "Admin" && " 👤"}
+      </div>
+      {channel.role === "Owner" && mem.role === "Admin" && (
+        <button
+          onClick={depriveAdminClick}
+          className="text-xs font-bold px-2 py-1 border-[1.5px] border-deepred-cyber hover:bg-deepred-cyber hover:text-black"
+        >
+          X
+        </button>
+      )}
+    </FlexBox>
+  );
+}
+
+interface BanItemProps {
+  mem: MemberAbstract;
+  idx: number;
+  channel: ChannelInfoType;
+  getData: () => Promise<void>;
+}
+
+function BanMemberItem({ mem, idx, channel, getData }: BanItemProps) {
+  const removeBanClick = async () => {
+    try {
+      await removeBanMember(channel.id, mem.id);
+      getData();
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      toast.error(axiosError.response?.status);
+    }
+  };
+
+  return (
+    <FlexBox className="w-full h-fit justify-between" key={idx} direction="row">
+      <div className="w-fit h-fit">{mem.nickname}</div>
+      {(channel.role === "Owner" || channel.role === "Admin") && (
+        <button
+          onClick={removeBanClick}
+          className="text-xs font-bold px-2 py-1 border-[1.5px] border-deepred-cyber hover:bg-deepred-cyber hover:text-black"
+        >
+          X
+        </button>
+      )}
+    </FlexBox>
+  );
+}
 
 export default function ChannelInfoModal() {
   const { chatInfo } = useChatInfo();
@@ -30,7 +104,6 @@ export default function ChannelInfoModal() {
       const AxiosError = error as AxiosError;
       toast.error(AxiosError.response?.status);
     }
-
   };
 
   useEffect(() => {
@@ -61,11 +134,12 @@ export default function ChannelInfoModal() {
               {memberList !== null &&
                 memberList.map((_mem, idx) => {
                   return (
-                    <div key={idx} className="w-full h-fit">
-                      {_mem.nickname}
-                      {_mem.role === "Owner" && " 👑"}
-                      {_mem.role === "Admin" && " 👤"}
-                    </div>
+                    <MemberItem
+                      mem={_mem}
+                      idx={idx}
+                      channel={channel}
+                      getData={getData}
+                    />
                   );
                 })}
             </FlexBox>
@@ -79,30 +153,12 @@ export default function ChannelInfoModal() {
             <FlexBox direction="col" className="w-full h-full gap-2 p-1">
               {bannedList.map((_mem, idx) => {
                 return (
-                  <FlexBox
-                    className="w-full h-fit justify-between"
-                    key={idx}
-                    direction="row"
-                  >
-                    <div className="w-fit h-fit">{_mem.nickname}</div>
-                    {(channel.role === "Owner" ||
-                      channel.role === "Admin") && (
-                      <button
-                        onClick={async () => {
-                          try {
-                            await removeBanMember(channel.id, _mem.id);
-                            getData();
-                          } catch (error) {
-                            const axiosError = error as AxiosError;
-                            toast.error(axiosError.response?.status);
-                          }
-                        }}
-                        className="text-xs font-bold px-2 py-1 border-[1.5px] border-deepred-cyber hover:bg-deepred-cyber hover:text-black"
-                      >
-                        X
-                      </button>
-                    )}
-                  </FlexBox>
+                  <BanMemberItem
+                    mem={_mem}
+                    idx={idx}
+                    channel={channel}
+                    getData={getData}
+                  />
                 );
               })}
             </FlexBox>
