@@ -36,7 +36,9 @@ function SearchItem({
           className="w-[80px]"
           onClick={async () => {
             try {
-              chatInfo.id !== null && (await inviteUser(chatInfo.id, user.id));
+              chatInfo.selected &&
+                chatInfo.selected.id !== null &&
+                (await inviteUser(chatInfo.selected.id, user.id));
               setIsSearch(false);
             } catch (error) {
               const axiosError = error as AxiosError;

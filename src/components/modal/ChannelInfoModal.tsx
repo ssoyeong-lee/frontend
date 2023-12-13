@@ -10,12 +10,12 @@ import { toast } from "react-toastify";
 export default function ChannelInfoModal() {
   const { chatInfo } = useChatInfo();
 
-  if (chatInfo.index === null) {
-    console.log("ChannelInfoModal(): chatInfo.index ===null");
+  if (chatInfo.selected === null || chatInfo.selected.chatType !== "CM") {
+    console.log("error");
     return <></>;
   }
 
-  const channel = chatInfo.channelList[chatInfo.index];
+  const channel = chatInfo.selected;
 
   const [memberList, setMemberList] = useState<MemberDetail[]>([]);
   const [bannedList, setBannedList] = useState<MemberAbstract[]>([]);
@@ -85,8 +85,8 @@ export default function ChannelInfoModal() {
                     direction="row"
                   >
                     <div className="w-fit h-fit">{_mem.nickname}</div>
-                    {(chatInfo.role === "Owner" ||
-                      chatInfo.role === "Admin") && (
+                    {(channel.role === "Owner" ||
+                      channel.role === "Admin") && (
                       <button
                         onClick={async () => {
                           try {

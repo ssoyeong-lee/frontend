@@ -34,12 +34,12 @@ export default function ChannelCreateModal() {
   };
 
   const { closeModal } = useModal();
-  const { updateList } = useChatInfo();
+  const { updateInfo } = useChatInfo();
   const okClick = async () => {
     try {
       await createChannel({ title, type, password });
       closeModal();
-      updateList("CM");
+      updateInfo("CM");
     } catch (error) {
       const axiosError = error as AxiosError;
       toast.error(axiosError.response?.status);

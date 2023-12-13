@@ -24,27 +24,29 @@ export default function ChatDisplay() {
   }, [chatData]);
 
   useEffect(() => {
-    if (chatInfo.id !== null) {
-      if (chatInfo.type === "DM") {
-        setChatData(DMData[chatInfo.id]?.message ?? []);
-        if (DMData[chatInfo.id]?.unreadCount !== 0)
-          setDMUnreadCount(chatInfo.id, 0);
+    if (chatInfo.selected !== null) {
+      if (chatInfo.selected.chatType === "DM") {
+        setChatData(DMData[chatInfo.selected.id]?.message ?? []);
+        if (DMData[chatInfo.selected.id]?.unreadCount !== 0)
+          setDMUnreadCount(chatInfo.selected.id, 0);
       } else {
-        setChatData(CMData[chatInfo.id]?.message ?? []);
-        if (CMData[chatInfo.id]?.unreadCount !== 0)
-          setCMUnreadCount(chatInfo.id, 0);
+        setChatData(CMData[chatInfo.selected.id]?.message ?? []);
+        if (CMData[chatInfo.selected.id]?.unreadCount !== 0)
+          setCMUnreadCount(chatInfo.selected.id, 0);
       }
     }
-  }, [chatInfo.id, chatInfo.type, DMData, CMData]);
+  }, [chatInfo.selected, chatInfo.type, DMData, CMData]);
 
   useEffect(() => {
-    if (chatInfo.id !== null) {
-      const setDMListImpl = (data: DM[]) => setDMList(data, chatInfo.id ?? -1);
+    if (chatInfo.selected !== null) {
+      const setDMListImpl = (data: DM[]) => {
+        chatInfo?.selected && setDMList(data, chatInfo.selected.id ?? -1)
+      };
       if (chatInfo.type === "DM") {
-        recieveDMList(socket, chatInfo.id, setDMListImpl);
+        chatInfo?.selected && recieveDMList(socket, chatInfo.selected.id, setDMListImpl);
       }
     }
-  }, [chatInfo.id, chatInfo.type, socket]);
+  }, [chatInfo.selected, chatInfo.type, socket]);
 
   return (
     <ScrollBox ref={ref}>
