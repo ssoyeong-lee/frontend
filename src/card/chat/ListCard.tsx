@@ -13,7 +13,7 @@ import { useEffect } from "react";
 
 export default function ListCard() {
   const { openModal } = useModal();
-  const { chatInfo, changeType, updateList } = useChatInfo();
+  const { chatInfo, changeType, updateInfo } = useChatInfo();
   const { DMData, CMData } = useMessage();
 
   const createClick = () => {
@@ -21,13 +21,15 @@ export default function ListCard() {
   };
   const clickUser = () => {
     changeType("DM");
+    console.log(chatInfo.type);
   };
   const clickChannel = () => {
     changeType("CM");
+    console.log(chatInfo);
   };
 
   useEffect(() => {
-    updateList(chatInfo.type);
+    updateInfo(chatInfo.type);
   }, [chatInfo.type]);
 
   return (
@@ -47,7 +49,7 @@ export default function ListCard() {
                       key={idx}
                       data={friend}
                       isSelected={
-                        friend.id === chatInfo.id ? true : false
+                        friend.id === chatInfo.selected?.id ? true : false
                       }
                       notiCount={DMData[friend.id]?.unreadCount ?? 0}
                     />
@@ -59,7 +61,7 @@ export default function ListCard() {
                       <ChannelItem
                         key={idx}
                         data={channel}
-                        isSelected={channel.id === chatInfo.id ? true : false}
+                        isSelected={channel.id === chatInfo.selected?.id ? true : false}
                         isJoined={channel.role !== null ? true : false}
                         notiCount={CMData[channel.id]?.unreadCount ?? 0}
                       />

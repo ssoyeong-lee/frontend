@@ -1,6 +1,6 @@
 import { OtherUserAbstract } from "@/api/users";
 import NotificationDot from "@/components/NotificationDot";
-import useChatInfo, { FriendInfoType } from "@/hooks/data/useChatInfo";
+import useChatInfo from "@/hooks/data/useChatInfo";
 import { useMessage } from "@/hooks/data/useMessage";
 import { useSocket } from "@/hooks/useSocket";
 import FlexBox from "@/layouts/FlexBox";
@@ -16,12 +16,12 @@ interface Props {
 
 export default function FriendItem({ data, isSelected, notiCount = 0 }: Props) {
   const { socket } = useSocket();
-  const { changeId } = useChatInfo();
+  const { changeSelected } = useChatInfo();
   const { setDMUnreadCount } = useMessage();
   const itemClick = async () => {
     try {
       console.log("data:", data);
-      await changeId(data.id);
+      await changeSelected(data.id);
     } catch (error) {
       const axiosError = error as AxiosError;
       toast.error(axiosError.response?.status);

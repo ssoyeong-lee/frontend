@@ -15,14 +15,14 @@ export default function ChatroomSettinngModal() {
   const [type, setType] = useState("");
   const [password, setPassword] = useState("");
 
-  const { chatInfo, updateList } = useChatInfo();
+  const { chatInfo, updateInfo } = useChatInfo();
   const { closeModal } = useModal();
 
   useEffect(() => {
     const load = async () => {
-      if (chatInfo.id === null) return;
+      if (chatInfo.selected === null) return;
       try {
-        const info = await getChannel(chatInfo.id);
+        const info = await getChannel(chatInfo.selected.id);
         setTitle(info.data.title);
         setType(info.data.type);
         setPassword("");
@@ -55,9 +55,9 @@ export default function ChatroomSettinngModal() {
   };
 
   const okClick = () => {
-    if (chatInfo.id === null) return;
-    updateChannel(chatInfo.id, { title, type, password });
-    updateList("CM");
+    if (chatInfo.selected === null) return;
+    updateChannel(chatInfo.selected.id, { title, type, password });
+    updateInfo("CM");
     closeModal();
   };
 

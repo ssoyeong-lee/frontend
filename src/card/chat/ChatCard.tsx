@@ -34,15 +34,15 @@ function ChatCardTop({ setIsSearch }: Props) {
   return (
     <FlexBox className="w-full justify-between">
       <div>{chatInfo.type === "DM" ? "Direct message" : "Channel"}</div>
-      {chatInfo.index !== null && (
+      {chatInfo.selected !== null && (
         <FlexBox className="gap-3">
           <div>
-            {chatInfo.type === "DM"
-              ? chatInfo.friendList[chatInfo.index]?.nickname
-              : chatInfo.channelList[chatInfo.index]?.title}
+            {chatInfo.selected?.chatType === "DM"
+              ? chatInfo.selected.nickname
+              : chatInfo.selected.title}
           </div>
-          {chatInfo.type === "CM" &&
-            chatInfo.channelList[chatInfo.index].type === "private" && (
+          {chatInfo.selected.chatType === "CM" &&
+            chatInfo.selected.type === "private" && (
               <Icon
                 src="/icon/mail.svg"
                 onClick={inviteClick}
@@ -58,14 +58,15 @@ function ChatCardTop({ setIsSearch }: Props) {
               alt="name"
             />
           )}
-          {chatInfo.role === "Owner" && (
-            <Icon
-              src="/icon/setting.svg"
-              onClick={settingClick}
-              className="w-6 h-6"
-              alt="name"
-            />
-          )}
+          {chatInfo.selected.chatType === "CM" &&
+            chatInfo.selected.role === "Owner" && (
+              <Icon
+                src="/icon/setting.svg"
+                onClick={settingClick}
+                className="w-6 h-6"
+                alt="name"
+              />
+            )}
         </FlexBox>
       )}
     </FlexBox>
@@ -82,10 +83,10 @@ export default function ChatCard({ setIsSearch }: Props) {
   };
   const msgSend = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter") return;
-    if (chatInfo.type === "DM" && chatInfo.id != null)
-      sendDM(socket, chatInfo.id, msg);
-    else if (chatInfo.type === "CM" && chatInfo.id != null)
-      sendCM(socket, chatInfo.id, msg);
+    if (chatInfo.selected?.chatType === "DM" && chatInfo.selected.id != null)
+      sendDM(socket, chatInfo.selected.id, msg);
+    else if (chatInfo.selected?.chatType === "CM" && chatInfo.selected.id != null)
+      sendCM(socket, chatInfo.selected.id, msg);
     setMsg("");
   };
 

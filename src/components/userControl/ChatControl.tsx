@@ -1,5 +1,5 @@
 import { giveAdmin } from "@/api/channels/admin";
-import { banMember, kickMember } from "@/api/channels/operate";
+import { banMember, kickMember, muteMember } from "@/api/channels/operate";
 import { inviteGame } from "@/api/games/index";
 import useChatInfo from "@/hooks/data/useChatInfo";
 import { useUserControl } from "@/hooks/display/useUserControl";
@@ -20,9 +20,9 @@ export default function ChatControl({ id }: Props) {
 
   const adminClick = async () => {
     console.log("adminClick");
-    if (chatInfo.id !== null) {
+    if (chatInfo.selected !== null) {
       try {
-        await giveAdmin(chatInfo.id, id);
+        await giveAdmin(chatInfo.selected.id, id);
       } catch (error) {
         const axiosError = error as AxiosError;
         toast.error(axiosError.response?.status);
@@ -32,9 +32,9 @@ export default function ChatControl({ id }: Props) {
   };
   const kickClick = async () => {
     console.log("kickClick");
-    if (chatInfo.id !== null) {
+    if (chatInfo.selected !== null) {
       try {
-        await kickMember(chatInfo.id, id);
+        await kickMember(chatInfo.selected.id, id);
       } catch (error) {
         const axiosError = error as AxiosError;
         toast.error(axiosError.response?.status);
@@ -44,9 +44,9 @@ export default function ChatControl({ id }: Props) {
   };
   const banClick = async () => {
     console.log("banClick");
-    if (chatInfo.id !== null) {
+    if (chatInfo.selected !== null) {
       try {
-        await banMember(chatInfo.id, id);
+        await banMember(chatInfo.selected.id, id);
       } catch (error) {
         const axiosError = error as AxiosError;
         toast.error(axiosError.response?.status);
@@ -56,6 +56,14 @@ export default function ChatControl({ id }: Props) {
   };
   const muteClick = async () => {
     console.log("muteClick");
+    if (chatInfo.selected !== null) {
+      try {
+        await muteMember(chatInfo.selected.id, id);
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        toast.error(axiosError.response?.status);
+      }
+    }
     closeUserControl();
   };
   const profileClick = async () => {
@@ -75,28 +83,31 @@ export default function ChatControl({ id }: Props) {
   };
   return (
     <FlexBox direction="col" className="w-[200px] gap-2 font-bold">
-      {chatInfo.role === "Owner" && (
-        <>
-          <div className="userControl-item" onClick={adminClick}>
-            make admin
-          </div>
-          <Divider color="white" />
-        </>
-      )}
-      {(chatInfo.role === "Owner" || chatInfo.role === "Admin") && (
-        <>
-          <div className="userControl-item" onClick={kickClick}>
-            kick
-          </div>
-          <div className="userControl-item" onClick={banClick}>
-            ban
-          </div>
-          <div className="userControl-item" onClick={muteClick}>
-            mute for 5min
-          </div>
-          <Divider color="white" />
-        </>
-      )}
+      {chatInfo.selected?.chatType === "CM" &&
+        chatInfo.selected.role === "Owner" && (
+          <>
+            <div className="userControl-item" onClick={adminClick}>
+              make admin
+            </div>
+            <Divider color="white" />
+          </>
+        )}
+      {chatInfo.selected?.chatType === "CM" &&
+        (chatInfo.selected.role === "Owner" ||
+          chatInfo.selected.role === "Admin") && (
+          <>
+            <div className="userControl-item" onClick={kickClick}>
+              kick
+            </div>
+            <div className="userControl-item" onClick={banClick}>
+              ban
+            </div>
+            <div className="userControl-item" onClick={muteClick}>
+              mute for 5min
+            </div>
+            <Divider color="white" />
+          </>
+        )}
       <div className="userControl-item" onClick={profileClick}>
         view profile
       </div>

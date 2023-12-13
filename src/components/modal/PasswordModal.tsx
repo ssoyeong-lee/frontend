@@ -14,7 +14,7 @@ interface Props {
 
 export default function PasswordModal({ id }: Props) {
   const { closeModal } = useModal();
-  const { changeId, updateList } = useChatInfo();
+  const { changeSelected, updateInfo } = useChatInfo();
   const [password, setPassword] = useState("");
   const passwordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -24,10 +24,10 @@ export default function PasswordModal({ id }: Props) {
     try {
       await joinChannel(id, password);
       closeModal();
-      updateList("CM");
-      changeId(id);
+      updateInfo("CM");
+      changeSelected(id);
     } catch (error) {
-      changeId(null);
+      changeSelected(null);
       const axiosError = error as AxiosError;
       toast.error(axiosError.response?.status);
     }

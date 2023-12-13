@@ -18,12 +18,11 @@ export default function FriendRequestAlarm({
     removeNoti(idx);
   };
   return (
-    <FlexBox className="justify-between">
+    <FlexBox className="w-full justify-between">
       <div>
         <span>{noti.requestingUser.nickname}</span>
         <span>님이 친구 초대를 보냈습니다.</span>
       </div>
-      <ChipButton color="green">수락</ChipButton>
       <Icon
         src="/icon/read-receipt.png"
         alt=""
