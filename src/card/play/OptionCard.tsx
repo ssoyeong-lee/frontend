@@ -21,23 +21,7 @@ export default function OptionCard({ option, setOption }: Props) {
         <FlexBox className="w-full justify-between">
           <div>SPEED</div>
           <FlexBox>
-            <div
-              className={`w-[150px] ${
-                option.speed === "normal" ? selectedStyle : unselectedStyle
-              }`}
-              onClick={() => setOption({ ...option, speed: "normal" })}
-            >
-              Normal
-            </div>
-            <div
-              className={`w-[150px] ${
-                option.speed === "fast" ? selectedStyle : unselectedStyle
-              }
-            `}
-              onClick={() => setOption({ ...option, speed: "fast" })}
-            >
-              Fast
-            </div>
+            <div className={`w-[150px] ${selectedStyle}`}>Normal</div>
           </FlexBox>
         </FlexBox>
         <FlexBox className="w-full justify-between">

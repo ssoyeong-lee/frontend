@@ -20,14 +20,16 @@ function ModalTemplate({ content, onClose }: ModalTemplateProps) {
 
 interface UseModalType {
   modal: JSX.Element;
-  openModal: (RC: JSX.Element) => void;
+  openModal: (RC: JSX.Element, fixed?: boolean) => void;
   closeModal: () => void;
 }
 
 function useModal(): UseModalType {
   const [modal, setModal] = useAtom(modalAtom);
-  const openModal = (RC: JSX.Element) => {
-    setModal(<ModalTemplate content={RC} onClose={closeModal} />);
+  const openModal = (RC: JSX.Element, fixed?: boolean) => {
+    setModal(
+      <ModalTemplate content={RC} onClose={fixed ? () => {} : closeModal} />
+    );
   };
   const closeModal = () => {
     setModal(<></>);

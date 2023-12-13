@@ -3,13 +3,17 @@ import { atom, useAtom } from "jotai";
 
 interface GameStart extends GameInfo {
   me: GameUserInfo & { info: UserAbstract };
-  oppense: GameUserInfo & { info: UserAbstract };
+  opponent: GameUserInfo & { info: UserAbstract };
+  canvasHeight: number;
+  canvasWidth: number;
+  barHeight: number;
+  barWidth: number;
 }
 
 interface GameResult {
   id: number;
   result: "win" | "lose";
-  lpchange: number;
+  lpChange: number;
   user: UserAbstract;
   opponent: UserAbstract;
   userScore: number;
@@ -35,27 +39,46 @@ interface GameBallInfo {
 
 interface GameInfo {
   me: GameUserInfo;
-  oppense: GameUserInfo;
+  opponent: GameUserInfo;
   ball: GameBallInfo;
 }
 
 const gameInfoAtom = atom<GameInfo | null>(null);
+const gameStartInfoAtom = atom<GameStart | null>(null);
+const isGameSearchingAtom = atom<boolean>(false);
 
 interface UseGameType {
+  isGameSearching: boolean;
+  setIsGameSearching: (isGameSearching: boolean) => void;
   gameInfo: GameInfo | null;
   setGameInfo: (gameInfo: GameInfo) => void;
+  gameStartInfo: GameStart | null;
+  setGameStartInfo: (gameStartInfo: GameStart) => void;
 }
 
 function useGame(): UseGameType {
   const [gameInfo, setGameInfoAtom] = useAtom(gameInfoAtom);
+  const [gameStartInfo, setGameStartInfoAtom] = useAtom(gameStartInfoAtom);
+  const [isGameSearching, setIsGameSearchingAtom] =
+    useAtom(isGameSearchingAtom);
 
-  const setGameInfo = (gameInfo: GameInfo) => {
-    setGameInfoAtom(gameInfo);
+  const setGameInfo = (_gameInfo: GameInfo) => {
+    setGameInfoAtom(_gameInfo);
+  };
+  const setGameStartInfo = (_gameStartInfo: GameStart) => {
+    setGameStartInfoAtom(_gameStartInfo);
+  };
+  const setIsGameSearching = (_isGameSearching: boolean) => {
+    setIsGameSearchingAtom(_isGameSearching);
   };
 
   return {
     gameInfo,
     setGameInfo,
+    gameStartInfo,
+    setGameStartInfo,
+    isGameSearching,
+    setIsGameSearching,
   };
 }
 

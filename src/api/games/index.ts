@@ -1,7 +1,9 @@
 import axios, { AxiosResponse } from "axios";
 
-async function enterQueue(): Promise<AxiosResponse> {
-  return axios.post("/api/games/queue", {});
+async function enterQueue(
+  mode: "standard" | "extreme"
+): Promise<AxiosResponse> {
+  return axios.post("/api/games/queue", { mode });
 }
 
 async function leaveQueue(): Promise<AxiosResponse> {
@@ -9,7 +11,7 @@ async function leaveQueue(): Promise<AxiosResponse> {
 }
 
 async function inviteGame(user_id: number): Promise<AxiosResponse> {
-  return axios.post(`/api/games/invite/${user_id}`, {});
+  return axios.post(`/api/games/invite/${user_id}`, { mode: "standard" });
 }
 
 async function acceptGame(user_id: number): Promise<AxiosResponse> {

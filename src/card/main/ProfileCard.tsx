@@ -1,4 +1,4 @@
-import { TFAOff, TFASetup } from "@/api/auth/2fa";
+import { TFAOff } from "@/api/auth/2fa";
 import { UserDetail, putUserMe } from "@/api/users/index";
 import Avatar, { avatarObj } from "@/components/Avatar";
 import ChipButton from "@/components/button/ChipButton";
@@ -72,7 +72,17 @@ export default function ProfileCard({ type, user, setUser }: Props) {
       <FlexBox className="w-full gap-6" direction="col">
         <FlexBox className="w-full justify-between">
           <div className="text-2xl font-bold">Status</div>
-          <div className="text-2xl font-bold text-green-cyber">online</div>
+          <div
+            className={`text-2xl font-bold ${
+              user?.status === "online"
+                ? "text-green-cyber"
+                : user?.status === "ingame"
+                ? "text-red-cyber"
+                : "text-gray-300"
+            }`}
+          >
+            {user?.status}
+          </div>
         </FlexBox>
         <FlexBox className="w-full justify-between gap-6">
           <div>

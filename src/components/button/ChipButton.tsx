@@ -1,7 +1,7 @@
 interface Props extends React.HTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   className?: string;
-  color: "white" | "green" | "red" | "white-contain";
+  color: "white" | "green" | "red" | "white-contain" | "green-contain";
 }
 
 export default function ChipButton({
@@ -23,6 +23,10 @@ export default function ChipButton({
       break;
     case "green":
       colorClass = "border-green-cyber hover:bg-green-cyber hover:text-black";
+      break;
+    case "green-contain":
+      colorClass =
+        "border-green-cyber bg-green-cyber text-black hover:bg-black hover:text-white";
       break;
     case "red":
       colorClass =
