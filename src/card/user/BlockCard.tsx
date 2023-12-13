@@ -16,7 +16,7 @@ export default function BlockCard({ blockList, setBlockList }: Props) {
   const onClickDelete = async (id: number) => {
     try {
       await deleteBlock(id);
-      setBlockList(blockList.filter((block) => block.otherUserId !== id));
+      setBlockList(blockList.filter((block) => block.id !== id));
     } catch (error) {
       const axiosError = error as AxiosError;
       toast.error(axiosError.response?.status);

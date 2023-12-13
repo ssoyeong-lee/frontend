@@ -1,15 +1,10 @@
-import {
-  Channel,
-  MemberAbstract,
-  MemberDetail,
-  getChannel,
-} from "@/api/channels";
+import { MemberAbstract, MemberDetail, getChannel } from "@/api/channels";
 import { depriveAdmin } from "@/api/channels/admin";
 import { getBanMemberList, removeBanMember } from "@/api/channels/operate";
 import useChatInfo, { ChannelInfoType } from "@/hooks/data/useChatInfo";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -83,6 +78,13 @@ function BanMemberItem({ mem, idx, channel, getData }: BanItemProps) {
 
 export default function ChannelInfoModal() {
   const { chatInfo } = useChatInfo();
+  const [memberList, setMemberList] = useState<MemberDetail[]>([]);
+  const [bannedList, setBannedList] = useState<MemberAbstract[]>([]);
+
+  useEffect(() => {
+    if (chatInfo.selected !== null && chatInfo.selected.chatType === "CM")
+      getData();
+  }, []);
 
   if (chatInfo.selected === null || chatInfo.selected.chatType !== "CM") {
     console.log("error");
@@ -90,9 +92,6 @@ export default function ChannelInfoModal() {
   }
 
   const channel = chatInfo.selected;
-
-  const [memberList, setMemberList] = useState<MemberDetail[]>([]);
-  const [bannedList, setBannedList] = useState<MemberAbstract[]>([]);
 
   const getData = async () => {
     try {
@@ -105,10 +104,6 @@ export default function ChannelInfoModal() {
       toast.error(AxiosError.response?.status);
     }
   };
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   return (
     <FlexBox
@@ -135,6 +130,7 @@ export default function ChannelInfoModal() {
                 memberList.map((_mem, idx) => {
                   return (
                     <MemberItem
+                      key={idx}
                       mem={_mem}
                       idx={idx}
                       channel={channel}
@@ -154,6 +150,7 @@ export default function ChannelInfoModal() {
               {bannedList.map((_mem, idx) => {
                 return (
                   <BanMemberItem
+                    key={idx}
                     mem={_mem}
                     idx={idx}
                     channel={channel}
