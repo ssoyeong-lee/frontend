@@ -1,28 +1,28 @@
-import { UserDetail, getUserMe } from "@/api/users/index";
+import { UserDetail } from "@/api/users/index";
 import HistoryCard from "@/card/main/HistoryCard";
 import ProfileCard from "@/card/main/ProfileCard";
 import StatusCard from "@/card/main/StatusCard";
+import { useAuth } from "@/hooks/data/useAuth";
 import Container from "@/layouts/Container";
 import FlexBox from "@/layouts/FlexBox";
 import TopNav from "@/layouts/TopNav";
-import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 
 export default function Home() {
+  const { auth, setAuth } = useAuth();
   const [user, setUser] = useState<UserDetail | null>(null);
+
   useEffect(() => {
-    const asyncFunc = async () => {
-      try {
-        const res = await getUserMe();
-        setUser(res.data);
-      } catch (error) {
-        const axiosError = error as AxiosError;
-        toast.error(axiosError.response?.status);
-      }
-    };
-    asyncFunc();
-  }, []);
+    if (auth !== null && user === null) {
+      setUser(auth);
+    }
+  }, [auth]);
+
+  useEffect(() => {
+    if (user !== auth && user !== null && auth !== null) {
+      setAuth(user);
+    }
+  }, [user]);
 
   return (
     <>

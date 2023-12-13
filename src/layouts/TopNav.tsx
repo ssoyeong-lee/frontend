@@ -10,6 +10,8 @@ import NotificationDot from "@/components/NotificationDot";
 import { useMessage } from "@/hooks/data/useMessage";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import { useSocket } from "@/hooks/useSocket";
+import { Socket } from "socket.io-client";
 
 export default function TopNav() {
   const router = useRouter();
@@ -21,11 +23,14 @@ export default function TopNav() {
   const { openNotification } = useNotification();
   const { notiList } = useNoti();
   const { DMData, CMData } = useMessage();
+  const { setSocket } = useSocket();
   const onClickNotification = () => {
     openNotification(
       <FlexBox direction="col" className="w-full max-h-[200px] px-2 gap-1">
         {notiList.length === 0 ? (
-          <div className="w-full text-cover-white-80">새로운 알림이 없습니다</div>
+          <div className="w-full text-cover-white-80">
+            새로운 알림이 없습니다
+          </div>
         ) : (
           notiList.map((noti, idx) => <Alarm key={idx} noti={noti} idx={idx} />)
         )}
@@ -36,7 +41,8 @@ export default function TopNav() {
   const onClickLogout = async () => {
     try {
       await logout();
-      router.push("/login");
+      await router.push("/login");
+      router.reload();
     } catch (error) {
       const axiosError = error as AxiosError;
       toast.error(axiosError.response?.status);
