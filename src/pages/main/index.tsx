@@ -1,4 +1,4 @@
-import { UserDetail } from "@/api/users/index";
+import { UserDetail, getUserMe } from "@/api/users/index";
 import HistoryCard from "@/card/main/HistoryCard";
 import ProfileCard from "@/card/main/ProfileCard";
 import StatusCard from "@/card/main/StatusCard";
@@ -11,6 +11,14 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const { auth, setAuth } = useAuth();
   const [user, setUser] = useState<UserDetail | null>(null);
+
+  useEffect(() => {
+    getUserMe()
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (auth !== null && user === null) {
