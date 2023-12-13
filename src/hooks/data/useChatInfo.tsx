@@ -94,7 +94,6 @@ function useChatInfo(): ChatInfoRetType {
           })
         );
         console.log("myFriends: ", myFriends);
-        setSelected(null);
       } else if (_type === "CM") {
         const allChan = (await getChannelList()).data;
         const myChan = (await getMyChannels()).data;
