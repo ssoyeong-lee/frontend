@@ -1,5 +1,5 @@
 import { giveAdmin } from "@/api/channels/admin";
-import { banMember, kickMember } from "@/api/channels/operate";
+import { banMember, kickMember, muteMember } from "@/api/channels/operate";
 import { inviteGame } from "@/api/games/index";
 import useChatInfo from "@/hooks/data/useChatInfo";
 import { useUserControl } from "@/hooks/display/useUserControl";
@@ -56,6 +56,14 @@ export default function ChatControl({ id }: Props) {
   };
   const muteClick = async () => {
     console.log("muteClick");
+    if (chatInfo.selected !== null) {
+      try {
+        await muteMember(chatInfo.selected.id, id);
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        toast.error(axiosError.response?.status);
+      }
+    }
     closeUserControl();
   };
   const profileClick = async () => {
