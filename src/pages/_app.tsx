@@ -38,7 +38,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const { socket, setSocket } = useSocket();
   const { openModal, closeModal } = useModal();
   const { setAuth } = useAuth();
-  const { setGameInfo, setGameStartInfo, setIsGameSearching } = useGame();
+  const { setGameInfo, setGameStartInfo, setGameSearch } = useGame();
   const {
     setDM,
     setCM,
@@ -91,7 +91,10 @@ export default function App({ Component, pageProps }: AppProps) {
               receiveChannelMember(socketInstance, () => {});
               receiveNotification(socketInstance, setNoti);
               receiveGameStart(socketInstance, (data) => {
-                setIsGameSearching(false);
+                setGameSearch({
+                  isSearching: false,
+                  mode: "standard",
+                });
                 setGameStartInfo(data);
                 openModal(<MatchFoundModal info={data} />, true);
                 sleep(3000).then(() => {
