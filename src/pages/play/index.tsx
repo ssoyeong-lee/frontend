@@ -8,28 +8,28 @@ import Container from "@/layouts/Container";
 import FlexBox from "@/layouts/FlexBox";
 import TopNav from "@/layouts/TopNav";
 import { AxiosError } from "axios";
-import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export interface Option {
-  speed: "normal" | "fast";
   mode: "standard" | "extreme";
 }
 
 export default function Play() {
-  const { isGameSearching, setIsGameSearching } = useGame();
-  const [option, setOption] = useState<Option>({
-    speed: "normal",
-    mode: "standard",
-  });
+  const { gameSearch, setGameSearch } = useGame();
   const onClick = async () => {
     try {
-      if (isGameSearching) {
-        setIsGameSearching(false);
+      if (gameSearch.isSearching) {
+        setGameSearch({
+          ...gameSearch,
+          isSearching: false,
+        });
         await leaveQueue();
       } else {
-        setIsGameSearching(true);
-        await enterQueue(option.mode);
+        setGameSearch({
+          ...gameSearch,
+          isSearching: true,
+        });
+        await enterQueue(gameSearch.mode);
       }
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -37,9 +37,6 @@ export default function Play() {
     }
   };
 
-  useEffect(() => {
-    console.log("isGameSearching", isGameSearching);
-  }, [isGameSearching]);
   return (
     <>
       <TopNav />
@@ -50,10 +47,10 @@ export default function Play() {
           </div>
           <FlexBox className="basis-2/3 h-full gap-6" direction="col">
             <div className="h-fit w-full">
-              <OptionCard option={option} setOption={setOption} />
+              <OptionCard />
             </div>
-            <GameButton isFinding={isGameSearching} onClick={onClick} />
-            {isGameSearching && <GameLoader />}
+            <GameButton isFinding={gameSearch.isSearching} onClick={onClick} />
+            {gameSearch.isSearching && <GameLoader />}
           </FlexBox>
         </FlexBox>
       </Container>
