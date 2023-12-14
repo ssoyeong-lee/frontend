@@ -24,8 +24,10 @@ export default function FriendCard({ friendList, setFriendList }: Props) {
       await deleteFriend(id);
       setFriendList(friendList.filter((friend) => friend.otherUser.id !== id));
     } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(axiosError.response?.status);
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (typeof axiosError.response?.data.message === "object")
+        toast.error(axiosError.response?.data.message[0]);
+      else toast.error(axiosError.response?.data.message);
     }
   };
   const onClickApprove = async (id: number) => {
@@ -38,8 +40,10 @@ export default function FriendCard({ friendList, setFriendList }: Props) {
         })
       );
     } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(axiosError.response?.status);
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (typeof axiosError.response?.data.message === "object")
+        toast.error(axiosError.response?.data.message[0]);
+      else toast.error(axiosError.response?.data.message);
     }
   };
   const onClickDeny = async (id: number) => {
@@ -47,8 +51,10 @@ export default function FriendCard({ friendList, setFriendList }: Props) {
       await denyFriend(id);
       setFriendList(friendList.filter((friend) => friend.otherUser.id !== id));
     } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(axiosError.response?.status);
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (typeof axiosError.response?.data.message === "object")
+        toast.error(axiosError.response?.data.message[0]);
+      else toast.error(axiosError.response?.data.message);
     }
   };
 

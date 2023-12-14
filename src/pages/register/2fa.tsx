@@ -38,7 +38,9 @@ export default function Register() {
         })
         .catch((err) => {
           const axiosError = err as AxiosError;
-          toast.error(axiosError.response?.status);
+          if (typeof axiosError.response?.data.message === "object")
+            toast.error(axiosError.response?.data.message[0]);
+          else toast.error(axiosError.response?.data.message);
         });
   }, [code]);
 

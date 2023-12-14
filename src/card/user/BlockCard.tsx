@@ -18,8 +18,10 @@ export default function BlockCard({ blockList, setBlockList }: Props) {
       await deleteBlock(id);
       setBlockList(blockList.filter((block) => block.id !== id));
     } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(axiosError.response?.status);
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (typeof axiosError.response?.data.message === "object")
+        toast.error(axiosError.response?.data.message[0]);
+      else toast.error(axiosError.response?.data.message);
     }
   };
   return (

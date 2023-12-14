@@ -66,7 +66,6 @@ export default function App({ Component, pageProps }: AppProps) {
           return;
         }
         const socketInstance = connectSocket(session ?? "");
-        console.log("socket", socketInstance);
         socketInstance.on("connect", () => {
           console.log("socket connected");
           getUserMe()
