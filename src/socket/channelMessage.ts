@@ -1,3 +1,4 @@
+import { UserAbstract } from "@/api/users/index";
 import { Socket } from "socket.io-client";
 
 interface CM {
@@ -26,15 +27,14 @@ interface ChannelIn {
   channel: {
     id: number;
     title: string;
+    type: "public" | "private" | "protected";
   };
   channelRelation: {
-    user: {
-      id: number;
-      nickname: string;
-    };
+    user: UserAbstract;
     isAdmin: boolean;
     isOwner: boolean;
-    isMuted: boolean; // 이건 아직 고려중
+    isMuted: boolean;
+    createdAt: string;
   };
 }
 
@@ -48,7 +48,6 @@ function receiveChannelIn(socket: Socket, callback: (res: ChannelIn) => void) {
 interface ChannelOut {
   channel: {
     id: number;
-    title: string;
   };
   user: {
     id: number;

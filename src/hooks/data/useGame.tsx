@@ -43,13 +43,21 @@ interface GameInfo {
   ball: GameBallInfo;
 }
 
+interface GameSearch {
+  isSearching: boolean;
+  mode: "standard" | "extreme";
+}
+
 const gameInfoAtom = atom<GameInfo | null>(null);
 const gameStartInfoAtom = atom<GameStart | null>(null);
-const isGameSearchingAtom = atom<boolean>(false);
+const gameSearchAtom = atom<GameSearch>({
+  isSearching: false,
+  mode: "standard",
+});
 
 interface UseGameType {
-  isGameSearching: boolean;
-  setIsGameSearching: (isGameSearching: boolean) => void;
+  gameSearch: GameSearch;
+  setGameSearch: (gameSearch: GameSearch) => void;
   gameInfo: GameInfo | null;
   setGameInfo: (gameInfo: GameInfo) => void;
   gameStartInfo: GameStart | null;
@@ -59,8 +67,7 @@ interface UseGameType {
 function useGame(): UseGameType {
   const [gameInfo, setGameInfoAtom] = useAtom(gameInfoAtom);
   const [gameStartInfo, setGameStartInfoAtom] = useAtom(gameStartInfoAtom);
-  const [isGameSearching, setIsGameSearchingAtom] =
-    useAtom(isGameSearchingAtom);
+  const [gameSearch, setGameSearchAtom] = useAtom(gameSearchAtom);
 
   const setGameInfo = (_gameInfo: GameInfo) => {
     setGameInfoAtom(_gameInfo);
@@ -68,8 +75,8 @@ function useGame(): UseGameType {
   const setGameStartInfo = (_gameStartInfo: GameStart) => {
     setGameStartInfoAtom(_gameStartInfo);
   };
-  const setIsGameSearching = (_isGameSearching: boolean) => {
-    setIsGameSearchingAtom(_isGameSearching);
+  const setGameSearch = (_gameSearch: GameSearch) => {
+    setGameSearchAtom(_gameSearch);
   };
 
   return {
@@ -77,8 +84,8 @@ function useGame(): UseGameType {
     setGameInfo,
     gameStartInfo,
     setGameStartInfo,
-    isGameSearching,
-    setIsGameSearching,
+    gameSearch,
+    setGameSearch,
   };
 }
 

@@ -53,8 +53,10 @@ export default function ProfileCard({ type, user, setUser }: Props) {
         });
       } else openModal(<TFAModal />);
     } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(axiosError.response?.status);
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (typeof axiosError.response?.data.message === "object")
+        toast.error(axiosError.response?.data.message[0]);
+      else toast.error(axiosError.response?.data.message);
     }
   };
   const onBlur = async () => {
@@ -62,8 +64,10 @@ export default function ProfileCard({ type, user, setUser }: Props) {
     try {
       await putUserMe(user);
     } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(axiosError.response?.status);
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (typeof axiosError.response?.data.message === "object")
+        toast.error(axiosError.response?.data.message[0]);
+      else toast.error(axiosError.response?.data.message);
     }
   };
 

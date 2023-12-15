@@ -18,16 +18,20 @@ export default function GameInviteAlarm({ noti, idx }: GameInviteAlarmProps) {
       await acceptGame(noti.invitingUser.id);
       closeNotification();
     } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(axiosError.response?.status);
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (typeof axiosError.response?.data.message === "object")
+        toast.error(axiosError.response?.data.message[0]);
+      else toast.error(axiosError.response?.data.message);
     }
   };
   const rejectClick = async () => {
     try {
       await rejectGame(noti.invitingUser.id);
     } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(axiosError.response?.status);
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (typeof axiosError.response?.data.message === "object")
+        toast.error(axiosError.response?.data.message[0]);
+      else toast.error(axiosError.response?.data.message);
     }
   };
   return (

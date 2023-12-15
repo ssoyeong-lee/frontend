@@ -36,9 +36,11 @@ export default function Register() {
             toast.error("유효하지 않은 Token 입니다.");
           else router.push("/main");
         })
-        .catch((err) => {
-          const axiosError = err as AxiosError;
-          toast.error(axiosError.response?.status);
+        .catch((error) => {
+          const axiosError = error as AxiosError<{ message: string }>;
+          if (typeof axiosError.response?.data.message === "object")
+            toast.error(axiosError.response?.data.message[0]);
+          else toast.error(axiosError.response?.data.message);
         });
   }, [code]);
 

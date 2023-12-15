@@ -19,8 +19,10 @@ function LeaveButton({ id }: buttonProps) {
       await changeSelected(null);
       console.log("leave channel");
     } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(axiosError.response?.status);
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (typeof axiosError.response?.data.message === "object")
+        toast.error(axiosError.response?.data.message[0]);
+      else toast.error(axiosError.response?.data.message);
     }
     e.stopPropagation();
   };
@@ -55,8 +57,10 @@ export default function ChannelItem({
       if (data.type === "protected" && data.role === null)
         openModal(<PasswordModal id={data.id} />);
     } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(axiosError.response?.status);
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (typeof axiosError.response?.data.message === "object")
+        toast.error(axiosError.response?.data.message[0]);
+      else toast.error(axiosError.response?.data.message);
     }
   };
   return (
@@ -66,9 +70,9 @@ export default function ChannelItem({
       } hover:bg-gray-600`}
       onClick={itemClick}
     >
-        <div className={`font-bold ${!isJoined && "text-gray-400"}`}>
-          {data.title}
-        </div>
+      <div className={`font-bold ${!isJoined && "text-gray-400"}`}>
+        {data.title}
+      </div>
       <FlexBox className="w-full h-fit justify-end gap-4">
         <NotificationDot amount={notiCount} />
         {isJoined && <LeaveButton id={data.id} />}
