@@ -66,10 +66,10 @@ export default function ChannelItem({
       } hover:bg-gray-600`}
       onClick={itemClick}
     >
-        <div className={`font-bold ${!isJoined && "text-gray-400"}`}>
+        <div className={`w-fit h-fit font-bold ${!isJoined && "text-gray-400"}`}>
           {data.title}
         </div>
-      <FlexBox className="w-full h-fit justify-end gap-4">
+      <FlexBox className="w-fit h-fit justify-end gap-4">
         <NotificationDot amount={notiCount} />
         {isJoined && <LeaveButton id={data.id} />}
       </FlexBox>
