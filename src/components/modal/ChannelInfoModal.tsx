@@ -19,8 +19,10 @@ function MemberItem({ mem, idx, channel }: MemItemProps) {
       await depriveAdmin(channel.id, mem.id);
       await updateInfo();
     } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(axiosError.response?.status);
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (typeof axiosError.response?.data.message === "object")
+        toast.error(axiosError.response?.data.message[0]);
+      else toast.error(axiosError.response?.data.message);
     }
   };
   return (
@@ -55,8 +57,10 @@ function BanMemberItem({ mem, idx, channel }: BanItemProps) {
       await removeBanMember(channel.id, mem.id);
       await updateInfo();
     } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(axiosError.response?.status);
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (typeof axiosError.response?.data.message === "object")
+        toast.error(axiosError.response?.data.message[0]);
+      else toast.error(axiosError.response?.data.message);
     }
   };
 

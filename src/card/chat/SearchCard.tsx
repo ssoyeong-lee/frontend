@@ -1,6 +1,4 @@
 import { inviteUser } from "@/api/channels/operate";
-import { postBlock } from "@/api/users/block";
-import { postRequestFriend } from "@/api/users/friend";
 import { UserAbstract } from "@/api/users/index";
 import ChipButton from "@/components/button/ChipButton";
 import IconInput from "@/components/control/IconInput";
@@ -41,8 +39,10 @@ function SearchItem({
                 (await inviteUser(chatInfo.selected.id, user.id));
               setIsSearch(false);
             } catch (error) {
-              const axiosError = error as AxiosError;
-              toast.error(axiosError.response?.status);
+              const axiosError = error as AxiosError<{ message: string }>;
+              if (typeof axiosError.response?.data.message === "object")
+                toast.error(axiosError.response?.data.message[0]);
+              else toast.error(axiosError.response?.data.message);
             }
           }}
         >

@@ -19,8 +19,10 @@ function LeaveButton({ id }: buttonProps) {
       await changeSelected(null);
       console.log("leave channel");
     } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(axiosError.response?.status);
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (typeof axiosError.response?.data.message === "object")
+        toast.error(axiosError.response?.data.message[0]);
+      else toast.error(axiosError.response?.data.message);
     }
     e.stopPropagation();
   };
@@ -55,8 +57,10 @@ export default function ChannelItem({
       if (data.type === "protected" && data.role === null)
         openModal(<PasswordModal id={data.id} />);
     } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(axiosError.response?.status);
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (typeof axiosError.response?.data.message === "object")
+        toast.error(axiosError.response?.data.message[0]);
+      else toast.error(axiosError.response?.data.message);
     }
   };
   return (

@@ -25,8 +25,10 @@ export default function ChatControl({ id }: Props) {
         await giveAdmin(chatInfo.selected.id, id);
         await updateInfo();
       } catch (error) {
-        const axiosError = error as AxiosError;
-        toast.error(axiosError.response?.status);
+        const axiosError = error as AxiosError<{ message: string }>;
+        if (typeof axiosError.response?.data.message === "object")
+          toast.error(axiosError.response?.data.message[0]);
+        else toast.error(axiosError.response?.data.message);
       }
     }
     closeUserControl();
@@ -37,8 +39,10 @@ export default function ChatControl({ id }: Props) {
       try {
         await kickMember(chatInfo.selected.id, id);
       } catch (error) {
-        const axiosError = error as AxiosError;
-        toast.error(axiosError.response?.status);
+        const axiosError = error as AxiosError<{ message: string }>;
+        if (typeof axiosError.response?.data.message === "object")
+          toast.error(axiosError.response?.data.message[0]);
+        else toast.error(axiosError.response?.data.message);
       }
     }
     closeUserControl();
@@ -50,8 +54,10 @@ export default function ChatControl({ id }: Props) {
         await banMember(chatInfo.selected.id, id);
         await updateInfo();
       } catch (error) {
-        const axiosError = error as AxiosError;
-        toast.error(axiosError.response?.status);
+        const axiosError = error as AxiosError<{ message: string }>;
+        if (typeof axiosError.response?.data.message === "object")
+          toast.error(axiosError.response?.data.message[0]);
+        else toast.error(axiosError.response?.data.message);
       }
     }
     closeUserControl();
@@ -62,8 +68,10 @@ export default function ChatControl({ id }: Props) {
       try {
         await muteMember(chatInfo.selected.id, id);
       } catch (error) {
-        const axiosError = error as AxiosError;
-        toast.error(axiosError.response?.status);
+        const axiosError = error as AxiosError<{ message: string }>;
+        if (typeof axiosError.response?.data.message === "object")
+          toast.error(axiosError.response?.data.message[0]);
+        else toast.error(axiosError.response?.data.message);
       }
     }
     closeUserControl();
@@ -79,8 +87,10 @@ export default function ChatControl({ id }: Props) {
       await inviteGame(id);
       closeUserControl();
     } catch (error) {
-      const axiosError = error as AxiosError;
-      toast.error(axiosError.response?.status);
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (typeof axiosError.response?.data.message === "object")
+        toast.error(axiosError.response?.data.message[0]);
+      else toast.error(axiosError.response?.data.message);
     }
   };
   return (

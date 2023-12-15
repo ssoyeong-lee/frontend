@@ -1,14 +1,9 @@
+import { useGame } from "@/hooks/data/useGame";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
-import { Option } from "@/pages/play/index";
-import { Dispatch, SetStateAction } from "react";
 
-interface Props {
-  option: Option;
-  setOption: Dispatch<SetStateAction<Option>>;
-}
-
-export default function OptionCard({ option, setOption }: Props) {
+export default function OptionCard() {
+  const { gameSearch, setGameSearch } = useGame();
   const selectedStyle = "cursor-pointer text-white";
   const unselectedStyle = "cursor-pointer text-gray-400 hover:text-white";
   return (
@@ -29,16 +24,16 @@ export default function OptionCard({ option, setOption }: Props) {
           <FlexBox>
             <div
               className={`w-[150px] ${
-                option.mode === "standard" ? selectedStyle : unselectedStyle
+                gameSearch.mode === "standard" ? selectedStyle : unselectedStyle
               }`}
-              onClick={() => setOption({ ...option, mode: "standard" })}
+              onClick={() => setGameSearch({ ...gameSearch, mode: "standard" })}
             >
               Standard
             </div>
             <div
               className={`w-[150px] 
-            ${option.mode === "extreme" ? selectedStyle : unselectedStyle}`}
-              onClick={() => setOption({ ...option, mode: "extreme" })}
+            ${gameSearch.mode === "extreme" ? selectedStyle : unselectedStyle}`}
+              onClick={() => setGameSearch({ ...gameSearch, mode: "extreme" })}
             >
               Extreme
             </div>
