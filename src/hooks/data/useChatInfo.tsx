@@ -1,6 +1,7 @@
 import { atom, useAtom } from "jotai";
 import {
   Channel,
+  MemberAbstract,
   MemberDetail,
   getChannel,
   getChannelList,
@@ -11,6 +12,7 @@ import { getFriendList, Friend } from "@/api/users/friend";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { OtherUserAbstract } from "@/api/users";
+import { getBanMemberList } from "@/api/channels/operate";
 
 interface DmInfoType extends OtherUserAbstract {
   chatType: "DM";
@@ -26,6 +28,7 @@ const selectedAtom = atom<DmInfoType | ChannelInfoType | null>(null);
 const friendListAtom = atom<DmInfoType[]>([]);
 const channelListAtom = atom<ChannelInfoType[]>([]);
 const memberListAtom = atom<MemberDetail[]>([]);
+const banListAtom = atom<MemberAbstract[]>([]);
 
 interface ChatInfoRetType {
   chatInfo: {
@@ -34,11 +37,13 @@ interface ChatInfoRetType {
     friendList: DmInfoType[];
     channelList: ChannelInfoType[];
     memberList: MemberDetail[];
+    banList: MemberAbstract[];
   };
   changeType: (_type: "DM" | "CM") => Promise<void>;
   changeSelected: (_id: number | null, _type?: "DM" | "CM") => Promise<void>;
   updateInfo: (_type?: "DM" | "CM") => Promise<void>;
   updateMember: (_mem: MemberDetail, mode: "IN" | "OUT") => void;
+  updateBan: (_mem: MemberAbstract, mode: "BAN" | "CANCEL") => void;
 }
 
 function useChatInfo(): ChatInfoRetType {
@@ -47,6 +52,7 @@ function useChatInfo(): ChatInfoRetType {
   const [friendList, setFriendList] = useAtom(friendListAtom);
   const [channelList, setChannelList] = useAtom(channelListAtom);
   const [memberList, setMemberList] = useAtom(memberListAtom);
+  const [banList, setBanList] = useAtom(banListAtom);
 
   const changeType = async (_type: "DM" | "CM") => {
     setType(_type);
@@ -120,6 +126,10 @@ function useChatInfo(): ChatInfoRetType {
           const chan = (await getChannel(selected.id)).data;
           setMemberList(chan.users);
           console.log("MEMBERLIST", selected, chan);
+
+          const ban = (await getBanMemberList(selected.id)).data;
+          setBanList(ban);
+          console.log("BANLIST", ban);
         }
       }
     } catch (error) {
@@ -133,15 +143,36 @@ function useChatInfo(): ChatInfoRetType {
       setMemberList((prev) => [...prev, _mem]);
     } else if (mode === "OUT") {
       const idx = memberList.findIndex((elem) => elem.id === _mem.id);
-      idx !== -1 &&
-        setMemberList((prev) => {
-          return [...prev].splice(idx, 1);
-        });
+      idx !== -1 && setMemberList((prev) => [...prev].splice(idx, 1));
     }
     console.log("updateMember", memberList);
   };
-  const chatInfo = { type, selected, friendList, channelList, memberList };
-  return { chatInfo, changeType, changeSelected, updateInfo, updateMember };
+
+  const updateBan = (_mem: MemberAbstract, mode: "BAN" | "CANCEL") => {
+    if (mode === "BAN") {
+      setBanList((prev) => [...prev, _mem]);
+    } else if (mode === "CANCEL") {
+      const idx = banList.findIndex((elem) => elem.id === _mem.id);
+      idx !== -1 && setBanList((prev) => [...prev].splice(idx, 1));
+    }
+  };
+
+  const chatInfo = {
+    type,
+    selected,
+    friendList,
+    channelList,
+    memberList,
+    banList,
+  };
+  return {
+    chatInfo,
+    changeType,
+    changeSelected,
+    updateInfo,
+    updateMember,
+    updateBan,
+  };
 }
 
 export type { ChannelInfoType };
