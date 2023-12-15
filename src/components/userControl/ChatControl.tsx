@@ -15,7 +15,7 @@ interface Props {
 
 export default function ChatControl({ id }: Props) {
   const router = useRouter();
-  const { chatInfo } = useChatInfo();
+  const { chatInfo, updateInfo } = useChatInfo();
   const { closeUserControl } = useUserControl();
 
   const adminClick = async () => {
@@ -23,6 +23,7 @@ export default function ChatControl({ id }: Props) {
     if (chatInfo.selected !== null) {
       try {
         await giveAdmin(chatInfo.selected.id, id);
+        await updateInfo();
       } catch (error) {
         const axiosError = error as AxiosError;
         toast.error(axiosError.response?.status);
@@ -47,6 +48,7 @@ export default function ChatControl({ id }: Props) {
     if (chatInfo.selected !== null) {
       try {
         await banMember(chatInfo.selected.id, id);
+        await updateInfo();
       } catch (error) {
         const axiosError = error as AxiosError;
         toast.error(axiosError.response?.status);

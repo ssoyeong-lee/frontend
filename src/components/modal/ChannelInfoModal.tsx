@@ -1,24 +1,23 @@
-import { MemberAbstract, MemberDetail, getChannel } from "@/api/channels";
+import { MemberAbstract, MemberDetail } from "@/api/channels";
 import { depriveAdmin } from "@/api/channels/admin";
-import { getBanMemberList, removeBanMember } from "@/api/channels/operate";
+import { removeBanMember } from "@/api/channels/operate";
 import useChatInfo, { ChannelInfoType } from "@/hooks/data/useChatInfo";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
 import { AxiosError } from "axios";
-import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 interface MemItemProps {
   mem: MemberDetail;
   idx: number;
   channel: ChannelInfoType;
-  getData: () => Promise<void>;
 }
-function MemberItem({ mem, idx, channel, getData }: MemItemProps) {
+function MemberItem({ mem, idx, channel }: MemItemProps) {
+  const { updateInfo } = useChatInfo();
   const depriveAdminClick = async () => {
     try {
       await depriveAdmin(channel.id, mem.id);
-      await getData();
+      await updateInfo();
     } catch (error) {
       const axiosError = error as AxiosError;
       toast.error(axiosError.response?.status);
@@ -47,14 +46,14 @@ interface BanItemProps {
   mem: MemberAbstract;
   idx: number;
   channel: ChannelInfoType;
-  getData: () => Promise<void>;
 }
 
-function BanMemberItem({ mem, idx, channel, getData }: BanItemProps) {
+function BanMemberItem({ mem, idx, channel }: BanItemProps) {
+  const { updateInfo } = useChatInfo();
   const removeBanClick = async () => {
     try {
       await removeBanMember(channel.id, mem.id);
-      getData();
+      await updateInfo();
     } catch (error) {
       const axiosError = error as AxiosError;
       toast.error(axiosError.response?.status);
@@ -77,15 +76,7 @@ function BanMemberItem({ mem, idx, channel, getData }: BanItemProps) {
 }
 
 export default function ChannelInfoModal() {
-  const { chatInfo, updateInfo, updateMember } = useChatInfo();
-  // const [memberList, setMemberList] = useState<MemberDetail[]>([]);
-  const [bannedList, setBannedList] = useState<MemberAbstract[]>([]);
-
-  useEffect(() => {
-    if (chatInfo.selected !== null && chatInfo.selected.chatType === "CM") {
-      getData();
-    }
-  }, []);
+  const { chatInfo } = useChatInfo();
 
   if (chatInfo.selected === null || chatInfo.selected.chatType !== "CM") {
     console.log("error");
@@ -93,17 +84,6 @@ export default function ChannelInfoModal() {
   }
 
   const channel = chatInfo.selected;
-
-  const getData = async () => {
-    try {
-      await updateInfo("CM");
-      const bannedData = (await getBanMemberList(channel.id)).data;
-      setBannedList(bannedData);
-    } catch (error) {
-      const AxiosError = error as AxiosError;
-      toast.error(AxiosError.response?.status);
-    }
-  };
 
   return (
     <FlexBox
@@ -134,9 +114,6 @@ export default function ChannelInfoModal() {
                       mem={_mem}
                       idx={idx}
                       channel={channel}
-                      getData={async () => {
-                        console.log("hello");
-                      }}
                     />
                   );
                 })}
@@ -149,14 +126,13 @@ export default function ChannelInfoModal() {
           </div>
           <ScrollBox className="max-h-[280px]">
             <FlexBox direction="col" className="w-full h-full gap-2 p-1">
-              {bannedList.map((_mem, idx) => {
+              {chatInfo.banList.map((_mem, idx) => {
                 return (
                   <BanMemberItem
                     key={idx}
                     mem={_mem}
                     idx={idx}
                     channel={channel}
-                    getData={getData}
                   />
                 );
               })}
