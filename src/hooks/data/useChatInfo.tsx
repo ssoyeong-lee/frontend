@@ -2,7 +2,6 @@ import { atom, useAtom } from "jotai";
 import {
   Channel,
   MemberDetail,
-  MyChannel,
   getChannel,
   getChannelList,
   getMyChannels,
@@ -39,7 +38,7 @@ interface ChatInfoRetType {
   changeType: (_type: "DM" | "CM") => Promise<void>;
   changeSelected: (_id: number | null, _type?: "DM" | "CM") => Promise<void>;
   updateInfo: (_type?: "DM" | "CM") => Promise<void>;
-  //memeberList 업데이트
+  updateMember: (_mem: MemberDetail, mode: "IN" | "OUT") => void;
 }
 
 function useChatInfo(): ChatInfoRetType {
@@ -116,6 +115,12 @@ function useChatInfo(): ChatInfoRetType {
         const channelList = myChanExt.concat(allChanFlt);
         setChannelList(channelList);
         console.log(channelList);
+
+        if (selected !== null && selected.id !== null) {
+          const chan = (await getChannel(selected.id)).data;
+          setMemberList(chan.users);
+          console.log("MEMBERLIST", selected, chan);
+        }
       }
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -123,8 +128,20 @@ function useChatInfo(): ChatInfoRetType {
     }
   };
 
+  const updateMember = (_mem: MemberDetail, mode: "IN" | "OUT") => {
+    if (mode === "IN") {
+      setMemberList((prev) => [...prev, _mem]);
+    } else if (mode === "OUT") {
+      const idx = memberList.findIndex((elem) => elem.id === _mem.id);
+      idx !== -1 &&
+        setMemberList((prev) => {
+          return [...prev].splice(idx, 1);
+        });
+    }
+    console.log("updateMember", memberList);
+  };
   const chatInfo = { type, selected, friendList, channelList, memberList };
-  return { chatInfo, changeType, changeSelected, updateInfo };
+  return { chatInfo, changeType, changeSelected, updateInfo, updateMember };
 }
 
 export type { ChannelInfoType };

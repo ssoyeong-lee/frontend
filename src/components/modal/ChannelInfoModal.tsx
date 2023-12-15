@@ -77,13 +77,14 @@ function BanMemberItem({ mem, idx, channel, getData }: BanItemProps) {
 }
 
 export default function ChannelInfoModal() {
-  const { chatInfo } = useChatInfo();
-  const [memberList, setMemberList] = useState<MemberDetail[]>([]);
+  const { chatInfo, updateInfo, updateMember } = useChatInfo();
+  // const [memberList, setMemberList] = useState<MemberDetail[]>([]);
   const [bannedList, setBannedList] = useState<MemberAbstract[]>([]);
 
   useEffect(() => {
-    if (chatInfo.selected !== null && chatInfo.selected.chatType === "CM")
+    if (chatInfo.selected !== null && chatInfo.selected.chatType === "CM") {
       getData();
+    }
   }, []);
 
   if (chatInfo.selected === null || chatInfo.selected.chatType !== "CM") {
@@ -95,9 +96,8 @@ export default function ChannelInfoModal() {
 
   const getData = async () => {
     try {
-      const memberData = (await getChannel(channel.id)).data;
+      await updateInfo("CM");
       const bannedData = (await getBanMemberList(channel.id)).data;
-      setMemberList(memberData.users);
       setBannedList(bannedData);
     } catch (error) {
       const AxiosError = error as AxiosError;
@@ -126,15 +126,17 @@ export default function ChannelInfoModal() {
           <div className="w-full h-fit p-1 text-xl border-b-2">Member</div>
           <ScrollBox className="max-h-[280px]">
             <FlexBox direction="col" className="w-full h-full gap-2 p-1">
-              {memberList !== null &&
-                memberList.map((_mem, idx) => {
+              {chatInfo.memberList !== null &&
+                chatInfo.memberList.map((_mem, idx) => {
                   return (
                     <MemberItem
                       key={idx}
                       mem={_mem}
                       idx={idx}
                       channel={channel}
-                      getData={getData}
+                      getData={async () => {
+                        console.log("hello");
+                      }}
                     />
                   );
                 })}
