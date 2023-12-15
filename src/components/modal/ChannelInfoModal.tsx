@@ -5,6 +5,7 @@ import useChatInfo, { ChannelInfoType } from "@/hooks/data/useChatInfo";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
 import { AxiosError } from "axios";
+import { useEffect } from "react";
 import { toast } from "react-toastify";
 
 interface MemItemProps {
@@ -80,7 +81,11 @@ function BanMemberItem({ mem, idx, channel }: BanItemProps) {
 }
 
 export default function ChannelInfoModal() {
-  const { chatInfo } = useChatInfo();
+  const { chatInfo, updateInfo } = useChatInfo();
+
+  useEffect(()=>{
+    updateInfo();
+  }, []);
 
   if (chatInfo.selected === null || chatInfo.selected.chatType !== "CM") {
     console.log("error");
