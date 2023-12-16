@@ -59,7 +59,7 @@ export default function ChatroomSettinngModal() {
   const okClick = () => {
     if (chatInfo.selected === null) return;
     updateChannel(chatInfo.selected.id, { title, type, password });
-    updateInfo("CM");
+    updateInfo(chatInfo.selected.id, "CM");
     closeModal();
   };
 

@@ -1,18 +1,17 @@
-import { atom, useAtom } from "jotai";
 import {
-  Channel,
-  MemberAbstract,
-  MemberDetail,
-  getChannel,
-  getChannelList,
-  getMyChannels,
-  joinChannel,
+    Channel,
+    MemberAbstract,
+    MemberDetail,
+    getChannel,
+    getChannelList,
+    getMyChannels,
 } from "@/api/channels";
-import { getFriendList, Friend } from "@/api/users/friend";
-import { AxiosError } from "axios";
-import { toast } from "react-toastify";
-import { OtherUserAbstract } from "@/api/users";
 import { getBanMemberList } from "@/api/channels/operate";
+import { OtherUserAbstract } from "@/api/users";
+import { getFriendList } from "@/api/users/friend";
+import { AxiosError } from "axios";
+import { atom, useAtom } from "jotai";
+import { toast } from "react-toastify";
 
 interface DmInfoType extends OtherUserAbstract {
   chatType: "DM";
@@ -43,7 +42,6 @@ interface ChatInfoRetType {
   changeSelected: (_id: number | null, _type?: "DM" | "CM") => Promise<void>;
   updateInfo: (_type?: "DM" | "CM") => Promise<void>;
   updateMember: (_mem: MemberDetail, mode: "IN" | "OUT" | "UPDATE") => void;
-  updateBan: (_mem: MemberAbstract, mode: "BAN" | "CANCEL") => void;
 }
 
 function useChatInfo(): ChatInfoRetType {
@@ -56,18 +54,14 @@ function useChatInfo(): ChatInfoRetType {
 
   const changeType = async (_type: "DM" | "CM") => {
     setType(_type);
-    await updateInfo(_type);
+    setSelected(null);
+    await updateInfo(null, _type);
   };
 
   const changeSelected = async (
     _id: number | null,
     _type: "DM" | "CM" = type
   ) => {
-    if (_id === null) {
-      setSelected(null);
-      await updateInfo();
-      return;
-    }
     if (_type === "DM") {
       console.log("changeSelected DM");
       const _idx = friendList.findIndex((e) => e.id === _id);
@@ -77,18 +71,18 @@ function useChatInfo(): ChatInfoRetType {
       _idx === -1 ? setSelected(null) : setSelected(channelList[_idx]);
 
       if (
+        _id !== null &&
         channelList[_idx].type !== "protected" &&
         channelList[_idx].role === null
       ) {
-        await joinChannel(_id, "");
         const chanData = (await getChannel(_id)).data;
         setMemberList(chanData.users);
       }
     }
-    await updateInfo(_type);
+    await updateInfo(_id, _type);
   };
 
-  const updateInfo = async (_type: "DM" | "CM" = type) => {
+  const updateInfo = async (_id: number | null, _type?: "DM" | "CM") => {
     try {
       if (_type === "DM") {
         console.log("Update DM");
@@ -122,12 +116,12 @@ function useChatInfo(): ChatInfoRetType {
         setChannelList(channelList);
         console.log(channelList);
 
-        if (selected !== null && selected.id !== null) {
-          const chan = (await getChannel(selected.id)).data;
+        if (_id !== null) {
+          const chan = (await getChannel(_id)).data;
           setMemberList(chan.users);
-          console.log("MEMBERLIST", selected, chan);
+          console.log("MEMBERLIST", chan);
 
-          const ban = (await getBanMemberList(selected.id)).data;
+          const ban = (await getBanMemberList(_id)).data;
           setBanList(ban);
           console.log("BANLIST", ban);
         }
@@ -158,15 +152,6 @@ function useChatInfo(): ChatInfoRetType {
     console.log("updateMember", memberList);
   };
 
-  const updateBan = (_mem: MemberAbstract, mode: "BAN" | "CANCEL") => {
-    if (mode === "BAN") {
-      setBanList((prev) => [...prev, _mem]);
-    } else if (mode === "CANCEL") {
-      const idx = banList.findIndex((elem) => elem.id === _mem.id);
-      idx !== -1 && setBanList((prev) => [...prev].splice(idx, 1));
-    }
-  };
-
   const chatInfo = {
     type,
     selected,
@@ -181,7 +166,6 @@ function useChatInfo(): ChatInfoRetType {
     changeSelected,
     updateInfo,
     updateMember,
-    updateBan,
   };
 }
 
