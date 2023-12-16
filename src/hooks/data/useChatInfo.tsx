@@ -42,7 +42,7 @@ interface ChatInfoRetType {
   changeType: (_type: "DM" | "CM") => Promise<void>;
   changeSelected: (_id: number | null, _type?: "DM" | "CM") => Promise<void>;
   updateInfo: (_type?: "DM" | "CM") => Promise<void>;
-  updateMember: (_mem: MemberDetail, mode: "IN" | "OUT") => void;
+  updateMember: (_mem: MemberDetail, mode: "IN" | "OUT" | "UPDATE") => void;
   updateBan: (_mem: MemberAbstract, mode: "BAN" | "CANCEL") => void;
 }
 
@@ -140,12 +140,20 @@ function useChatInfo(): ChatInfoRetType {
     }
   };
 
-  const updateMember = (_mem: MemberDetail, mode: "IN" | "OUT") => {
+  const updateMember = (_mem: MemberDetail, mode: "IN" | "OUT" | "UPDATE") => {
     if (mode === "IN") {
       setMemberList((prev) => [...prev, _mem]);
     } else if (mode === "OUT") {
       const idx = memberList.findIndex((elem) => elem.id === _mem.id);
       idx !== -1 && setMemberList((prev) => [...prev].splice(idx, 1));
+    } else if (mode === "UPDATE") {
+      const idx = memberList.findIndex((elem) => elem.id === _mem.id);
+      idx !== -1 &&
+        setMemberList((prev) => {
+          const ret = [...prev];
+          ret[idx] = _mem;
+          return ret;
+        });
     }
     console.log("updateMember", memberList);
   };
