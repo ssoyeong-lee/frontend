@@ -18,7 +18,7 @@ function MemberItem({ mem, idx, channel }: MemItemProps) {
   const depriveAdminClick = async () => {
     try {
       await depriveAdmin(channel.id, mem.id);
-      await updateInfo();
+      await updateInfo(channel.id);
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
       if (typeof axiosError.response?.data.message === "object")
@@ -56,7 +56,7 @@ function BanMemberItem({ mem, idx, channel }: BanItemProps) {
   const removeBanClick = async () => {
     try {
       await removeBanMember(channel.id, mem.id);
-      await updateInfo();
+      await updateInfo(channel.id);
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
       if (typeof axiosError.response?.data.message === "object")
@@ -83,8 +83,8 @@ function BanMemberItem({ mem, idx, channel }: BanItemProps) {
 export default function ChannelInfoModal() {
   const { chatInfo, updateInfo } = useChatInfo();
 
-  useEffect(()=>{
-    updateInfo();
+  useEffect(() => {
+    chatInfo.selected && updateInfo(chatInfo.selected.id);
   }, []);
 
   if (chatInfo.selected === null || chatInfo.selected.chatType !== "CM") {

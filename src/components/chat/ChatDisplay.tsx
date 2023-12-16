@@ -23,6 +23,12 @@ export default function ChatDisplay() {
     ref.current?.scrollTo(0, ref.current.scrollHeight);
   }, [chatData]);
 
+  useEffect(()=>{
+    if (chatInfo.selected === null) {
+        setChatData([]);
+    }
+  }, [chatInfo.selected])
+  
   useEffect(() => {
     if (chatInfo.selected !== null) {
       if (chatInfo.selected.chatType === "DM") {

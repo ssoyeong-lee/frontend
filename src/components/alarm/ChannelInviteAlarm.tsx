@@ -3,6 +3,8 @@ import { NotiChannelInvite } from "@/socket/notification";
 import ChipButton from "../button/ChipButton";
 import { useNoti } from "@/hooks/data/useNoti";
 import { acceptInvite, rejectInvite } from "@/api/channels/operate";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 interface ChannelInviteAlarmProps {
   noti: NotiChannelInvite;
@@ -15,9 +17,17 @@ export default function ChannelInviteAlarm({
 }: ChannelInviteAlarmProps) {
   const { removeNoti } = useNoti();
   const acceptClick = async () => {
-    console.log("acceptClick");
-    removeNoti(idx);
-    await acceptInvite(noti.channel.id);
+    try {
+      console.log("acceptClick");
+      await acceptInvite(noti.channel.id);
+      removeNoti(idx);
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      if (typeof axiosError.response?.data.message === "object")
+        toast.error(axiosError.response?.data.message[0]);
+      else toast.error(axiosError.response?.data.message);
+      removeNoti(idx);
+    }
   };
   const rejectClick = async () => {
     console.log("rejectClick");

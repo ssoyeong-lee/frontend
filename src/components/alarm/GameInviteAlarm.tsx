@@ -1,6 +1,5 @@
 import { acceptGame, rejectGame } from "@/api/games/index";
 import ChipButton from "@/components/button/ChipButton";
-import { useNotification } from "@/hooks/display/useNotification";
 import FlexBox from "@/layouts/FlexBox";
 import { NotiGameInvite } from "@/socket/notification";
 import { AxiosError } from "axios";
@@ -12,11 +11,9 @@ interface GameInviteAlarmProps {
 }
 
 export default function GameInviteAlarm({ noti, idx }: GameInviteAlarmProps) {
-  const { closeNotification } = useNotification();
   const acceptClick = async () => {
     try {
       await acceptGame(noti.invitingUser.id);
-      closeNotification();
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
       if (typeof axiosError.response?.data.message === "object")
