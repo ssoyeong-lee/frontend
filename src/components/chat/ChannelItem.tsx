@@ -14,6 +14,7 @@ interface buttonProps {
 function LeaveButton({ id }: buttonProps) {
   const { changeSelected } = useChatInfo();
   const leaveClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     try {
       await leaveChannel(id);
       await changeSelected(null);
@@ -56,8 +57,8 @@ export default function ChannelItem({
       if (data.type === "protected" && data.role === null)
         data.role === null && openModal(<PasswordModal id={data.id} />);
       else {
-        await changeSelected(data.id);
-        data.role === null && (await joinChannel(data.id, ""));
+          data.role === null && (await joinChannel(data.id, ""));
+          await changeSelected(data.id);
       }
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;

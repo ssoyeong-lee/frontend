@@ -1,18 +1,17 @@
-import { atom, useAtom } from "jotai";
 import {
-  Channel,
-  MemberAbstract,
-  MemberDetail,
-  getChannel,
-  getChannelList,
-  getMyChannels,
-  joinChannel,
+    Channel,
+    MemberAbstract,
+    MemberDetail,
+    getChannel,
+    getChannelList,
+    getMyChannels,
 } from "@/api/channels";
-import { getFriendList, Friend } from "@/api/users/friend";
-import { AxiosError } from "axios";
-import { toast } from "react-toastify";
-import { OtherUserAbstract } from "@/api/users";
 import { getBanMemberList } from "@/api/channels/operate";
+import { OtherUserAbstract } from "@/api/users";
+import { getFriendList } from "@/api/users/friend";
+import { AxiosError } from "axios";
+import { atom, useAtom } from "jotai";
+import { toast } from "react-toastify";
 
 interface DmInfoType extends OtherUserAbstract {
   chatType: "DM";
@@ -43,7 +42,6 @@ interface ChatInfoRetType {
   changeSelected: (_id: number | null, _type?: "DM" | "CM") => Promise<void>;
   updateInfo: (_id: number | null, _type?: "DM" | "CM") => Promise<void>;
   updateMember: (_mem: MemberDetail, mode: "IN" | "OUT") => void;
-  updateBan: (_mem: MemberAbstract, mode: "BAN" | "CANCEL") => void;
 }
 
 function useChatInfo(): ChatInfoRetType {
@@ -77,7 +75,6 @@ function useChatInfo(): ChatInfoRetType {
         channelList[_idx].type !== "protected" &&
         channelList[_idx].role === null
       ) {
-        // await joinChannel(_id, "");
         const chanData = (await getChannel(_id)).data;
         setMemberList(chanData.users);
       }
@@ -147,15 +144,6 @@ function useChatInfo(): ChatInfoRetType {
     console.log("updateMember", memberList);
   };
 
-  const updateBan = (_mem: MemberAbstract, mode: "BAN" | "CANCEL") => {
-    if (mode === "BAN") {
-      setBanList((prev) => [...prev, _mem]);
-    } else if (mode === "CANCEL") {
-      const idx = banList.findIndex((elem) => elem.id === _mem.id);
-      idx !== -1 && setBanList((prev) => [...prev].splice(idx, 1));
-    }
-  };
-
   const chatInfo = {
     type,
     selected,
@@ -170,7 +158,6 @@ function useChatInfo(): ChatInfoRetType {
     changeSelected,
     updateInfo,
     updateMember,
-    updateBan,
   };
 }
 
