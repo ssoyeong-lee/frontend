@@ -27,9 +27,12 @@ export default function ListCard() {
     changeType("CM");
     console.log(chatInfo);
   };
-
   useEffect(() => {
-    updateInfo(chatInfo.type);
+    updateInfo(chatInfo.selected ? chatInfo.selected.id : null, chatInfo.type);
+  }, []);
+  useEffect(() => {
+    if (chatInfo.selected !== null)
+      updateInfo(chatInfo.selected.id, chatInfo.type);
   }, [chatInfo.type]);
 
   return (
@@ -61,7 +64,9 @@ export default function ListCard() {
                       <ChannelItem
                         key={idx}
                         data={channel}
-                        isSelected={channel.id === chatInfo.selected?.id ? true : false}
+                        isSelected={
+                          channel.id === chatInfo.selected?.id ? true : false
+                        }
                         isJoined={channel.role !== null ? true : false}
                         notiCount={CMData[channel.id]?.unreadCount ?? 0}
                       />

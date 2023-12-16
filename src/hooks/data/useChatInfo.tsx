@@ -41,7 +41,7 @@ interface ChatInfoRetType {
   };
   changeType: (_type: "DM" | "CM") => Promise<void>;
   changeSelected: (_id: number | null, _type?: "DM" | "CM") => Promise<void>;
-  updateInfo: (_type?: "DM" | "CM") => Promise<void>;
+  updateInfo: (_id: number | null, _type?: "DM" | "CM") => Promise<void>;
   updateMember: (_mem: MemberDetail, mode: "IN" | "OUT") => void;
   updateBan: (_mem: MemberAbstract, mode: "BAN" | "CANCEL") => void;
 }
@@ -56,18 +56,14 @@ function useChatInfo(): ChatInfoRetType {
 
   const changeType = async (_type: "DM" | "CM") => {
     setType(_type);
-    await updateInfo(_type);
+    setSelected(null);
+    await updateInfo(null, _type);
   };
 
   const changeSelected = async (
     _id: number | null,
     _type: "DM" | "CM" = type
   ) => {
-    if (_id === null) {
-      setSelected(null);
-      await updateInfo();
-      return;
-    }
     if (_type === "DM") {
       console.log("changeSelected DM");
       const _idx = friendList.findIndex((e) => e.id === _id);
@@ -77,18 +73,19 @@ function useChatInfo(): ChatInfoRetType {
       _idx === -1 ? setSelected(null) : setSelected(channelList[_idx]);
 
       if (
+        _id !== null &&
         channelList[_idx].type !== "protected" &&
         channelList[_idx].role === null
       ) {
-        await joinChannel(_id, "");
+        // await joinChannel(_id, "");
         const chanData = (await getChannel(_id)).data;
         setMemberList(chanData.users);
       }
     }
-    await updateInfo(_type);
+    await updateInfo(_id, _type);
   };
 
-  const updateInfo = async (_type: "DM" | "CM" = type) => {
+  const updateInfo = async (_id: number | null, _type?: "DM" | "CM") => {
     try {
       if (_type === "DM") {
         console.log("Update DM");
@@ -122,12 +119,12 @@ function useChatInfo(): ChatInfoRetType {
         setChannelList(channelList);
         console.log(channelList);
 
-        if (selected !== null && selected.id !== null) {
-          const chan = (await getChannel(selected.id)).data;
+        if (_id !== null) {
+          const chan = (await getChannel(_id)).data;
           setMemberList(chan.users);
-          console.log("MEMBERLIST", selected, chan);
+          console.log("MEMBERLIST", chan);
 
-          const ban = (await getBanMemberList(selected.id)).data;
+          const ban = (await getBanMemberList(_id)).data;
           setBanList(ban);
           console.log("BANLIST", ban);
         }
