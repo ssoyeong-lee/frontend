@@ -1,10 +1,10 @@
 import {
-    Channel,
-    MemberAbstract,
-    MemberDetail,
-    getChannel,
-    getChannelList,
-    getMyChannels,
+  Channel,
+  MemberAbstract,
+  MemberDetail,
+  getChannel,
+  getChannelList,
+  getMyChannels,
 } from "@/api/channels";
 import { getBanMemberList } from "@/api/channels/operate";
 import { OtherUserAbstract } from "@/api/users";
@@ -40,8 +40,12 @@ interface ChatInfoRetType {
   };
   changeType: (_type: "DM" | "CM") => Promise<void>;
   changeSelected: (_id: number | null, _type?: "DM" | "CM") => Promise<void>;
-  updateInfo: (_type?: "DM" | "CM") => Promise<void>;
-  updateMember: (_mem: MemberDetail, mode: "IN" | "OUT" | "UPDATE") => void;
+  updateInfo: (_id: number | null, _type?: "DM" | "CM") => Promise<void>;
+  updateMember: (
+    _id: number | null,
+    _mem: MemberDetail,
+    mode: "IN" | "OUT" | "UPDATE"
+  ) => void;
 }
 
 function useChatInfo(): ChatInfoRetType {
@@ -134,23 +138,11 @@ function useChatInfo(): ChatInfoRetType {
     }
   };
 
-  const updateMember = (_mem: MemberDetail, mode: "IN" | "OUT" | "UPDATE") => {
-    if (mode === "IN") {
-      setMemberList((prev) => [...prev, _mem]);
-    } else if (mode === "OUT") {
-      const idx = memberList.findIndex((elem) => elem.id === _mem.id);
-      idx !== -1 && setMemberList((prev) => [...prev].splice(idx, 1));
-    } else if (mode === "UPDATE") {
-      const idx = memberList.findIndex((elem) => elem.id === _mem.id);
-      idx !== -1 &&
-        setMemberList((prev) => {
-          const ret = [...prev];
-          ret[idx] = _mem;
-          return ret;
-        });
-    }
-    console.log("updateMember", memberList);
-  };
+  const updateMember = (
+    _id: number | null,
+    _mem: MemberDetail,
+    mode: "IN" | "OUT" | "UPDATE"
+  ) => {};
 
   const chatInfo = {
     type,
