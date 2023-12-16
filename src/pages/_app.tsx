@@ -1,9 +1,7 @@
-import { MemberDetail } from "@/api/channels/index";
 import { getUserMe } from "@/api/users/index";
 import MatchEndModal from "@/components/modal/MatchEndModal";
 import MatchFoundModal from "@/components/modal/MatchFoundModal";
 import { useAuth } from "@/hooks/data/useAuth";
-import useChatInfo from "@/hooks/data/useChatInfo";
 import { useGame } from "@/hooks/data/useGame";
 import { useMessage } from "@/hooks/data/useMessage";
 import { useNoti } from "@/hooks/data/useNoti";
@@ -49,7 +47,6 @@ export default function App({ Component, pageProps }: AppProps) {
     increaseCMUnreadCount,
   } = useMessage();
   const { setNoti, setNotiList } = useNoti();
-  const { chatInfo, updateMember, updateBan } = useChatInfo();
 
   useEffect(() => {
     if (
@@ -89,47 +86,9 @@ export default function App({ Component, pageProps }: AppProps) {
                 setCM(data);
                 increaseCMUnreadCount(data.channel.id);
               });
-              receiveChannelIn(socketInstance, (data) => {
-                if (
-                  chatInfo.type === "CM" &&
-                  chatInfo.selected?.id === data.channel.id
-                ) {
-                  const user: MemberDetail = {
-                    ...data.channelRelation.user,
-                    role: "User",
-                  };
-                  if (data.channelRelation.isAdmin) user.role = "Admin";
-                  if (data.channelRelation.isOwner) user.role = "Owner";
-                  updateMember(user, "IN");
-                }
-              });
-              receiveChannelOut(socketInstance, (data) => {
-                if (
-                  chatInfo.type === "CM" &&
-                  chatInfo.selected?.id === data.channel.id
-                ) {
-                  const user: MemberDetail = {
-                    ...data.user,
-                    nickname: "",
-                    role: "User",
-                  };
-                  updateMember(user, "OUT");
-                }
-              });
-              receiveChannelMember(socketInstance, (data) => {
-                if (
-                  chatInfo.type === "CM" &&
-                  chatInfo.selected?.id === data.channel.id
-                ) {
-                  const user: MemberDetail = {
-                    ...data.channelRelation.user,
-                    role: "User",
-                  };
-                  if (data.channelRelation.isAdmin) user.role = "Admin";
-                  if (data.channelRelation.isOwner) user.role = "Owner";
-                  updateMember(user, "UPDATE");
-                }
-              });
+              receiveChannelIn(socketInstance, (data) => {});
+              receiveChannelOut(socketInstance, (data) => {});
+              receiveChannelMember(socketInstance, (data) => {});
               receiveNotification(socketInstance, setNoti);
               receiveGameStart(socketInstance, (data) => {
                 setGameSearch({
