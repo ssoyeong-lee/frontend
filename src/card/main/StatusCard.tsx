@@ -66,7 +66,7 @@ export default function StatusCard({ user }: { user: UserDetail | null }) {
           <CoinDisplay title="Lose" content={lose} color="red" />
           <CoinDisplay
             title="Win Rate"
-            content={Math.floor((win * 100) / (win + lose)) + "%"}
+            content={(win + lose !== 0) ? Math.floor((win * 100) / (win + lose)) + "%" : "0%"}
             color="green"
           />
         </FlexBox>
