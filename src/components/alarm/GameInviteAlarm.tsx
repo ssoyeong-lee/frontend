@@ -4,6 +4,7 @@ import { useNoti } from "@/hooks/data/useNoti";
 import FlexBox from "@/layouts/FlexBox";
 import { NotiGameInvite } from "@/socket/notification";
 import { AxiosError } from "axios";
+import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
 interface GameInviteAlarmProps {
@@ -13,12 +14,17 @@ interface GameInviteAlarmProps {
 
 export default function GameInviteAlarm({ noti, idx }: GameInviteAlarmProps) {
   const { removeNoti } = useNoti();
+  const router = useRouter();
   const acceptClick = async () => {
     try {
       await acceptGame(noti.invitingUser.id);
       removeNoti(idx);
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);
@@ -30,6 +36,10 @@ export default function GameInviteAlarm({ noti, idx }: GameInviteAlarmProps) {
       removeNoti(idx);
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);

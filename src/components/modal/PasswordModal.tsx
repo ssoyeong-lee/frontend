@@ -7,12 +7,14 @@ import { useModal } from "@/hooks/display/useModal";
 import useChatInfo from "@/hooks/data/useChatInfo";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 interface Props {
   id: number;
 }
 
 export default function PasswordModal({ id }: Props) {
+  const router = useRouter();
   const { closeModal } = useModal();
   const { chatInfo, changeSelected, updateInfo } = useChatInfo();
   const [password, setPassword] = useState("");
@@ -29,6 +31,10 @@ export default function PasswordModal({ id }: Props) {
     } catch (error) {
       changeSelected(null);
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);

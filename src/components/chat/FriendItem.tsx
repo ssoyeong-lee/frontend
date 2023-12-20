@@ -6,6 +6,7 @@ import { useSocket } from "@/hooks/useSocket";
 import FlexBox from "@/layouts/FlexBox";
 import { sendDMRead } from "@/socket/directMessage";
 import { AxiosError } from "axios";
+import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
 interface Props {
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export default function FriendItem({ data, isSelected, notiCount = 0 }: Props) {
+  const router = useRouter();
   const { socket } = useSocket();
   const { changeSelected } = useChatInfo();
   const { setDMUnreadCount } = useMessage();
@@ -24,6 +26,10 @@ export default function FriendItem({ data, isSelected, notiCount = 0 }: Props) {
       await changeSelected(data.id);
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);

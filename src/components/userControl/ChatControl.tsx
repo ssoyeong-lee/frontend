@@ -26,6 +26,10 @@ export default function ChatControl({ id }: Props) {
         await updateInfo(chatInfo.selected.id);
       } catch (error) {
         const axiosError = error as AxiosError<{ message: string }>;
+        if (axiosError.response?.status === 401) {
+          router.push("/login");
+          return;
+        }
         if (typeof axiosError.response?.data.message === "object")
           toast.error(axiosError.response?.data.message[0]);
         else toast.error(axiosError.response?.data.message);
@@ -40,6 +44,10 @@ export default function ChatControl({ id }: Props) {
         await kickMember(chatInfo.selected.id, id);
       } catch (error) {
         const axiosError = error as AxiosError<{ message: string }>;
+        if (axiosError.response?.status === 401) {
+          router.push("/login");
+          return;
+        }
         if (typeof axiosError.response?.data.message === "object")
           toast.error(axiosError.response?.data.message[0]);
         else toast.error(axiosError.response?.data.message);
@@ -55,6 +63,10 @@ export default function ChatControl({ id }: Props) {
         await updateInfo(chatInfo.selected.id);
       } catch (error) {
         const axiosError = error as AxiosError<{ message: string }>;
+        if (axiosError.response?.status === 401) {
+          router.push("/login");
+          return;
+        }
         if (typeof axiosError.response?.data.message === "object")
           toast.error(axiosError.response?.data.message[0]);
         else toast.error(axiosError.response?.data.message);
@@ -69,6 +81,10 @@ export default function ChatControl({ id }: Props) {
         await muteMember(chatInfo.selected.id, id);
       } catch (error) {
         const axiosError = error as AxiosError<{ message: string }>;
+        if (axiosError.response?.status === 401) {
+          router.push("/login");
+          return;
+        }
         if (typeof axiosError.response?.data.message === "object")
           toast.error(axiosError.response?.data.message[0]);
         else toast.error(axiosError.response?.data.message);
@@ -88,6 +104,10 @@ export default function ChatControl({ id }: Props) {
       closeUserControl();
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);

@@ -1,5 +1,5 @@
 import { TFAOff } from "@/api/auth/2fa";
-import { UserDetail, putUserMe } from "@/api/users/index";
+import { UserDetail, putUserMe, putUserMeAvatar } from "@/api/users/index";
 import Avatar, { avatarObj } from "@/components/Avatar";
 import ChipButton from "@/components/button/ChipButton";
 import DefaultInput from "@/components/control/DefaultInput";
@@ -9,6 +9,7 @@ import { useModal } from "@/hooks/display/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import { AxiosError } from "axios";
+import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -19,8 +20,9 @@ interface Props {
 }
 
 export default function ProfileCard({ type, user, setUser }: Props) {
+  const router = useRouter();
   const [onMouse, setOnMouse] = useState<boolean>(false);
-  const { openModal, closeModal } = useModal();
+  const { openModal } = useModal();
   const onChange = (key: keyof UserDetail, value: any) => {
     if (!setUser || !user) return;
     setUser((prev: UserDetail | null) => {
@@ -28,19 +30,12 @@ export default function ProfileCard({ type, user, setUser }: Props) {
       return { ...prev, [key]: value };
     });
   };
-  const onCloseAvatar = (num: keyof typeof avatarObj) => {
-    closeModal();
-    if (!setUser || !user) return;
-    setUser((prev: UserDetail | null) => {
-      if (!prev) return null;
-      putUserMe({ ...prev, avatar: num });
-      return { ...prev, avatar: num };
-    });
-  };
-  const onClickAvatar = () => {
+  const onChangeAvatar = async (file: File | undefined) => {
     if (type === "other") return;
     if (!setUser || !user) return;
-    openModal(<AvatarModal onClick={onCloseAvatar} />);
+    if (file === undefined) return;
+    const res = await putUserMeAvatar(file);
+    console.log(res);
   };
   const onClickTwoFactor = async () => {
     if (!setUser || !user) return;
@@ -54,6 +49,10 @@ export default function ProfileCard({ type, user, setUser }: Props) {
       } else openModal(<TFAModal />);
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);
@@ -65,6 +64,10 @@ export default function ProfileCard({ type, user, setUser }: Props) {
       await putUserMe(user);
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);
@@ -105,16 +108,28 @@ export default function ProfileCard({ type, user, setUser }: Props) {
           <div className="relative">
             <Avatar type={user?.avatar ?? 0} />
             {type === "me" && (
-              <FlexBox
-                direction="col"
-                className="group/item absolute cursor-pointer rounded-full hover:bg-[#000000CC] 
+              <label htmlFor="file">
+                <FlexBox
+                  direction="col"
+                  className="group/item absolute cursor-pointer rounded-full hover:bg-[#000000CC] 
                 top-0 right-0 h-full w-full justify-center text-white"
-                onClick={onClickAvatar}
-              >
-                <div className="text-sm invisible group-hover/item:visible">
-                  change
-                </div>
-              </FlexBox>
+                >
+                  <div className="text-sm invisible group-hover/item:visible">
+                    change
+                  </div>
+                  <input
+                    type="file"
+                    name="file"
+                    id="file"
+                    accept=".png"
+                    className="hidden"
+                    onChange={(e) => {
+                      onChangeAvatar(e.target.files?.[0]);
+                      e.target.value = "";
+                    }}
+                  />
+                </FlexBox>
+              </label>
             )}
           </div>
         </FlexBox>

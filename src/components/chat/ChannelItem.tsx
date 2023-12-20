@@ -6,12 +6,14 @@ import NotificationDot from "../NotificationDot";
 import PasswordModal from "../modal/PasswordModal";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 interface buttonProps {
   id: number;
 }
 
 function LeaveButton({ id }: buttonProps) {
+  const router = useRouter();
   const { changeSelected } = useChatInfo();
   const leaveClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -21,6 +23,10 @@ function LeaveButton({ id }: buttonProps) {
       console.log("leave channel");
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);
@@ -50,6 +56,7 @@ export default function ChannelItem({
   isJoined,
   notiCount = 0,
 }: Props) {
+  const router = useRouter();
   const { openModal } = useModal();
   const { changeSelected } = useChatInfo();
   const itemClick = async () => {
@@ -57,11 +64,15 @@ export default function ChannelItem({
       if (data.type === "protected" && data.role === null)
         data.role === null && openModal(<PasswordModal id={data.id} />);
       else {
-          data.role === null && (await joinChannel(data.id, ""));
-          await changeSelected(data.id);
+        data.role === null && (await joinChannel(data.id, ""));
+        await changeSelected(data.id);
       }
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);
