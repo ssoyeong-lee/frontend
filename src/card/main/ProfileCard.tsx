@@ -34,9 +34,7 @@ export default function ProfileCard({ type, user, setUser }: Props) {
     if (type === "other") return;
     if (!setUser || !user) return;
     if (file === undefined) return;
-    const formData = new FormData();
-    formData.append("file", file);
-    const res = await putUserMeAvatar(formData);
+    const res = await putUserMeAvatar(file);
     console.log(res);
   };
   const onClickTwoFactor = async () => {

@@ -38,8 +38,10 @@ async function putUserMe(params: UserDetail): Promise<AxiosResponse> {
   return axios.put("/api/users/me", params);
 }
 
-async function putUserMeAvatar(avatar: FormData): Promise<AxiosResponse> {
-  return axios.put("/api/users/me/avatar", avatar, {
+async function putUserMeAvatar(avatar: File): Promise<AxiosResponse> {
+  const formData = new FormData();
+  formData.append("file", avatar);
+  return axios.put("/api/users/me/avatar", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
