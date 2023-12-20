@@ -23,12 +23,12 @@ export default function ChatDisplay() {
     ref.current?.scrollTo(0, ref.current.scrollHeight);
   }, [chatData]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (chatInfo.selected === null) {
-        setChatData([]);
+      setChatData([]);
     }
-  }, [chatInfo.selected])
-  
+  }, [chatInfo.selected]);
+
   useEffect(() => {
     if (chatInfo.selected !== null) {
       if (chatInfo.selected.chatType === "DM") {
@@ -46,10 +46,11 @@ export default function ChatDisplay() {
   useEffect(() => {
     if (chatInfo.selected !== null) {
       const setDMListImpl = (data: DM[]) => {
-        chatInfo?.selected && setDMList(data, chatInfo.selected.id ?? -1)
+        chatInfo?.selected && setDMList(data, chatInfo.selected.id ?? -1);
       };
       if (chatInfo.type === "DM") {
-        chatInfo?.selected && recieveDMList(socket, chatInfo.selected.id, setDMListImpl);
+        chatInfo?.selected &&
+          recieveDMList(socket, chatInfo.selected.id, setDMListImpl);
       }
     }
   }, [chatInfo.selected, chatInfo.type, socket]);
@@ -57,6 +58,11 @@ export default function ChatDisplay() {
   return (
     <ScrollBox ref={ref}>
       <FlexBox direction="col" className="w-full h-full">
+        {chatInfo.selected === null && (
+          <div className="font-bold text-2xl text-gray-500">
+            Not Selected.
+          </div>
+        )}
         {chatData.map((data, idx) => {
           if (data.sender.id === auth?.id)
             return <MyChat key={idx} content={data.content} />;
