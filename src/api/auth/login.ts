@@ -21,17 +21,21 @@ export function userRedirect(
 }
 
 export function register(
-  nickname: string
+  nickname: string,
+  file: File | null
 ): Promise<AxiosResponse<{ session?: string }>> {
-  return axios.post("/api/auth/register", { nickname });
-}
-
-export function uploadAvatar(file: File): Promise<AxiosResponse> {
+  if (file !== null) {
     const formData = new FormData();
-    formData.append('files', file);
-    return axios.post("/api/auth/register", formData, {
+    formData.append("files", file);
+    return axios.post(
+      "/api/auth/register",
+      { nickname, formData },
+      {
         headers: {
-            "Content-Type": "multipart/form-data",
-        }
-    });
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+  }
+  return axios.post("/api/auth/register", { nickname });
 }
