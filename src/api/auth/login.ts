@@ -25,3 +25,13 @@ export function register(
 ): Promise<AxiosResponse<{ session?: string }>> {
   return axios.post("/api/auth/register", { nickname });
 }
+
+export function uploadAvatar(file: File): Promise<AxiosResponse> {
+    const formData = new FormData();
+    formData.append('files', file);
+    return axios.post("/api/auth/register", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        }
+    });
+}
