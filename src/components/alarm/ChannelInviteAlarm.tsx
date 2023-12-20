@@ -5,6 +5,7 @@ import { useNoti } from "@/hooks/data/useNoti";
 import { acceptInvite, rejectInvite } from "@/api/channels/operate";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 interface ChannelInviteAlarmProps {
   noti: NotiChannelInvite;
@@ -15,6 +16,7 @@ export default function ChannelInviteAlarm({
   noti,
   idx,
 }: ChannelInviteAlarmProps) {
+  const router = useRouter();
   const { removeNoti } = useNoti();
   const acceptClick = async () => {
     try {
@@ -23,6 +25,10 @@ export default function ChannelInviteAlarm({
       removeNoti(idx);
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);

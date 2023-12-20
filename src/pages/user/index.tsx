@@ -16,8 +16,10 @@ import { useEffect, useState } from "react";
 import sleep from "@/utils/sleep";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 export default function User() {
+  const router = useRouter();
   const [userList, setUserList] = useState<UserAbstract[]>([]);
   const [friendList, setFriendList] = useState<Friend[]>([]);
   const [blockList, setBlockList] = useState<OtherUserAbstract[]>([]);
@@ -30,6 +32,10 @@ export default function User() {
         setUserList(res.data);
       } catch (error) {
         const axiosError = error as AxiosError<{ message: string }>;
+        if (axiosError.response?.status === 401) {
+          router.push("/login");
+          return;
+        }
         if (typeof axiosError.response?.data.message === "object")
           toast.error(axiosError.response?.data.message[0]);
         else toast.error(axiosError.response?.data.message);

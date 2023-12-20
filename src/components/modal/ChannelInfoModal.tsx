@@ -5,6 +5,7 @@ import useChatInfo, { ChannelInfoType } from "@/hooks/data/useChatInfo";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
 import { AxiosError } from "axios";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 
@@ -14,6 +15,7 @@ interface MemItemProps {
   channel: ChannelInfoType;
 }
 function MemberItem({ mem, idx, channel }: MemItemProps) {
+  const router = useRouter();
   const { updateInfo } = useChatInfo();
   const depriveAdminClick = async () => {
     try {
@@ -21,6 +23,10 @@ function MemberItem({ mem, idx, channel }: MemItemProps) {
       await updateInfo(channel.id);
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);
@@ -52,6 +58,7 @@ interface BanItemProps {
 }
 
 function BanMemberItem({ mem, idx, channel }: BanItemProps) {
+  const router = useRouter();
   const { updateInfo } = useChatInfo();
   const removeBanClick = async () => {
     try {
@@ -59,6 +66,10 @@ function BanMemberItem({ mem, idx, channel }: BanItemProps) {
       await updateInfo(channel.id);
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);

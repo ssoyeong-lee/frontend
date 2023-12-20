@@ -7,10 +7,12 @@ import { useModal } from "@/hooks/display/useModal";
 import FlexBox from "@/layouts/FlexBox";
 import ModalCard from "@/layouts/ModalCard";
 import { AxiosError } from "axios";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export default function ChatroomSettinngModal() {
+  const router = useRouter();
   const [title, setTitle] = useState("");
   const [type, setType] = useState("");
   const [password, setPassword] = useState("");
@@ -29,6 +31,10 @@ export default function ChatroomSettinngModal() {
         console.log(info.data);
       } catch (error) {
         const axiosError = error as AxiosError<{ message: string }>;
+        if (axiosError.response?.status === 401) {
+          router.push("/login");
+          return;
+        }
         if (typeof axiosError.response?.data.message === "object")
           toast.error(axiosError.response?.data.message[0]);
         else toast.error(axiosError.response?.data.message);

@@ -11,6 +11,7 @@ import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
 import { AxiosError } from "axios";
+import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
 interface Props {
@@ -19,12 +20,17 @@ interface Props {
 }
 
 export default function FriendCard({ friendList, setFriendList }: Props) {
+  const router = useRouter();
   const onClickDelete = async (id: number) => {
     try {
       await deleteFriend(id);
       setFriendList(friendList.filter((friend) => friend.otherUser.id !== id));
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);
@@ -41,6 +47,10 @@ export default function FriendCard({ friendList, setFriendList }: Props) {
       );
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);
@@ -52,6 +62,10 @@ export default function FriendCard({ friendList, setFriendList }: Props) {
       setFriendList(friendList.filter((friend) => friend.otherUser.id !== id));
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);

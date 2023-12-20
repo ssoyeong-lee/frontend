@@ -6,10 +6,12 @@ import Container from "@/layouts/Container";
 import FlexBox from "@/layouts/FlexBox";
 import TopNav from "@/layouts/TopNav";
 import { AxiosError } from "axios";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export default function Chat() {
+  const router = useRouter();
   const [isSearch, setIsSearch] = useState<boolean>(false);
   const [userList, setUserList] = useState<UserAbstract[]>([]);
 
@@ -20,6 +22,10 @@ export default function Chat() {
         setUserList(tmp);
       } catch (error) {
         const axiosError = error as AxiosError<{ message: string }>;
+        if (axiosError.response?.status === 401) {
+          router.push("/login");
+          return;
+        }
         if (typeof axiosError.response?.data.message === "object")
           toast.error(axiosError.response?.data.message[0]);
         else toast.error(axiosError.response?.data.message);
