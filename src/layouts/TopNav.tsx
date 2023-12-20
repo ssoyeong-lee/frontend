@@ -56,12 +56,9 @@ export default function TopNav() {
   const menuStyle = "text-gray-400 w-[200px] cursor-pointer hover:text-white";
   const activeMenuStyle = "text-white w-[200px] cursor-pointer";
 
-
   const { notiList } = useNoti();
   const [isNoti, setIsNoti] = useState(false);
   const { DMData, CMData } = useMessage();
-  const { setSocket } = useSocket();
-
 
   const onClickLogout = async () => {
     try {
@@ -70,6 +67,10 @@ export default function TopNav() {
       router.reload();
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);
@@ -118,7 +119,7 @@ export default function TopNav() {
           <FlexBox className="gap-6">
             <div className="relative min-w-[48px]">
               <Icon
-                onClick={()=>setIsNoti(true)}
+                onClick={() => setIsNoti(true)}
                 src="/icon/alarm.svg"
                 alt="alarm"
                 className="cursor-pointer"

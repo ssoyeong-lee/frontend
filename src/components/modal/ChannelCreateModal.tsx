@@ -7,13 +7,18 @@ import { useModal } from "@/hooks/display/useModal";
 import FlexBox from "@/layouts/FlexBox";
 import ModalCard from "@/layouts/ModalCard";
 import { AxiosError } from "axios";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
 export default function ChannelCreateModal() {
+  const router = useRouter();
   const [title, setTitle] = useState("");
   const [type, setType] = useState<string>("private");
   const [password, setPassword] = useState("");
+  const { closeModal } = useModal();
+  const { chatInfo, changeSelected, updateInfo } = useChatInfo();
+
   const titleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
@@ -33,8 +38,6 @@ export default function ChannelCreateModal() {
     return "";
   };
 
-  const { closeModal } = useModal();
-  const { chatInfo, changeSelected, updateInfo } = useChatInfo();
   const okClick = async () => {
     try {
       await createChannel({ title, type, password });
@@ -42,6 +45,10 @@ export default function ChannelCreateModal() {
       await updateInfo(null, "CM");
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);

@@ -8,6 +8,7 @@ import Container from "@/layouts/Container";
 import FlexBox from "@/layouts/FlexBox";
 import TopNav from "@/layouts/TopNav";
 import { AxiosError } from "axios";
+import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
 export interface Option {
@@ -15,6 +16,7 @@ export interface Option {
 }
 
 export default function Play() {
+  const router = useRouter();
   const { gameSearch, setGameSearch } = useGame();
   const onClick = async () => {
     try {
@@ -33,6 +35,10 @@ export default function Play() {
       }
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);

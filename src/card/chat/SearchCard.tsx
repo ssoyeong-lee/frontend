@@ -7,6 +7,7 @@ import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import ScrollBox from "@/layouts/ScrollBox";
 import { AxiosError } from "axios";
+import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -24,6 +25,7 @@ function SearchItem({
   user: UserAbstract;
   setIsSearch: (isSearch: boolean) => void;
 }) {
+  const router = useRouter();
   const { chatInfo } = useChatInfo();
   return (
     <FlexBox className="w-full px-4 py-2 justify-between">
@@ -40,6 +42,10 @@ function SearchItem({
               setIsSearch(false);
             } catch (error) {
               const axiosError = error as AxiosError<{ message: string }>;
+              if (axiosError.response?.status === 401) {
+                router.push("/login");
+                return;
+              }
               if (typeof axiosError.response?.data.message === "object")
                 toast.error(axiosError.response?.data.message[0]);
               else toast.error(axiosError.response?.data.message);

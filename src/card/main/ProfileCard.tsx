@@ -9,6 +9,7 @@ import { useModal } from "@/hooks/display/useModal";
 import Card from "@/layouts/Card";
 import FlexBox from "@/layouts/FlexBox";
 import { AxiosError } from "axios";
+import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export default function ProfileCard({ type, user, setUser }: Props) {
+  const router = useRouter();
   const [onMouse, setOnMouse] = useState<boolean>(false);
   const { openModal, closeModal } = useModal();
   const onChange = (key: keyof UserDetail, value: any) => {
@@ -54,6 +56,10 @@ export default function ProfileCard({ type, user, setUser }: Props) {
       } else openModal(<TFAModal />);
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);
@@ -65,6 +71,10 @@ export default function ProfileCard({ type, user, setUser }: Props) {
       await putUserMe(user);
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);

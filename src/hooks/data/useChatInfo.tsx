@@ -11,6 +11,7 @@ import { OtherUserAbstract } from "@/api/users";
 import { getFriendList } from "@/api/users/friend";
 import { AxiosError } from "axios";
 import { atom, useAtom } from "jotai";
+import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
 interface DmInfoType extends OtherUserAbstract {
@@ -49,6 +50,7 @@ interface ChatInfoRetType {
 }
 
 function useChatInfo(): ChatInfoRetType {
+  const router = useRouter();
   const [type, setType] = useAtom(typeAtom);
   const [selected, setSelected] = useAtom(selectedAtom);
   const [friendList, setFriendList] = useAtom(friendListAtom);
@@ -132,6 +134,10 @@ function useChatInfo(): ChatInfoRetType {
       }
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
+      if (axiosError.response?.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
       else toast.error(axiosError.response?.data.message);
