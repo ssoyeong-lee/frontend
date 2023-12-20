@@ -46,7 +46,7 @@ function ChatCardTop({ setIsSearch }: Props) {
               <Icon
                 src="/icon/mail.svg"
                 onClick={inviteClick}
-                className="w-6 h-6"
+                className="w-6 h-6 cursor-pointer"
                 alt="invite"
               />
             )}
@@ -54,7 +54,7 @@ function ChatCardTop({ setIsSearch }: Props) {
             <Icon
               src="/icon/info.svg"
               onClick={channelInfoClick}
-              className="w-6 h-6"
+              className="w-6 h-6 cursor-pointer"
               alt="name"
             />
           )}
@@ -63,7 +63,7 @@ function ChatCardTop({ setIsSearch }: Props) {
               <Icon
                 src="/icon/setting.svg"
                 onClick={settingClick}
-                className="w-6 h-6"
+                className="w-6 h-6 cursor-pointer"
                 alt="name"
               />
             )}
