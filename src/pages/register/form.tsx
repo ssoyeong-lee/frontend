@@ -1,9 +1,9 @@
-import { register, uploadAvatar } from "@/api/auth/login";
+import { register } from "@/api/auth/login";
 import Button from "@/layouts/Button";
 import FlexBox from "@/layouts/FlexBox";
 import SideBox from "@/layouts/SideBox";
 import TextBox from "@/layouts/TextBox";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
@@ -43,7 +43,7 @@ function FileInput({ filename, selectClick }: Props) {
 export default function Register() {
   const router = useRouter();
   const [nickName, setNickName] = useState("");
-  const [file, setFile] = useState<File>();
+  const [file, setFile] = useState<File | null>(null);
   const selectClick = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.target.files && setFile(e.target.files[0]);
   };
@@ -55,16 +55,18 @@ export default function Register() {
   const onClickBtn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      const res = await register(nickName);
+      const res = await register(nickName, file);
       if (res.data?.session !== undefined && res.data?.session !== null) {
         sessionStorage.setItem("session", res.data?.session);
       }
-      file && (await uploadAvatar(file));
       router.push("/main");
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
       if (axiosError.response?.status === 401) {
         router.push("/login");
+        return;
+      } else if (axiosError.response?.status === 400) {
+        router.push("/main");
         return;
       }
       if (typeof axiosError.response?.data.message === "object")
