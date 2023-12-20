@@ -65,9 +65,6 @@ export default function Register() {
       if (axiosError.response?.status === 401) {
         router.push("/login");
         return;
-      } else if (axiosError.response?.status === 400) {
-        router.push("/main");
-        return;
       }
       if (typeof axiosError.response?.data.message === "object")
         toast.error(axiosError.response?.data.message[0]);
