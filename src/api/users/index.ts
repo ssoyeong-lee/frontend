@@ -38,9 +38,17 @@ async function putUserMe(params: UserDetail): Promise<AxiosResponse> {
   return axios.put("/api/users/me", params);
 }
 
+async function putUserMeAvatar(avatar: FormData): Promise<AxiosResponse> {
+  return axios.put("/api/users/me/avatar", avatar, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+}
+
 async function getUser(id: number): Promise<AxiosResponse<UserDetail>> {
   return axios.get(`/api/users/${id}`);
 }
 
 export type { UserAbstract, UserDetail, OtherUserAbstract };
-export { getUserList, getUserMe, putUserMe, getUser };
+export { getUserList, getUserMe, putUserMe, getUser, putUserMeAvatar };
