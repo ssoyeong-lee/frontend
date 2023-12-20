@@ -15,8 +15,6 @@ function draw(
   drawBar(ctx, info.me, "me");
   drawBar(ctx, info.opponent, "opponent");
   drawBall(ctx, info.ball);
-
-  requestAnimationFrame(() => draw(ctx, startInfo, info));
 }
 
 function drawBar(
